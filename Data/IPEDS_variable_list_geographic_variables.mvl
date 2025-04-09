@@ -1,0 +1,7 @@
+HD2023|LONGITUD|Directory information|Longitude location of institution|||||||||||||23.16106|.|Cont|TN|N||110|||||
+HD2023|LATITUDE|Directory information|Latitude location of institution|||||||||||||23.16111|.|Cont|TN|N||110|||||
+HD2023|COUNTYCD|Directory information|Fips County code|||||||||||||23.16116|.|Disc|DMN|N||110|||||
+HD2023|STABBR|Institutions|State abbreviation|||||||||||||23.10016|.|Disc|DMA|A||730|||||
+HD2023|FIPS|Institutions|FIPS state code|||||||||||||23.10026|.|Disc|DMN|N||730|||||
+HD2023|OBEREG|Institutions|Bureau of Economic Analysis (BEA) regions|||||||||||||23.10031|.|Disc|DMN|N||730|||||
+HD2023|LOCALE|Institutions|Degree of urbanization (Urban-centric locale)|||||||||||||23.10176|.|Disc|DMN|N||730|||||

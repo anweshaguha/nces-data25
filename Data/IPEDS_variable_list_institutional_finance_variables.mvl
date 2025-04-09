@@ -1,0 +1,190 @@
+SFA2223|NPIST2|Average net price for full-time, first-time degree/certificate-seeking undergraduate students, 2006-07 to current year|Average net price-students awarded grant or scholarship aid, 2022-23|||||||||||||23.70711|XNPIST2.SFA2223|Cont|TN|N||512|||||
+SFA2223|NPGRN2|Average net price for full-time, first-time degree/certificate-seeking undergraduate students, 2006-07 to current year|Average net price-students awarded grant or scholarship aid, 2022-23|||||||||||||23.70966|XNPGRN2.SFA2223|Cont|TN|N||512|||||
+DRVIC2023|CINSON|Total cost of attendance|Total price for in-state students living on campus 2023-24|||||||||||||23.11576|.|Cont|TN|N||735|||||
+DRVF2023|F1CORREV|Financial indicators|Core revenues, total dollars (GASB)|||||||||||||23.66101|.|Cont|TN|N||770|||||
+DRVF2023|F1TUFEPC|Financial indicators|Tuition and fees as a percent of core revenues (GASB)|||||||||||||23.66104|.|Cont|TN|N||770|||||
+DRVF2023|F1STAPPC|Financial indicators|State appropriations as percent of core revenues  (GASB)|||||||||||||23.66107|.|Cont|TN|N||770|||||
+DRVF2023|F1LCAPPC|Financial indicators|Local appropriations as a percent of core revenues (GASB)|||||||||||||23.66110|.|Cont|TN|N||770|||||
+DRVF2023|F1GVGCPC|Financial indicators|Government grants and contracts as a percent of core revenues (GASB)|||||||||||||23.66113|.|Cont|TN|N||770|||||
+DRVF2023|F1PGGCPC|Financial indicators|Private gifts, grants, and contracts as a percent of core revenues (GASB)|||||||||||||23.66115|.|Cont|TN|N||770|||||
+DRVF2023|F1INVRPC|Financial indicators|Investment return as a percent of core revenues (GASB)|||||||||||||23.66117|.|Cont|TN|N||770|||||
+DRVF2023|F1OTRVPC|Financial indicators|Other revenues as a percent of core revenues (GASB)|||||||||||||23.66119|.|Cont|TN|N||770|||||
+DRVF2023|F2CORREV|Financial indicators|Core revenues, total dollars (FASB)|||||||||||||23.66201|.|Cont|TN|N||770|||||
+DRVF2023|F2TUFEPC|Financial indicators|Tuition and fees as a percent of core revenues (FASB)|||||||||||||23.66204|.|Cont|TN|N||770|||||
+DRVF2023|F2GVGCPC|Financial indicators|Government grants and contracts as a percent of core revenues (FASB)|||||||||||||23.66213|.|Cont|TN|N||770|||||
+DRVF2023|F2PGGCPC|Financial indicators|Private gifts, grants, contracts/contributions from affiliated entities as a percent of core revenues (FASB)|||||||||||||23.66215|.|Cont|TN|N||770|||||
+DRVF2023|F2INVRPC|Financial indicators|Investment return as a percent of core revenues (FASB)|||||||||||||23.66217|.|Cont|TN|N||770|||||
+DRVF2023|F2OTRVPC|Financial indicators|Other revenues as a percent of core revenues (FASB)|||||||||||||23.66219|.|Cont|TN|N||770|||||
+DRVF2023|F1INSTPC|Financial indicators|Instruction expenses as a percent of total core expenses (GASB)|||||||||||||23.66151|.|Cont|TN|N||770|||||
+DRVF2023|F2INSTPC|Financial indicators|Instruction expenses as a percent of total core expenses (FASB)|||||||||||||23.66251|.|Cont|TN|N||770|||||
+DRVF2023|F1RSRCPC|Financial indicators|Research expenses as a percent of total core expenses (GASB)|||||||||||||23.66152|.|Cont|TN|N||770|||||
+DRVF2023|F1PBSVPC|Financial indicators|Public service expenses as a percent of total core expenses (GASB)|||||||||||||23.66153|.|Cont|TN|N||770|||||
+DRVF2023|F1ACSPPC|Financial indicators|Academic support expenses as a percent of total core expenses (GASB)|||||||||||||23.66154|.|Cont|TN|N||770|||||
+DRVF2023|F1STSVPC|Financial indicators|Student service expenses as a percent of total core expenses (GASB)|||||||||||||23.66155|.|Cont|TN|N||770|||||
+DRVF2023|F1INSUPC|Financial indicators|Institutional support expenses as a percent of total core expenses (GASB)|||||||||||||23.66156|.|Cont|TN|N||770|||||
+DRVF2023|F1OTEXPC|Financial indicators|Other core expenses as a percent of total core expenses (GASB)|||||||||||||23.66159|.|Cont|TN|N||770|||||
+DRVF2023|F1COREXP|Financial indicators|Core expenses, total dollars (GASB)|||||||||||||23.66150|.|Cont|TN|N||770|||||
+DRVF2023|F2COREXP|Financial indicators|Core expenses, total dollars (FASB)|||||||||||||23.66250|.|Cont|TN|N||770|||||
+DRVF2023|F2RSRCPC|Financial indicators|Research expenses as a percent of total core expenses (FASB)|||||||||||||23.66252|.|Cont|TN|N||770|||||
+DRVF2023|F2PBSVPC|Financial indicators|Public service expenses as a percent of total core expenses (FASB)|||||||||||||23.66253|.|Cont|TN|N||770|||||
+DRVF2023|F2ACSPPC|Financial indicators|Academic support expenses as a percent of total core expenses (FASB)|||||||||||||23.66254|.|Cont|TN|N||770|||||
+DRVF2023|F2STSVPC|Financial indicators|Student service expenses as a percent of total core expenses (FASB)|||||||||||||23.66255|.|Cont|TN|N||770|||||
+DRVF2023|F2INSUPC|Financial indicators|Institutional support expenses as a percent of total core expenses (FASB)|||||||||||||23.66256|.|Cont|TN|N||770|||||
+DRVF2023|F2OTEXPC|Financial indicators|Other core expenses as a percent of total core expenses (FASB)|||||||||||||23.66259|.|Cont|TN|N||770|||||
+DRVF2023|F1INSTFT|Financial indicators|Instruction expenses per FTE  (GASB)|||||||||||||23.66161|.|Cont|TN|N||770|||||
+DRVF2023|F2INSTFT|Financial indicators|Instruction expenses per FTE  (FASB)|||||||||||||23.66261|.|Cont|TN|N||770|||||
+IC2023_AY|chg1ay3|Cost of attendance for full-time, first-time undergraduate students (academic year programs)|Published in-district tuition and fees 2023-24|||||||||||||23.11951|Xchg1ay3.IC2023_AY|Cont|TN|N||609|||||
+IC2023_AY|chg2ay3|Cost of attendance for full-time, first-time undergraduate students (academic year programs)|Published in-state tuition and fees 2023-24|||||||||||||23.11966|Xchg2ay3.IC2023_AY|Cont|TN|N||609|||||
+IC2023_AY|chg3ay3|Cost of attendance for full-time, first-time undergraduate students (academic year programs)|Published out-of-state tuition and fees 2023-24|||||||||||||23.11981|Xchg3ay3.IC2023_AY|Cont|TN|N||609|||||
+SFA2122_RV|NPIST2|Average net price for full-time, first-time degree/certificate-seeking undergraduate students, 2006-07 to current year|Average net price-students awarded grant or scholarship aid, 2021-22|||||||||||||22.70711|XNPIST2.SFA2122_RV|Cont|TN|N||512|||||
+SFA2122_RV|NPGRN2|Average net price for full-time, first-time degree/certificate-seeking undergraduate students, 2006-07 to current year|Average net price-students awarded grant or scholarship aid, 2021-22|||||||||||||22.70966|XNPGRN2.SFA2122_RV|Cont|TN|N||512|||||
+DRVIC2022|CINSON|Total cost of attendance|Total price for in-state students living on campus 2022-23|||||||||||||22.11576|.|Cont|TN|N||735|||||
+DRVF2022_RV|F1CORREV|Financial indicators|Core revenues, total dollars (GASB)|||||||||||||22.66101|.|Cont|TN|N||770|||||
+DRVF2022_RV|F1TUFEPC|Financial indicators|Tuition and fees as a percent of core revenues (GASB)|||||||||||||22.66104|.|Cont|TN|N||770|||||
+DRVF2022_RV|F1STAPPC|Financial indicators|State appropriations as percent of core revenues  (GASB)|||||||||||||22.66107|.|Cont|TN|N||770|||||
+DRVF2022_RV|F1LCAPPC|Financial indicators|Local appropriations as a percent of core revenues (GASB)|||||||||||||22.66110|.|Cont|TN|N||770|||||
+DRVF2022_RV|F1GVGCPC|Financial indicators|Government grants and contracts as a percent of core revenues (GASB)|||||||||||||22.66113|.|Cont|TN|N||770|||||
+DRVF2022_RV|F1PGGCPC|Financial indicators|Private gifts, grants, and contracts as a percent of core revenues (GASB)|||||||||||||22.66115|.|Cont|TN|N||770|||||
+DRVF2022_RV|F1INVRPC|Financial indicators|Investment return as a percent of core revenues (GASB)|||||||||||||22.66117|.|Cont|TN|N||770|||||
+DRVF2022_RV|F1OTRVPC|Financial indicators|Other revenues as a percent of core revenues (GASB)|||||||||||||22.66119|.|Cont|TN|N||770|||||
+DRVF2022_RV|F2CORREV|Financial indicators|Core revenues, total dollars (FASB)|||||||||||||22.66201|.|Cont|TN|N||770|||||
+DRVF2022_RV|F2TUFEPC|Financial indicators|Tuition and fees as a percent of core revenues (FASB)|||||||||||||22.66204|.|Cont|TN|N||770|||||
+DRVF2022_RV|F2GVGCPC|Financial indicators|Government grants and contracts as a percent of core revenues (FASB)|||||||||||||22.66213|.|Cont|TN|N||770|||||
+DRVF2022_RV|F2PGGCPC|Financial indicators|Private gifts, grants, contracts/contributions from affiliated entities as a percent of core revenues (FASB)|||||||||||||22.66215|.|Cont|TN|N||770|||||
+DRVF2022_RV|F2INVRPC|Financial indicators|Investment return as a percent of core revenues (FASB)|||||||||||||22.66217|.|Cont|TN|N||770|||||
+DRVF2022_RV|F2OTRVPC|Financial indicators|Other revenues as a percent of core revenues (FASB)|||||||||||||22.66219|.|Cont|TN|N||770|||||
+DRVF2022_RV|F1INSTPC|Financial indicators|Instruction expenses as a percent of total core expenses (GASB)|||||||||||||22.66151|.|Cont|TN|N||770|||||
+DRVF2022_RV|F2INSTPC|Financial indicators|Instruction expenses as a percent of total core expenses (FASB)|||||||||||||22.66251|.|Cont|TN|N||770|||||
+DRVF2022_RV|F1RSRCPC|Financial indicators|Research expenses as a percent of total core expenses (GASB)|||||||||||||22.66152|.|Cont|TN|N||770|||||
+DRVF2022_RV|F1PBSVPC|Financial indicators|Public service expenses as a percent of total core expenses (GASB)|||||||||||||22.66153|.|Cont|TN|N||770|||||
+DRVF2022_RV|F1ACSPPC|Financial indicators|Academic support expenses as a percent of total core expenses (GASB)|||||||||||||22.66154|.|Cont|TN|N||770|||||
+DRVF2022_RV|F1STSVPC|Financial indicators|Student service expenses as a percent of total core expenses (GASB)|||||||||||||22.66155|.|Cont|TN|N||770|||||
+DRVF2022_RV|F1INSUPC|Financial indicators|Institutional support expenses as a percent of total core expenses (GASB)|||||||||||||22.66156|.|Cont|TN|N||770|||||
+DRVF2022_RV|F1OTEXPC|Financial indicators|Other core expenses as a percent of total core expenses (GASB)|||||||||||||22.66159|.|Cont|TN|N||770|||||
+DRVF2022_RV|F1COREXP|Financial indicators|Core expenses, total dollars (GASB)|||||||||||||22.66150|.|Cont|TN|N||770|||||
+DRVF2022_RV|F2COREXP|Financial indicators|Core expenses, total dollars (FASB)|||||||||||||22.66250|.|Cont|TN|N||770|||||
+DRVF2022_RV|F2RSRCPC|Financial indicators|Research expenses as a percent of total core expenses (FASB)|||||||||||||22.66252|.|Cont|TN|N||770|||||
+DRVF2022_RV|F2PBSVPC|Financial indicators|Public service expenses as a percent of total core expenses (FASB)|||||||||||||22.66253|.|Cont|TN|N||770|||||
+DRVF2022_RV|F2ACSPPC|Financial indicators|Academic support expenses as a percent of total core expenses (FASB)|||||||||||||22.66254|.|Cont|TN|N||770|||||
+DRVF2022_RV|F2STSVPC|Financial indicators|Student service expenses as a percent of total core expenses (FASB)|||||||||||||22.66255|.|Cont|TN|N||770|||||
+DRVF2022_RV|F2INSUPC|Financial indicators|Institutional support expenses as a percent of total core expenses (FASB)|||||||||||||22.66256|.|Cont|TN|N||770|||||
+DRVF2022_RV|F2OTEXPC|Financial indicators|Other core expenses as a percent of total core expenses (FASB)|||||||||||||22.66259|.|Cont|TN|N||770|||||
+DRVF2022_RV|F1INSTFT|Financial indicators|Instruction expenses per FTE  (GASB)|||||||||||||22.66161|.|Cont|TN|N||770|||||
+DRVF2022_RV|F2INSTFT|Financial indicators|Instruction expenses per FTE  (FASB)|||||||||||||22.66261|.|Cont|TN|N||770|||||
+IC2022_AY|chg1ay3|Cost of attendance for full-time, first-time undergraduate students (academic year programs)|Published in-district tuition and fees 2022-23|||||||||||||22.11951|Xchg1ay3.IC2022_AY|Cont|TN|N||609|||||
+IC2022_AY|chg2ay3|Cost of attendance for full-time, first-time undergraduate students (academic year programs)|Published in-state tuition and fees 2022-23|||||||||||||22.11966|Xchg2ay3.IC2022_AY|Cont|TN|N||609|||||
+IC2022_AY|chg3ay3|Cost of attendance for full-time, first-time undergraduate students (academic year programs)|Published out-of-state tuition and fees 2022-23|||||||||||||22.11981|Xchg3ay3.IC2022_AY|Cont|TN|N||609|||||
+SFA2021_RV|NPIST2|Average net price for full-time, first-time degree/certificate-seeking undergraduate students, 2006-07 to current year|Average net price-students awarded grant or scholarship aid, 2020-21|||||||||||||21.70711|XNPIST2.SFA2021_RV|Cont|TN|N||512|||||
+SFA2021_RV|NPGRN2|Average net price for full-time, first-time degree/certificate-seeking undergraduate students, 2006-07 to current year|Average net price-students awarded grant or scholarship aid, 2020-21|||||||||||||21.70966|XNPGRN2.SFA2021_RV|Cont|TN|N||512|||||
+DRVIC2021|CINSON|Total cost of attendance|Total price for in-state students living on campus 2021-22|||||||||||||21.11576|.|Cont|TN|N||735|||||
+DRVF2021_RV|F1CORREV|Financial indicators|Core revenues, total dollars (GASB)|||||||||||||21.66101|.|Cont|TN|N||770|||||
+DRVF2021_RV|F1TUFEPC|Financial indicators|Tuition and fees as a percent of core revenues (GASB)|||||||||||||21.66104|.|Cont|TN|N||770|||||
+DRVF2021_RV|F1STAPPC|Financial indicators|State appropriations as percent of core revenues  (GASB)|||||||||||||21.66107|.|Cont|TN|N||770|||||
+DRVF2021_RV|F1LCAPPC|Financial indicators|Local appropriations as a percent of core revenues (GASB)|||||||||||||21.66110|.|Cont|TN|N||770|||||
+DRVF2021_RV|F1GVGCPC|Financial indicators|Government grants and contracts as a percent of core revenues (GASB)|||||||||||||21.66113|.|Cont|TN|N||770|||||
+DRVF2021_RV|F1PGGCPC|Financial indicators|Private gifts, grants, and contracts as a percent of core revenues (GASB)|||||||||||||21.66115|.|Cont|TN|N||770|||||
+DRVF2021_RV|F1INVRPC|Financial indicators|Investment return as a percent of core revenues (GASB)|||||||||||||21.66117|.|Cont|TN|N||770|||||
+DRVF2021_RV|F1OTRVPC|Financial indicators|Other revenues as a percent of core revenues (GASB)|||||||||||||21.66119|.|Cont|TN|N||770|||||
+DRVF2021_RV|F2CORREV|Financial indicators|Core revenues, total dollars (FASB)|||||||||||||21.66201|.|Cont|TN|N||770|||||
+DRVF2021_RV|F2TUFEPC|Financial indicators|Tuition and fees as a percent of core revenues (FASB)|||||||||||||21.66204|.|Cont|TN|N||770|||||
+DRVF2021_RV|F2GVGCPC|Financial indicators|Government grants and contracts as a percent of core revenues (FASB)|||||||||||||21.66213|.|Cont|TN|N||770|||||
+DRVF2021_RV|F2PGGCPC|Financial indicators|Private gifts, grants, contracts/contributions from affiliated entities as a percent of core revenues (FASB)|||||||||||||21.66215|.|Cont|TN|N||770|||||
+DRVF2021_RV|F2INVRPC|Financial indicators|Investment return as a percent of core revenues (FASB)|||||||||||||21.66217|.|Cont|TN|N||770|||||
+DRVF2021_RV|F2OTRVPC|Financial indicators|Other revenues as a percent of core revenues (FASB)|||||||||||||21.66219|.|Cont|TN|N||770|||||
+DRVF2021_RV|F1INSTPC|Financial indicators|Instruction expenses as a percent of total core expenses (GASB)|||||||||||||21.66151|.|Cont|TN|N||770|||||
+DRVF2021_RV|F2INSTPC|Financial indicators|Instruction expenses as a percent of total core expenses (FASB)|||||||||||||21.66251|.|Cont|TN|N||770|||||
+DRVF2021_RV|F1RSRCPC|Financial indicators|Research expenses as a percent of total core expenses (GASB)|||||||||||||21.66152|.|Cont|TN|N||770|||||
+DRVF2021_RV|F1PBSVPC|Financial indicators|Public service expenses as a percent of total core expenses (GASB)|||||||||||||21.66153|.|Cont|TN|N||770|||||
+DRVF2021_RV|F1ACSPPC|Financial indicators|Academic support expenses as a percent of total core expenses (GASB)|||||||||||||21.66154|.|Cont|TN|N||770|||||
+DRVF2021_RV|F1STSVPC|Financial indicators|Student service expenses as a percent of total core expenses (GASB)|||||||||||||21.66155|.|Cont|TN|N||770|||||
+DRVF2021_RV|F1INSUPC|Financial indicators|Institutional support expenses as a percent of total core expenses (GASB)|||||||||||||21.66156|.|Cont|TN|N||770|||||
+DRVF2021_RV|F1OTEXPC|Financial indicators|Other core expenses as a percent of total core expenses (GASB)|||||||||||||21.66159|.|Cont|TN|N||770|||||
+DRVF2021_RV|F1COREXP|Financial indicators|Core expenses, total dollars (GASB)|||||||||||||21.66150|.|Cont|TN|N||770|||||
+DRVF2021_RV|F2COREXP|Financial indicators|Core expenses, total dollars (FASB)|||||||||||||21.66250|.|Cont|TN|N||770|||||
+DRVF2021_RV|F2RSRCPC|Financial indicators|Research expenses as a percent of total core expenses (FASB)|||||||||||||21.66252|.|Cont|TN|N||770|||||
+DRVF2021_RV|F2PBSVPC|Financial indicators|Public service expenses as a percent of total core expenses (FASB)|||||||||||||21.66253|.|Cont|TN|N||770|||||
+DRVF2021_RV|F2ACSPPC|Financial indicators|Academic support expenses as a percent of total core expenses (FASB)|||||||||||||21.66254|.|Cont|TN|N||770|||||
+DRVF2021_RV|F2STSVPC|Financial indicators|Student service expenses as a percent of total core expenses (FASB)|||||||||||||21.66255|.|Cont|TN|N||770|||||
+DRVF2021_RV|F2INSUPC|Financial indicators|Institutional support expenses as a percent of total core expenses (FASB)|||||||||||||21.66256|.|Cont|TN|N||770|||||
+DRVF2021_RV|F2OTEXPC|Financial indicators|Other core expenses as a percent of total core expenses (FASB)|||||||||||||21.66259|.|Cont|TN|N||770|||||
+DRVF2021_RV|F1INSTFT|Financial indicators|Instruction expenses per FTE  (GASB)|||||||||||||21.66161|.|Cont|TN|N||770|||||
+DRVF2021_RV|F2INSTFT|Financial indicators|Instruction expenses per FTE  (FASB)|||||||||||||21.66261|.|Cont|TN|N||770|||||
+IC2021_AY|chg1ay3|Cost of attendance for full-time, first-time undergraduate students (academic year programs)|Published in-district tuition and fees 2021-22|||||||||||||21.11951|Xchg1ay3.IC2021_AY|Cont|TN|N||609|||||
+IC2021_AY|chg2ay3|Cost of attendance for full-time, first-time undergraduate students (academic year programs)|Published in-state tuition and fees 2021-22|||||||||||||21.11966|Xchg2ay3.IC2021_AY|Cont|TN|N||609|||||
+IC2021_AY|chg3ay3|Cost of attendance for full-time, first-time undergraduate students (academic year programs)|Published out-of-state tuition and fees 2021-22|||||||||||||21.11981|Xchg3ay3.IC2021_AY|Cont|TN|N||609|||||
+SFA1920_RV|NPIST2|Average net price for full-time, first-time degree/certificate-seeking undergraduate students, 2006-07 to current year|Average net price-students awarded grant or scholarship aid, 2019-20|||||||||||||20.70711|XNPIST2.SFA1920_RV|Cont|TN|N||512|||||
+SFA1920_RV|NPGRN2|Average net price for full-time, first-time degree/certificate-seeking undergraduate students, 2006-07 to current year|Average net price-students awarded grant or scholarship aid, 2019-20|||||||||||||20.70966|XNPGRN2.SFA1920_RV|Cont|TN|N||512|||||
+DRVIC2020|CINSON|Total cost of attendance|Total price for in-state students living on campus 2020-21|||||||||||||20.11576|.|Cont|TN|N||735|||||
+DRVF2020_RV|F1CORREV|Financial indicators|Core revenues, total dollars (GASB)|||||||||||||20.66101|.|Cont|TN|N||770|||||
+DRVF2020_RV|F1TUFEPC|Financial indicators|Tuition and fees as a percent of core revenues (GASB)|||||||||||||20.66104|.|Cont|TN|N||770|||||
+DRVF2020_RV|F1STAPPC|Financial indicators|State appropriations as percent of core revenues  (GASB)|||||||||||||20.66107|.|Cont|TN|N||770|||||
+DRVF2020_RV|F1LCAPPC|Financial indicators|Local appropriations as a percent of core revenues (GASB)|||||||||||||20.66110|.|Cont|TN|N||770|||||
+DRVF2020_RV|F1GVGCPC|Financial indicators|Government grants and contracts as a percent of core revenues (GASB)|||||||||||||20.66113|.|Cont|TN|N||770|||||
+DRVF2020_RV|F1PGGCPC|Financial indicators|Private gifts, grants, and contracts as a percent of core revenues (GASB)|||||||||||||20.66115|.|Cont|TN|N||770|||||
+DRVF2020_RV|F1INVRPC|Financial indicators|Investment return as a percent of core revenues (GASB)|||||||||||||20.66117|.|Cont|TN|N||770|||||
+DRVF2020_RV|F1OTRVPC|Financial indicators|Other revenues as a percent of core revenues (GASB)|||||||||||||20.66119|.|Cont|TN|N||770|||||
+DRVF2020_RV|F2CORREV|Financial indicators|Core revenues, total dollars (FASB)|||||||||||||20.66201|.|Cont|TN|N||770|||||
+DRVF2020_RV|F2TUFEPC|Financial indicators|Tuition and fees as a percent of core revenues (FASB)|||||||||||||20.66204|.|Cont|TN|N||770|||||
+DRVF2020_RV|F2GVGCPC|Financial indicators|Government grants and contracts as a percent of core revenues (FASB)|||||||||||||20.66213|.|Cont|TN|N||770|||||
+DRVF2020_RV|F2PGGCPC|Financial indicators|Private gifts, grants, contracts/contributions from affiliated entities as a percent of core revenues (FASB)|||||||||||||20.66215|.|Cont|TN|N||770|||||
+DRVF2020_RV|F2INVRPC|Financial indicators|Investment return as a percent of core revenues (FASB)|||||||||||||20.66217|.|Cont|TN|N||770|||||
+DRVF2020_RV|F2OTRVPC|Financial indicators|Other revenues as a percent of core revenues (FASB)|||||||||||||20.66219|.|Cont|TN|N||770|||||
+DRVF2020_RV|F1INSTPC|Financial indicators|Instruction expenses as a percent of total core expenses (GASB)|||||||||||||20.66151|.|Cont|TN|N||770|||||
+DRVF2020_RV|F2INSTPC|Financial indicators|Instruction expenses as a percent of total core expenses (FASB)|||||||||||||20.66251|.|Cont|TN|N||770|||||
+DRVF2020_RV|F1RSRCPC|Financial indicators|Research expenses as a percent of total core expenses (GASB)|||||||||||||20.66152|.|Cont|TN|N||770|||||
+DRVF2020_RV|F1PBSVPC|Financial indicators|Public service expenses as a percent of total core expenses (GASB)|||||||||||||20.66153|.|Cont|TN|N||770|||||
+DRVF2020_RV|F1ACSPPC|Financial indicators|Academic support expenses as a percent of total core expenses (GASB)|||||||||||||20.66154|.|Cont|TN|N||770|||||
+DRVF2020_RV|F1STSVPC|Financial indicators|Student service expenses as a percent of total core expenses (GASB)|||||||||||||20.66155|.|Cont|TN|N||770|||||
+DRVF2020_RV|F1INSUPC|Financial indicators|Institutional support expenses as a percent of total core expenses (GASB)|||||||||||||20.66156|.|Cont|TN|N||770|||||
+DRVF2020_RV|F1OTEXPC|Financial indicators|Other core expenses as a percent of total core expenses (GASB)|||||||||||||20.66159|.|Cont|TN|N||770|||||
+DRVF2020_RV|F1COREXP|Financial indicators|Core expenses, total dollars (GASB)|||||||||||||20.66150|.|Cont|TN|N||770|||||
+DRVF2020_RV|F2COREXP|Financial indicators|Core expenses, total dollars (FASB)|||||||||||||20.66250|.|Cont|TN|N||770|||||
+DRVF2020_RV|F2RSRCPC|Financial indicators|Research expenses as a percent of total core expenses (FASB)|||||||||||||20.66252|.|Cont|TN|N||770|||||
+DRVF2020_RV|F2PBSVPC|Financial indicators|Public service expenses as a percent of total core expenses (FASB)|||||||||||||20.66253|.|Cont|TN|N||770|||||
+DRVF2020_RV|F2ACSPPC|Financial indicators|Academic support expenses as a percent of total core expenses (FASB)|||||||||||||20.66254|.|Cont|TN|N||770|||||
+DRVF2020_RV|F2STSVPC|Financial indicators|Student service expenses as a percent of total core expenses (FASB)|||||||||||||20.66255|.|Cont|TN|N||770|||||
+DRVF2020_RV|F2INSUPC|Financial indicators|Institutional support expenses as a percent of total core expenses (FASB)|||||||||||||20.66256|.|Cont|TN|N||770|||||
+DRVF2020_RV|F2OTEXPC|Financial indicators|Other core expenses as a percent of total core expenses (FASB)|||||||||||||20.66259|.|Cont|TN|N||770|||||
+DRVF2020_RV|F1INSTFT|Financial indicators|Instruction expenses per FTE  (GASB)|||||||||||||20.66161|.|Cont|TN|N||770|||||
+DRVF2020_RV|F2INSTFT|Financial indicators|Instruction expenses per FTE  (FASB)|||||||||||||20.66261|.|Cont|TN|N||770|||||
+IC2020_AY|chg1ay3|Cost of attendance for full-time, first-time undergraduate students (academic year programs)|Published in-district tuition and fees 2020-21|||||||||||||20.11951|Xchg1ay3.IC2020_AY|Cont|TN|N||609|||||
+IC2020_AY|chg2ay3|Cost of attendance for full-time, first-time undergraduate students (academic year programs)|Published in-state tuition and fees 2020-21|||||||||||||20.11966|Xchg2ay3.IC2020_AY|Cont|TN|N||609|||||
+IC2020_AY|chg3ay3|Cost of attendance for full-time, first-time undergraduate students (academic year programs)|Published out-of-state tuition and fees 2020-21|||||||||||||20.11981|Xchg3ay3.IC2020_AY|Cont|TN|N||609|||||
+SFA1819_RV|NPIST2|Average net price for full-time, first-time degree/certificate-seeking undergraduate students, 2006-07 to current year|Average net price-students awarded grant or scholarship aid, 2018-19|||||||||||||19.70711|XNPIST2.SFA1819_RV|Cont|TN|N||512|||||
+SFA1819_RV|NPGRN2|Average net price for full-time, first-time degree/certificate-seeking undergraduate students, 2006-07 to current year|Average net price-students awarded grant or scholarship aid, 2018-19|||||||||||||19.70966|XNPGRN2.SFA1819_RV|Cont|TN|N||512|||||
+DRVIC2019|CINSON|Total cost of attendance|Total price for in-state students living on campus 2019-20|||||||||||||19.11576|.|Cont|TN|N||735|||||
+DRVF2019_RV|F1CORREV|Financial indicators|Core revenues, total dollars (GASB)|||||||||||||19.66101|.|Cont|TN|N||770|||||
+DRVF2019_RV|F1TUFEPC|Financial indicators|Tuition and fees as a percent of core revenues (GASB)|||||||||||||19.66104|.|Cont|TN|N||770|||||
+DRVF2019_RV|F1STAPPC|Financial indicators|State appropriations as percent of core revenues  (GASB)|||||||||||||19.66107|.|Cont|TN|N||770|||||
+DRVF2019_RV|F1LCAPPC|Financial indicators|Local appropriations as a percent of core revenues (GASB)|||||||||||||19.66110|.|Cont|TN|N||770|||||
+DRVF2019_RV|F1GVGCPC|Financial indicators|Government grants and contracts as a percent of core revenues (GASB)|||||||||||||19.66113|.|Cont|TN|N||770|||||
+DRVF2019_RV|F1PGGCPC|Financial indicators|Private gifts, grants, and contracts as a percent of core revenues (GASB)|||||||||||||19.66115|.|Cont|TN|N||770|||||
+DRVF2019_RV|F1INVRPC|Financial indicators|Investment return as a percent of core revenues (GASB)|||||||||||||19.66117|.|Cont|TN|N||770|||||
+DRVF2019_RV|F1OTRVPC|Financial indicators|Other revenues as a percent of core revenues (GASB)|||||||||||||19.66119|.|Cont|TN|N||770|||||
+DRVF2019_RV|F2CORREV|Financial indicators|Core revenues, total dollars (FASB)|||||||||||||19.66201|.|Cont|TN|N||770|||||
+DRVF2019_RV|F2TUFEPC|Financial indicators|Tuition and fees as a percent of core revenues (FASB)|||||||||||||19.66204|.|Cont|TN|N||770|||||
+DRVF2019_RV|F2GVGCPC|Financial indicators|Government grants and contracts as a percent of core revenues (FASB)|||||||||||||19.66213|.|Cont|TN|N||770|||||
+DRVF2019_RV|F2PGGCPC|Financial indicators|Private gifts, grants, contracts/contributions from affiliated entities as a percent of core revenues (FASB)|||||||||||||19.66215|.|Cont|TN|N||770|||||
+DRVF2019_RV|F2INVRPC|Financial indicators|Investment return as a percent of core revenues (FASB)|||||||||||||19.66217|.|Cont|TN|N||770|||||
+DRVF2019_RV|F2OTRVPC|Financial indicators|Other revenues as a percent of core revenues (FASB)|||||||||||||19.66219|.|Cont|TN|N||770|||||
+DRVF2019_RV|F1INSTPC|Financial indicators|Instruction expenses as a percent of total core expenses (GASB)|||||||||||||19.66151|.|Cont|TN|N||770|||||
+DRVF2019_RV|F2INSTPC|Financial indicators|Instruction expenses as a percent of total core expenses (FASB)|||||||||||||19.66251|.|Cont|TN|N||770|||||
+DRVF2019_RV|F1RSRCPC|Financial indicators|Research expenses as a percent of total core expenses (GASB)|||||||||||||19.66152|.|Cont|TN|N||770|||||
+DRVF2019_RV|F1PBSVPC|Financial indicators|Public service expenses as a percent of total core expenses (GASB)|||||||||||||19.66153|.|Cont|TN|N||770|||||
+DRVF2019_RV|F1ACSPPC|Financial indicators|Academic support expenses as a percent of total core expenses (GASB)|||||||||||||19.66154|.|Cont|TN|N||770|||||
+DRVF2019_RV|F1STSVPC|Financial indicators|Student service expenses as a percent of total core expenses (GASB)|||||||||||||19.66155|.|Cont|TN|N||770|||||
+DRVF2019_RV|F1INSUPC|Financial indicators|Institutional support expenses as a percent of total core expenses (GASB)|||||||||||||19.66156|.|Cont|TN|N||770|||||
+DRVF2019_RV|F1OTEXPC|Financial indicators|Other core expenses as a percent of total core expenses (GASB)|||||||||||||19.66159|.|Cont|TN|N||770|||||
+DRVF2019_RV|F1COREXP|Financial indicators|Core expenses, total dollars (GASB)|||||||||||||19.66150|.|Cont|TN|N||770|||||
+DRVF2019_RV|F2COREXP|Financial indicators|Core expenses, total dollars (FASB)|||||||||||||19.66250|.|Cont|TN|N||770|||||
+DRVF2019_RV|F2RSRCPC|Financial indicators|Research expenses as a percent of total core expenses (FASB)|||||||||||||19.66252|.|Cont|TN|N||770|||||
+DRVF2019_RV|F2PBSVPC|Financial indicators|Public service expenses as a percent of total core expenses (FASB)|||||||||||||19.66253|.|Cont|TN|N||770|||||
+DRVF2019_RV|F2ACSPPC|Financial indicators|Academic support expenses as a percent of total core expenses (FASB)|||||||||||||19.66254|.|Cont|TN|N||770|||||
+DRVF2019_RV|F2STSVPC|Financial indicators|Student service expenses as a percent of total core expenses (FASB)|||||||||||||19.66255|.|Cont|TN|N||770|||||
+DRVF2019_RV|F2INSUPC|Financial indicators|Institutional support expenses as a percent of total core expenses (FASB)|||||||||||||19.66256|.|Cont|TN|N||770|||||
+DRVF2019_RV|F2OTEXPC|Financial indicators|Other core expenses as a percent of total core expenses (FASB)|||||||||||||19.66259|.|Cont|TN|N||770|||||
+DRVF2019_RV|F1INSTFT|Financial indicators|Instruction expenses per FTE  (GASB)|||||||||||||19.66161|.|Cont|TN|N||770|||||
+DRVF2019_RV|F2INSTFT|Financial indicators|Instruction expenses per FTE  (FASB)|||||||||||||19.66261|.|Cont|TN|N||770|||||
+IC2019_AY|chg1ay3|Cost of attendance for full-time, first-time undergraduate students (academic year programs)|Published in-district tuition and fees 2019-20|||||||||||||19.11951|Xchg1ay3.IC2019_AY|Cont|TN|N||609|||||
+IC2019_AY|chg2ay3|Cost of attendance for full-time, first-time undergraduate students (academic year programs)|Published in-state tuition and fees 2019-20|||||||||||||19.11966|Xchg2ay3.IC2019_AY|Cont|TN|N||609|||||
+IC2019_AY|chg3ay3|Cost of attendance for full-time, first-time undergraduate students (academic year programs)|Published out-of-state tuition and fees 2019-20|||||||||||||19.11981|Xchg3ay3.IC2019_AY|Cont|TN|N||609|||||

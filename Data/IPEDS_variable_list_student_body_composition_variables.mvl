@@ -1,0 +1,80 @@
+SFA2223|UPGRNTP|Student financial aid|Percent of undergraduate students awarded Federal Pell grants|||||||||||||23.70416|XUPGRNTP.SFA2223|Cont|TN|N||510|||||
+DRVEF2023|DVEF15|Fall enrollment/retention rates|Percent of undergraduate enrollment, 25-64|||||||||||||23.23415|.|Cont|TN|N||745|||||
+DRVEF2023|EFUG|Fall enrollment/retention rates|Undergraduate enrollment|||||||||||||23.24601|.|Cont|TN|N||745|||||
+DRVEF2023|EFUGFT|Fall enrollment/retention rates|Full-time undergraduate enrollment|||||||||||||23.24631|.|Cont|TN|N||745|||||
+DRVEF2023|EFUGPT|Fall enrollment/retention rates|Part-time undergraduate enrollment|||||||||||||23.24661|.|Cont|TN|N||745|||||
+DRVEF2023|PCUENRAN|Fall enrollment/retention rates|Percent of undergraduate enrollment that are American Indian or Alaska Native|||||||||||||23.24691|.|Cont|TN|N||745|||||
+DRVEF2023|PCUENRAP|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Asian/Native Hawaiian/Pacific Islander|||||||||||||23.24696|.|Cont|TN|N||745|||||
+DRVEF2023|PCUENRAS|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Asian|||||||||||||23.24791|.|Cont|TN|N||745|||||
+DRVEF2023|PCUENRNH|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Native Hawaiian or Other Pacific Islander|||||||||||||23.24796|.|Cont|TN|N||745|||||
+DRVEF2023|PCUENRBK|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Black or African American|||||||||||||23.24701|.|Cont|TN|N||745|||||
+DRVEF2023|PCUENRHS|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Hispanic/Latino|||||||||||||23.24706|.|Cont|TN|N||745|||||
+DRVEF2023|PCUENRWH|Fall enrollment/retention rates|Percent of undergraduate enrollment that are White|||||||||||||23.24711|.|Cont|TN|N||745|||||
+DRVEF2023|PCUENR2M|Fall enrollment/retention rates|Percent of undergraduate enrollment that are two or more races|||||||||||||23.24716|.|Cont|TN|N||745|||||
+DRVEF2023|PCUENRUN|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Race/ethnicity unknown|||||||||||||23.24721|.|Cont|TN|N||745|||||
+DRVEF2023|PCUENRNR|Fall enrollment/retention rates|Percent of undergraduate enrollment that are U.S. Nonresident|||||||||||||23.24726|.|Cont|TN|N||745|||||
+DRVEF2023|PCUENRW|Fall enrollment/retention rates|Percent of undergraduate enrollment that are women|||||||||||||23.24731|.|Cont|TN|N||745|||||
+SFA2122_RV|UPGRNTP|Student financial aid|Percent of undergraduate students awarded Pell grants|||||||||||||22.70416|XUPGRNTP.SFA2122_RV|Cont|TN|N||510|||||
+DRVEF2022_RV|DVEF15|Fall enrollment/retention rates|Percent of undergraduate enrollment, 25-64|||||||||||||22.23415|.|Cont|TN|N||745|||||
+DRVEF2022_RV|EFUG|Fall enrollment/retention rates|Undergraduate enrollment|||||||||||||22.24601|.|Cont|TN|N||745|||||
+DRVEF2022_RV|EFUGFT|Fall enrollment/retention rates|Full-time undergraduate enrollment|||||||||||||22.24631|.|Cont|TN|N||745|||||
+DRVEF2022_RV|EFUGPT|Fall enrollment/retention rates|Part-time undergraduate enrollment|||||||||||||22.24661|.|Cont|TN|N||745|||||
+DRVEF2022_RV|PCUENRAN|Fall enrollment/retention rates|Percent of undergraduate enrollment that are American Indian or Alaska Native|||||||||||||22.24691|.|Cont|TN|N||745|||||
+DRVEF2022_RV|PCUENRAP|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Asian/Native Hawaiian/Pacific Islander|||||||||||||22.24696|.|Cont|TN|N||745|||||
+DRVEF2022_RV|PCUENRAS|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Asian|||||||||||||22.24791|.|Cont|TN|N||745|||||
+DRVEF2022_RV|PCUENRNH|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Native Hawaiian or Other Pacific Islander|||||||||||||22.24796|.|Cont|TN|N||745|||||
+DRVEF2022_RV|PCUENRBK|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Black or African American|||||||||||||22.24701|.|Cont|TN|N||745|||||
+DRVEF2022_RV|PCUENRHS|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Hispanic/Latino|||||||||||||22.24706|.|Cont|TN|N||745|||||
+DRVEF2022_RV|PCUENRWH|Fall enrollment/retention rates|Percent of undergraduate enrollment that are White|||||||||||||22.24711|.|Cont|TN|N||745|||||
+DRVEF2022_RV|PCUENR2M|Fall enrollment/retention rates|Percent of undergraduate enrollment that are two or more races|||||||||||||22.24716|.|Cont|TN|N||745|||||
+DRVEF2022_RV|PCUENRUN|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Race/ethnicity unknown|||||||||||||22.24721|.|Cont|TN|N||745|||||
+DRVEF2022_RV|PCUENRNR|Fall enrollment/retention rates|Percent of undergraduate enrollment that are U.S. Nonresident|||||||||||||22.24726|.|Cont|TN|N||745|||||
+DRVEF2022_RV|PCUENRW|Fall enrollment/retention rates|Percent of undergraduate enrollment that are women|||||||||||||22.24731|.|Cont|TN|N||745|||||
+SFA2021_RV|UPGRNTP|Student financial aid|Percent of undergraduate students awarded Pell grants|||||||||||||21.70416|XUPGRNTP.SFA2021_RV|Cont|TN|N||510|||||
+DRVEF2021_RV|DVEF15|Fall enrollment/retention rates|Percent of undergraduate enrollment, 25-64|||||||||||||21.23415|.|Cont|TN|N||745|||||
+DRVEF2021_RV|EFUG|Fall enrollment/retention rates|Undergraduate enrollment|||||||||||||21.24601|.|Cont|TN|N||745|||||
+DRVEF2021_RV|EFUGFT|Fall enrollment/retention rates|Full-time undergraduate enrollment|||||||||||||21.24631|.|Cont|TN|N||745|||||
+DRVEF2021_RV|EFUGPT|Fall enrollment/retention rates|Part-time undergraduate enrollment|||||||||||||21.24661|.|Cont|TN|N||745|||||
+DRVEF2021_RV|PCUENRAN|Fall enrollment/retention rates|Percent of undergraduate enrollment that are American Indian or Alaska Native|||||||||||||21.24691|.|Cont|TN|N||745|||||
+DRVEF2021_RV|PCUENRAP|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Asian/Native Hawaiian/Pacific Islander|||||||||||||21.24696|.|Cont|TN|N||745|||||
+DRVEF2021_RV|PCUENRAS|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Asian|||||||||||||21.24791|.|Cont|TN|N||745|||||
+DRVEF2021_RV|PCUENRNH|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Native Hawaiian or Other Pacific Islander|||||||||||||21.24796|.|Cont|TN|N||745|||||
+DRVEF2021_RV|PCUENRBK|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Black or African American|||||||||||||21.24701|.|Cont|TN|N||745|||||
+DRVEF2021_RV|PCUENRHS|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Hispanic/Latino|||||||||||||21.24706|.|Cont|TN|N||745|||||
+DRVEF2021_RV|PCUENRWH|Fall enrollment/retention rates|Percent of undergraduate enrollment that are White|||||||||||||21.24711|.|Cont|TN|N||745|||||
+DRVEF2021_RV|PCUENR2M|Fall enrollment/retention rates|Percent of undergraduate enrollment that are two or more races|||||||||||||21.24716|.|Cont|TN|N||745|||||
+DRVEF2021_RV|PCUENRUN|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Race/ethnicity unknown|||||||||||||21.24721|.|Cont|TN|N||745|||||
+DRVEF2021_RV|PCUENRNR|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Nonresident Alien|||||||||||||21.24726|.|Cont|TN|N||745|||||
+DRVEF2021_RV|PCUENRW|Fall enrollment/retention rates|Percent of undergraduate enrollment that are women|||||||||||||21.24731|.|Cont|TN|N||745|||||
+SFA1920_RV|UPGRNTP|Student financial aid|Percent of undergraduate students awarded Pell grants|||||||||||||20.70416|XUPGRNTP.SFA1920_RV|Cont|TN|N||510|||||
+DRVEF2020_RV|DVEF15|Fall enrollment/retention rates|Percent of undergraduate enrollment, 25-64|||||||||||||20.23415|.|Cont|TN|N||745|||||
+DRVEF2020_RV|EFUG|Fall enrollment/retention rates|Undergraduate enrollment|||||||||||||20.24601|.|Cont|TN|N||745|||||
+DRVEF2020_RV|EFUGFT|Fall enrollment/retention rates|Full-time undergraduate enrollment|||||||||||||20.24631|.|Cont|TN|N||745|||||
+DRVEF2020_RV|EFUGPT|Fall enrollment/retention rates|Part-time undergraduate enrollment|||||||||||||20.24661|.|Cont|TN|N||745|||||
+DRVEF2020_RV|PCUENRAN|Fall enrollment/retention rates|Percent of undergraduate enrollment that are American Indian or Alaska Native|||||||||||||20.24691|.|Cont|TN|N||745|||||
+DRVEF2020_RV|PCUENRAP|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Asian/Native Hawaiian/Pacific Islander|||||||||||||20.24696|.|Cont|TN|N||745|||||
+DRVEF2020_RV|PCUENRAS|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Asian|||||||||||||20.24791|.|Cont|TN|N||745|||||
+DRVEF2020_RV|PCUENRNH|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Native Hawaiian or Other Pacific Islander|||||||||||||20.24796|.|Cont|TN|N||745|||||
+DRVEF2020_RV|PCUENRBK|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Black or African American|||||||||||||20.24701|.|Cont|TN|N||745|||||
+DRVEF2020_RV|PCUENRHS|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Hispanic/Latino|||||||||||||20.24706|.|Cont|TN|N||745|||||
+DRVEF2020_RV|PCUENRWH|Fall enrollment/retention rates|Percent of undergraduate enrollment that are White|||||||||||||20.24711|.|Cont|TN|N||745|||||
+DRVEF2020_RV|PCUENR2M|Fall enrollment/retention rates|Percent of undergraduate enrollment that are two or more races|||||||||||||20.24716|.|Cont|TN|N||745|||||
+DRVEF2020_RV|PCUENRUN|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Race/ethnicity unknown|||||||||||||20.24721|.|Cont|TN|N||745|||||
+DRVEF2020_RV|PCUENRNR|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Nonresident Alien|||||||||||||20.24726|.|Cont|TN|N||745|||||
+DRVEF2020_RV|PCUENRW|Fall enrollment/retention rates|Percent of undergraduate enrollment that are women|||||||||||||20.24731|.|Cont|TN|N||745|||||
+SFA1819_RV|UPGRNTP|Student financial aid|Percent of undergraduate students awarded Pell grants|||||||||||||19.70416|XUPGRNTP.SFA1819_RV|Cont|TN|N||510|||||
+DRVEF2019_RV|DVEF15|Fall enrollment/retention rates|Percent of undergraduate enrollment, 25-64|||||||||||||19.23415|.|Cont|TN|N||745|||||
+DRVEF2019_RV|EFUG|Fall enrollment/retention rates|Undergraduate enrollment|||||||||||||19.24601|.|Cont|TN|N||745|||||
+DRVEF2019_RV|EFUGFT|Fall enrollment/retention rates|Full-time undergraduate enrollment|||||||||||||19.24631|.|Cont|TN|N||745|||||
+DRVEF2019_RV|EFUGPT|Fall enrollment/retention rates|Part-time undergraduate enrollment|||||||||||||19.24661|.|Cont|TN|N||745|||||
+DRVEF2019_RV|PCUENRAN|Fall enrollment/retention rates|Percent of undergraduate enrollment that are American Indian or Alaska Native|||||||||||||19.24691|.|Cont|TN|N||745|||||
+DRVEF2019_RV|PCUENRAP|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Asian/Native Hawaiian/Pacific Islander|||||||||||||19.24696|.|Cont|TN|N||745|||||
+DRVEF2019_RV|PCUENRAS|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Asian|||||||||||||19.24791|.|Cont|TN|N||745|||||
+DRVEF2019_RV|PCUENRNH|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Native Hawaiian or Other Pacific Islander|||||||||||||19.24796|.|Cont|TN|N||745|||||
+DRVEF2019_RV|PCUENRBK|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Black or African American|||||||||||||19.24701|.|Cont|TN|N||745|||||
+DRVEF2019_RV|PCUENRHS|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Hispanic/Latino|||||||||||||19.24706|.|Cont|TN|N||745|||||
+DRVEF2019_RV|PCUENRWH|Fall enrollment/retention rates|Percent of undergraduate enrollment that are White|||||||||||||19.24711|.|Cont|TN|N||745|||||
+DRVEF2019_RV|PCUENR2M|Fall enrollment/retention rates|Percent of undergraduate enrollment that are two or more races|||||||||||||19.24716|.|Cont|TN|N||745|||||
+DRVEF2019_RV|PCUENRUN|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Race/ethnicity unknown|||||||||||||19.24721|.|Cont|TN|N||745|||||
+DRVEF2019_RV|PCUENRNR|Fall enrollment/retention rates|Percent of undergraduate enrollment that are Nonresident Alien|||||||||||||19.24726|.|Cont|TN|N||745|||||
+DRVEF2019_RV|PCUENRW|Fall enrollment/retention rates|Percent of undergraduate enrollment that are women|||||||||||||19.24731|.|Cont|TN|N||745|||||
