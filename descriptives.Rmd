@@ -11,6 +11,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+pacman::p_load(here, rio, tidyverse)
 ```
 
 ## Introduction
@@ -18,6 +19,26 @@ knitr::opts_chunk$set(echo = TRUE)
 Info.
 
 Research Question:
+
+### Creating one dataset
+
+```{r}
+finance_data <- import(here("Data", "Data Institutional Finance Variables.csv"))
+
+studentbody_data <- import(here("Data", "Data Student Body Composition Variables.csv"))
+
+academic_data <- import(here("Data", "Data Academic Variables.csv"))
+
+admissions_data <- import(here("Data", "Data Admissions Variables.csv"))
+
+dependentdv_data <- import(here("Data", "Data Dependent Variables.csv"))
+
+carnegie_data <- import(here("Data/Data Carnegie Variables", "Data Carnegie Variables.csv"))
+
+geographic_data <- import(here("Data/Data Geographic Variables", "Data Geographic Variables.csv"))
+
+```
+
 
 ### Dependent Variables
 
