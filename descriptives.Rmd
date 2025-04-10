@@ -1,0 +1,26 @@
+---
+title: "Initial Descriptives"
+author: "Group 3: Institutional Characteristics"
+date: "`r Sys.Date()`"
+output: 
+  prettydoc::html_pretty:
+    theme: cayman
+    toc: true
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+Info.
+
+## Dependent Variables
+
+Info.
+
+## Independent Variables
+
+Info.
