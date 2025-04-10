@@ -11,33 +11,81 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-pacman::p_load(here, rio, tidyverse)
+pacman::p_load(here, rio, tidyverse, janitor)
 ```
 
 ## Introduction
 
-Info.
+We are creating descriptives for the data here.
 
 Research Question:
 
 ### Creating one dataset
 
-```{r}
-finance_data <- import(here("Data", "Data Institutional Finance Variables.csv"))
+```{r individual data files}
+finance_data <- import(here("Data", "Data Institutional Finance Variables.csv"))  %>% # Dong
+  janitor::clean_names()
 
-studentbody_data <- import(here("Data", "Data Student Body Composition Variables.csv"))
+dependentdv_data <- import(here("Data", "Data Dependent Variables.csv")) %>% # Dong
+  janitor::clean_names()
 
-academic_data <- import(here("Data", "Data Academic Variables.csv"))
+studentbody_data <- import(here("Data", "Data Student Body Composition Variables.csv")) %>%  # Anwesha
+  janitor::clean_names()
 
-admissions_data <- import(here("Data", "Data Admissions Variables.csv"))
+carnegie_data <- import(here("Data/Data Carnegie Variables", "Data Carnegie Variables.csv")) %>% # Anwesha
+  janitor::clean_names()
 
-dependentdv_data <- import(here("Data", "Data Dependent Variables.csv"))
+academic_data <- import(here("Data", "Data Academic Variables.csv")) %>% # Amleset
+  janitor::clean_names()
 
-carnegie_data <- import(here("Data/Data Carnegie Variables", "Data Carnegie Variables.csv"))
+admissions_data <- import(here("Data", "Data Admissions Variables.csv")) %>% # Amleset
+  janitor::clean_names()
 
-geographic_data <- import(here("Data/Data Geographic Variables", "Data Geographic Variables.csv"))
+geographic_data <- import(here("Data/Data Geographic Variables", "Data Geographic Variables.csv")) %>% # Kurt
+  janitor::clean_names()
 
+# non-IPEDS data TBD # Kurt
 ```
+
+
+```{r}
+# aimed format: institution, year, variable, value
+
+#starting off with finance data
+finance_data <- finance_data %>%
+  select(1:2, sort(names(.)[-(1:2)]), -v218) #sort alphabetical to better see vars. also, v218 is an empty variable tacked onto the end, so I removed it here
+
+# most follow the 4-digit year format, except the avg net price i'll remove those, clean them up, and then add them back in.
+finance_netprice_clean <- finance_data %>%
+  select(unit_id, institution_name, starts_with("average_net_price")) %>% 
+  mutate(avg_net_price_w_aid_2019 = coalesce(average_net_price_students_awarded_grant_or_scholarship_aid_2018_19_sfa1819_rv,
+                                             average_net_price_students_awarded_grant_or_scholarship_aid_2018_19_sfa1819_rv_2),
+         avg_net_price_w_aid_2020 = coalesce(average_net_price_students_awarded_grant_or_scholarship_aid_2019_20_sfa1920_rv,
+                                             average_net_price_students_awarded_grant_or_scholarship_aid_2019_20_sfa1920_rv_2),
+         avg_net_price_w_aid_2021 = coalesce(average_net_price_students_awarded_grant_or_scholarship_aid_2020_21_sfa2021_rv,
+                                             average_net_price_students_awarded_grant_or_scholarship_aid_2020_21_sfa2021_rv_2),
+         avg_net_price_w_aid_2022 = coalesce(average_net_price_students_awarded_grant_or_scholarship_aid_2021_22_sfa2122_rv,
+                                             average_net_price_students_awarded_grant_or_scholarship_aid_2021_22_sfa2122_rv_2),
+         avg_net_price_w_aid_2023 = coalesce(average_net_price_students_awarded_grant_or_scholarship_aid_2022_23_sfa2223,
+                                             average_net_price_students_awarded_grant_or_scholarship_aid_2022_23_sfa2223_2)) %>% 
+  select(1, 2, 13:17)
+
+finance_data <- finance_data %>% 
+  select(-starts_with("average_net_price"), -starts_with("imputation")) %>%  #removing imputation flag for now
+  left_join(., finance_netprice_clean) 
+
+finance_data_clean <- finance_data %>% 
+  pivot_longer(
+    cols = -c(unit_id, institution_name),
+    names_to = "variable",
+    values_to = "value"
+  ) %>% 
+  mutate(
+    year = str_extract(variable, "\\d{4}")
+  )
+## values don't quite look right -- double check this!
+```
+
 
 
 ### Dependent Variables
