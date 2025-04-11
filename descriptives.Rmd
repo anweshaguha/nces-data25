@@ -10,7 +10,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 pacman::p_load(here, rio, tidyverse, janitor)
 ```
 
@@ -23,36 +23,31 @@ Research Question:
 ### Creating one dataset
 
 ```{r individual data files}
-finance_data <- import(here("Data", "Data Institutional Finance Variables.csv"))  %>% # Dong
-  janitor::clean_names()
+finance_data <- import(here("Data", "Data Institutional Finance Variables.csv"))  # Dong
 
-dependentdv_data <- import(here("Data", "Data Dependent Variables.csv")) %>% # Dong
-  janitor::clean_names()
+dependentdv_data <- import(here("Data", "Data Dependent Variables.csv")) # Dong
 
-studentbody_data <- import(here("Data", "Data Student Body Composition Variables.csv")) %>%  # Anwesha
-  janitor::clean_names()
+studentbody_data <- import(here("Data", "Data Student Body Composition Variables.csv"))  # Anwesha
 
-carnegie_data <- import(here("Data/Data Carnegie Variables", "Data Carnegie Variables.csv")) %>% # Anwesha
-  janitor::clean_names()
+carnegie_data <- import(here("Data/Data Carnegie Variables", "Data Carnegie Variables.csv")) # Anwesha
+#  janitor::clean_names() # omitting this to add in labels first
 
-academic_data <- import(here("Data", "Data Academic Variables.csv")) %>% # Amleset
-  janitor::clean_names()
+academic_data <- import(here("Data", "Data Academic Variables.csv")) # Amleset
 
-admissions_data <- import(here("Data", "Data Admissions Variables.csv")) %>% # Amleset
-  janitor::clean_names()
+admissions_data <- import(here("Data", "Data Admissions Variables.csv")) # Amleset
 
-geographic_data <- import(here("Data/Data Geographic Variables", "Data Geographic Variables.csv")) %>% # Kurt
-  janitor::clean_names()
+geographic_data <- import(here("Data/Data Geographic Variables", "Data Geographic Variables.csv")) # Kurt
 
 # non-IPEDS data TBD # Kurt
 ```
 
-
+The code below begins to clean the finance data and put it in long format.
 ```{r}
 # aimed format: institution, year, variable, value
 
 #starting off with finance data
 finance_data <- finance_data %>%
+  janitor::clean_names() %>% 
   select(1:2, sort(names(.)[-(1:2)]), -v218) #sort alphabetical to better see vars. also, v218 is an empty variable tacked onto the end, so I removed it here
 
 # most follow the 4-digit year format, except the avg net price i'll remove those, clean them up, and then add them back in.
@@ -83,16 +78,148 @@ finance_data_clean <- finance_data %>%
   mutate(
     year = str_extract(variable, "\\d{4}")
   )
-## values don't quite look right -- double check this!
+
+## clean up variable name
+finance_data_clean <- finance_data_clean %>% 
+  mutate(variable_base = str_extract(variable, ".*(?=_(drv|ic))")) %>% #take out the suffix
+  select(-variable)
+```
+
+On second thought, it might make more sense for everyone to do this part however they like, and then I can take the datasets created and pull them all together in the end. I'll still leave the code here in case it's useful, but I'll move on. - Anwesha
+
+### Student Body & Carnegie Data (Anwesha)
+
+#### Carnegie classification
+```{r}
+carnegie_labels <- import(here("Data/Data Carnegie Variables", "Labels Carnegie Variables.csv"))
+
+carnegie_data <- carnegie_data %>% 
+  select(-V9) %>% # get rid of rogue empty variable
+  pivot_longer(
+    cols = -c(1:2),
+    names_to = "VariableName",
+    values_to = "Value"
+  ) 
+
+# add in labels
+carnegie_labelled <- carnegie_data %>% 
+  left_join(., carnegie_labels) %>% 
+  select(-Value)
+```
+
+Descriptives by Carnegie classification are below. Note that there are about 8 schools that enroll graduate students exclusively. We may want to exclude these schools when we run our analyses.
+```{r}
+carnegie_labelled <- carnegie_labelled %>% 
+  pivot_wider(
+    names_from = VariableName,
+    values_from = ValueLabel
+  )
+```
+
+```{r carnegieplots, fig.width=10, fig.height=8}
+# Get the names of the variables to plot (excluding UnitID and Institution Name)
+vars_to_plot <- names(carnegie_labelled)[3:8]
+
+# Loop over each variable and create a bar chart
+for (var in vars_to_plot) {
+  
+  p <- carnegie_labelled %>%
+    count(.data[[var]]) %>%
+    ggplot(aes(x = reorder(.data[[var]], n), y = n)) +
+    geom_bar(stat = "identity", fill = "#005288") + # color taken from website
+    geom_text(aes(label = n), hjust = -0.5, size = 3) +
+    labs(title = var, x = NULL, y = "Count") +
+    theme_minimal() +
+    theme(panel.grid.major.y = element_blank(),
+          plot.title = element_text(face = "bold", size = 13, hjust = 0, margin = margin(l = -80))) +
+    scale_y_continuous(expand = expansion(mult = c(0, 0.07))) + # bars flush with axes, some space for text
+    coord_flip()
+  
+  print(p)
+}
+```
+
+#### Student Body
+
+```{r}
+studentbody_data <- studentbody_data %>% 
+  select(-V88, -contains("Imputation")) %>% 
+  pivot_longer(
+    cols = -c(1:2),
+    names_to = "VariableName",
+    values_to = "Value"
+  )
+
+studentbody_data_clean <- studentbody_data %>% 
+  rename_with(~ str_trim(.), everything()) %>%  # trim any weird spacing in names
+  mutate(
+    year = case_when(
+      str_detect(VariableName, "DRVEF\\d{4}") ~ str_extract(VariableName, "DRVEF(\\d{4})") %>% str_remove("DRVEF"),
+      str_detect(VariableName, "SFA\\d{4}") ~ paste0("20", str_sub(str_extract(VariableName, "SFA\\d{4}"), -2)),  # grab last 2 digits
+      TRUE ~ NA_character_
+    ),  # extract 4-digit year conditionally
+    clean_label = str_remove(VariableName, "\\s*\\([^\\)]+\\)")  # remove everything in parentheses
+  ) %>% #looks good! I'll remove original variable name
+  select(-VariableName)
+```
+
+Let's see what the variable names are here.
+```{r}
+table(studentbody_data_clean$clean_label)
+```
+
+The Pell and Non-resident variables are broken into two different variables due to different naming conventions. I'll combine those.
+```{r}
+studentbody_data_clean <- studentbody_data_clean %>% 
+  mutate(clean_label = recode(clean_label, "Percent of undergraduate enrollment that are Nonresident Alien" = 
+        "Percent of undergraduate enrollment that are U.S. Nonresident",
+        "Percent of undergraduate students awarded Pell grants" = 
+        "Percent of undergraduate students awarded Federal Pell grants"))
+
+table(studentbody_data_clean$clean_label)
+```
+Great, everything is uniform now. I'll pivot the dataset to better create a descriptive table. Note that the schools and/or years with 0 enrollment should be removed from the dataset when we do the analysis.
+
+```{r}
+overall_minmax_students <- studentbody_data_clean %>%
+  group_by(clean_label) %>%
+  summarise(
+    n = sum(!is.na(Value)),
+    min = min(Value, na.rm = TRUE),
+    max = max(Value, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+studentbody_descriptives <- studentbody_data_clean %>%
+  group_by(clean_label, year) %>%
+  summarise(
+    mean = round(mean(Value, na.rm = TRUE), 1),
+    median = round(median(Value, na.rm = TRUE), 1),
+    .groups = "drop"
+  ) %>%
+  # Create year-specific columns
+  pivot_wider(
+    names_from = year,
+    values_from = c(mean, median),
+    names_glue = "{.value}_{year}"
+  ) %>%
+  arrange(clean_label) %>% 
+  right_join(overall_minmax_students, by = "clean_label")
+```
+```{r}
+library(kableExtra)
+
+studentbody_descriptives %>%
+  kable(digits = 1, 
+        col.names = gsub("_", " ", names(studentbody_descriptives)),
+        caption = "Summary Statistics by Year") %>%
+  kable_styling(full_width = FALSE, 
+                bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
 
 
-### Dependent Variables
-
-Info.
-
-### Independent Variables
+### Other Variables ... 
 
 Info.
 
