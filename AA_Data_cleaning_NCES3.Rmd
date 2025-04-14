@@ -1,0 +1,203 @@
+---
+title: "NCES-AA Data Cleaning and Descriptive Stat"
+author: "Amleset Abrhale"
+date: "2025-04-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+academic_data <- read.csv("https://raw.githubusercontent.com/anweshaguha/nces-data25/refs/heads/main/Data/Data%20Academic%20Variables.csv")
+head(academic_data)
+colnames(academic_data)
+```
+
+```{r,message=FALSE, warning=FALSE}
+install.packages("gt")
+library(tidyverse)
+library(ggplot2)
+  
+
+# Clean and select relevant columns
+academic_data_clean <- academic_data %>%
+  rename(
+    UnitID = `UnitID`,
+    Institution = `Institution.Name`,
+    Ratio_2023 = `Student.to.faculty.ratio..EF2023D.`,
+    Ratio_2022 = `Student.to.faculty.ratio..EF2022D_RV.`,
+    Ratio_2021 = `Student.to.faculty.ratio..EF2021D_RV.`,
+    Ratio_2020 = `Student.to.faculty.ratio..EF2020D_RV.`,
+    Ratio_2019 = `Student.to.faculty.ratio..EF2019D_RV.`
+  ) %>%
+  select(UnitID, Institution, starts_with("Ratio_")) %>%
+  mutate(across(starts_with("Ratio_"), as.numeric))  # Convert to numeric
+head(academic_data_clean)
+```
+
+```{r}
+# Descriptive stats by year
+summary_stats <- academic_data_clean %>%
+  summarise(
+    across(starts_with("Ratio_"), list(
+      Mean = ~round(mean(.x, na.rm = TRUE)),
+      Median = ~median(.x, na.rm = TRUE),
+      SD = ~sd(.x, na.rm = TRUE)
+    ), .names = "{.col}_{.fn}")
+  )
+
+print(summary_stats)
+
+```
+
+```{r,message='FALSE',Warning='FALSE}
+# Gather ratio columns into long format
+ratio_long <- academic_data_clean %>%
+  select(starts_with("Ratio_")) %>%
+  pivot_longer(cols = everything(), names_to = "Ratio_Type", values_to = "Value")
+
+# Histogram
+hist_plot <- ggplot(ratio_long, aes(x = Value)) +
+  geom_histogram(bins = 30, fill = "skyblue", color = "black") +
+  facet_wrap(~ Ratio_Type, scales = "free") +
+  theme_minimal() +
+  labs(title = "Histogram of Ratio Variables")
+
+# Boxplot
+box_plot <- ggplot(ratio_long, aes(x = Ratio_Type, y = Value, fill = Ratio_Type)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title = "Boxplot of Ratio Variables")
+hist_plot
+box_plot
+
+
+# Long format without year
+ratio_long <- academic_data_clean %>%
+  select(starts_with("Ratio_")) %>%
+  pivot_longer(cols = everything(), names_to = "Ratio_Type", values_to = "Value")
+
+# Plot
+ggplot(ratio_long, aes(x = Value)) +
+  geom_histogram(bins = 30, fill = "lightblue", color = "black") +
+  facet_wrap(~ Ratio_Type, scales = "free") +
+  theme_minimal() +
+  labs(title = "Distribution of Ratio Variables")
+
+```
+# Admissions Data
+
+```{r,message='FALSE',warning='FALSE'}
+admission_data<- read.csv("https://raw.githubusercontent.com/anweshaguha/nces-data25/refs/heads/main/Data/Data%20Admissions%20Variables.csv")
+head(admission_data)
+colnames(admission_data)
+
+# 1: Select only total count columns (exclude imputation flags)
+admission_data_clean <- admission_data %>%
+  select(UnitID, Institution.Name, matches("^Applicants|^Admissions|^Enrolled")) %>%
+  pivot_longer(
+    cols = -c(UnitID, Institution.Name),
+    names_to = "Variable",
+    values_to = "Value"
+  ) %>%
+  
+  # 2: Extract category and year from column names
+  mutate(
+    Category = case_when(
+      str_detect(Variable, "Applicants") ~ "Applicants",
+      str_detect(Variable, "Admissions") ~ "Admissions",
+      str_detect(Variable, "Enrolled") ~ "Enrolled"
+    ),
+    Year = str_extract(Variable, "20\\d{2}"),
+    Year = as.integer(Year)
+  ) %>%
+  filter(!is.na(Year))  # Remove NA years (some might not match pattern)
+
+# Take a quick look
+head(admission_data_clean)
+
+summary_stats <- admission_data_clean %>%
+  group_by(Year, Category) %>%
+  summarise(
+    Mean = round(mean(Value, na.rm = TRUE)),
+    Median = round(median(Value, na.rm = TRUE)),
+    SD = round(sd(Value, na.rm = TRUE), 2),
+    Count = n()
+  )
+
+print(summary_stats)
+
+
+# Pivot wider to get Applicants, Admissions, Enrolled in separate columns
+ad_wide <- admission_data_clean %>%
+  select(UnitID, Institution.Name, Year, Category, Value) %>%
+  pivot_wider(names_from = Category, values_from = Value) %>%
+  arrange(UnitID, Year)
+
+# Calculate year-over-year change + derived metrics
+ad_metrics <- ad_wide %>%
+  group_by(UnitID) %>%
+  arrange(Year) %>%
+  mutate(
+    Change_Enroll = Enrolled - lag(Enrolled),
+    Change_Applicants = Applicants - lag(Applicants),
+    Yield = Enrolled / Admissions,
+    Change_Yield = Yield - lag(Yield),
+    Attractor_Score = Applicants * Yield,
+    Change_Attractor = Attractor_Score - lag(Attractor_Score)
+  ) %>%
+  ungroup()
+
+
+
+# Enroll vs Applicants
+ggplot(ad_metrics, aes(x = Change_Applicants, y = Change_Enroll)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal() +
+  labs(title = "Change in Enrollment vs Change in Applicants")
+
+# Enroll vs Yield
+ggplot(ad_metrics, aes(x = Change_Yield, y = Change_Enroll)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal() +
+  labs(title = "Change in Enrollment vs Change in Yield Rate")
+
+# Enroll vs Attractor Score
+ggplot(ad_metrics, aes(x = Change_Attractor, y = Change_Enroll)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal() +
+  labs(title = "Change in Enrollment vs Change in Attractor Score")
+
+```
+
+
+```{r,message='FALSE',warning='FALSE'}
+# Correlation between Change in Enrollment and Change in Applicants
+cor_applicants <- cor.test(ad_metrics$Change_Enroll, ad_metrics$Change_Applicants, use = "complete.obs")
+
+# Correlation between Change in Enrollment and Change in Yield
+cor_yield <- cor.test(ad_metrics$Change_Enroll, ad_metrics$Change_Yield, use = "complete.obs")
+
+# Correlation between Change in Enrollment and Change in Attractor Score
+cor_attractor <- cor.test(ad_metrics$Change_Enroll, ad_metrics$Change_Attractor, use = "complete.obs")
+
+# Print results with titles
+cat("🔹 Correlation: Change in Enrollment vs Change in Applicants\n")
+print(cor_applicants)
+cat("\n-----------------------------\n")
+
+cat("🔹 Correlation: Change in Enrollment vs Change in Yield Rate\n")
+print(cor_yield)
+cat("\n-----------------------------\n")
+
+cat("🔹 Correlation: Change in Enrollment vs Change in Attractor Score\n")
+print(cor_attractor)
+
+```
