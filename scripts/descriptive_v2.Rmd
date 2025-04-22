@@ -2,29 +2,271 @@
 title: "Descriptives - Version 2"
 author: "Anwesha Guha"
 date: "`r Sys.Date()`"
-output: html_document
+output: 
+  prettydoc::html_pretty:
+    theme: cayman
+    toc: true
+    number_sections: true
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+pacman::p_load(here, rio, tidyverse, janitor, gt, psych)
 ```
 
-## R Markdown
+## Read in data
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r individual data files, eval=FALSE, include=FALSE}
+finance_data <- import(here("Data", "Data Institutional Finance Variables.csv"))  # Dong
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+dependentdv_data <- import(here("Data", "Data Dependent Variables.csv")) # Dong
 
-```{r cars}
-summary(cars)
+studentbody_data <- import(here("Data", "Data Student Body Composition Variables.csv"))  # Anwesha
+
+carnegie_data <- import(here("Data/Data Carnegie Variables", "Data Carnegie Variables.csv")) # Anwesha
+#  janitor::clean_names() # omitting this to add in labels first
+
+academic_data <- import(here("Data", "Data Academic Variables.csv")) # Amleset, NOT USING
+
+admissions_data <- import(here("Data", "Data Admissions Variables.csv")) # Amleset
+
+# geographic_data <- import(here("Data/Data Geographic Variables", "Data Geographic Variables.csv")) # Kurt
+# IPEDS: Geographic data ----
+ipeds_geog_values <- read_csv(
+  file = "Data/Data Geographic Variables/Data Geographic Variables.csv", col_select = 1:9
+)
+ipeds_geog_labels <- read_csv(
+  file = "Data/Data Geographic Variables/Labels Geographic Variables.csv"
+)
+
+
+# non-IPEDS data TBD # Kurt
+# WICHE Data: High School Graduates by Year by State ----
+wiche_data_allrows <- readxl::read_xlsx(
+  path = "Data/Non-IPEDS Data/WICHE HS Graduates by State.xlsx",
+  sheet = "Data"
+)
+# ACS Data: Educational Attainment by State ----
+acs_2018 <- read_csv(
+  file = "Data/Non-IPEDS Data/ACS Educational Attainment by State/ACSST1Y2018.S1501-2025-04-09T015452.csv"
+)
+stabbr_csv <- read_csv(
+  file = "Data/Non-IPEDS Data/states.csv"
+)
 ```
 
-## Including Plots
+## Dependent variables 
 
-You can also embed plots, for example:
+  Enrollment – defined as first-time full-time student cohort 
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+## Independent variables 
+
+
+###  Applicants (numeric: integers) 
+
+```{r}
+admissions_data <- import(here("Data", "Data Admissions Variables.csv"))
+
+# 1: Select only total count columns (exclude imputation flags)
+admission_data_clean <- admissions_data %>%
+  clean_names() %>% 
+  select(unit_id, institution_name, matches("^applicants|^admissions|^enrolled")) %>%
+  pivot_longer(
+    cols = -c(unit_id, institution_name),
+    names_to = "variable",
+    values_to = "value"
+  ) %>%
+  
+  # 2: Extract category and year from column names
+  mutate(
+    category = case_when(
+      str_detect(variable, "applicants") ~ "applicants",
+      str_detect(variable, "admissions") ~ "admissions",
+      str_detect(variable, "enrolled") ~ "enrolled"
+    ),
+    year = str_extract(variable, "20\\d{2}"),
+    year = as.integer(year)
+  ) %>%
+  filter(!is.na(year)) %>%  # Remove NA years (some might not match pattern)
+  filter(value > 1) # Should have over 1 student enrolled
+
+summary_stats <- admission_data_clean %>%
+  group_by(year, category) %>%
+  summarise(
+    Mean = round(mean(value, na.rm = TRUE)),
+    Median = round(median(value, na.rm = TRUE)),
+    SD = round(sd(value, na.rm = TRUE), 2),
+    Count = n()
+  )
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+###  Admissions rate (numeric: %, 0 to 100) 
+
+```{r}
+admissions_rate_df <- admission_data_clean %>%
+  group_by(unit_id, institution_name, year, category) %>%
+  summarise(value = sum(value, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = category, values_from = value) %>%
+  mutate(admissions_rate = admissions / applicants)
+```
+
+```{r}
+describe(admissions_rate_df)
+```
+
+
+###  Average net price with aid (numeric: integers) 
+```{r}
+finance_data <- import(here("Data", "Data Institutional Finance Variables.csv")) %>% 
+  janitor::clean_names() %>% 
+  select(unit_id, institution_name, starts_with("average_net_price")) %>%
+  mutate(avg_net_price_w_aid_2019 = coalesce(average_net_price_students_awarded_grant_or_scholarship_aid_2018_19_sfa1819_rv,
+                                             average_net_price_students_awarded_grant_or_scholarship_aid_2018_19_sfa1819_rv_2),
+         avg_net_price_w_aid_2020 = coalesce(average_net_price_students_awarded_grant_or_scholarship_aid_2019_20_sfa1920_rv,
+                                             average_net_price_students_awarded_grant_or_scholarship_aid_2019_20_sfa1920_rv_2),
+         avg_net_price_w_aid_2021 = coalesce(average_net_price_students_awarded_grant_or_scholarship_aid_2020_21_sfa2021_rv,
+                                             average_net_price_students_awarded_grant_or_scholarship_aid_2020_21_sfa2021_rv_2),
+         avg_net_price_w_aid_2022 = coalesce(average_net_price_students_awarded_grant_or_scholarship_aid_2021_22_sfa2122_rv,
+                                             average_net_price_students_awarded_grant_or_scholarship_aid_2021_22_sfa2122_rv_2),
+         avg_net_price_w_aid_2023 = coalesce(average_net_price_students_awarded_grant_or_scholarship_aid_2022_23_sfa2223,
+                                             average_net_price_students_awarded_grant_or_scholarship_aid_2022_23_sfa2223_2)) %>% 
+  select(1, 2, 13:17)
+
+finance_data_clean <- finance_data %>%
+  pivot_longer(
+    cols = starts_with("avg_net_price_w_aid"),  # Select columns with "avg_net_price_w_aid"
+    names_to = "year",                         # The new column to hold the year
+    values_to = "avg_net_price_w_aid"          # The new column to hold the values
+  ) %>%
+  mutate(year = as.integer(sub("avg_net_price_w_aid_", "", year))) %>%  # Clean up the 'year' column to integer
+  filter(avg_net_price_w_aid > 0) #omit weird negative
+
+```
+
+```{r}
+describe(finance_data_clean$avg_net_price_w_aid)
+```
+
+```{r}
+describeBy(finance_data_clean$avg_net_price_w_aid, group = finance_data_clean$year) #2021 was cheaper
+```
+
+###  Percent of undergraduate students awarded Federal Pell grants (numeric: %, 0 to 100) 
+
+```{r}
+studentbody_data <- import(here("Data", "Data Student Body Composition Variables.csv"))
+
+studentbody_data <- studentbody_data %>% 
+  select(-V88, -contains("Imputation")) %>% 
+  pivot_longer(
+    cols = -c(1:2),
+    names_to = "VariableName",
+    values_to = "Value"
+  )
+
+studentbody_data_clean <- studentbody_data %>% 
+  rename_with(~ str_trim(.), everything()) %>%  # trim any weird spacing in names
+  mutate(
+    year = case_when(
+      str_detect(VariableName, "DRVEF\\d{4}") ~ str_extract(VariableName, "DRVEF(\\d{4})") %>% str_remove("DRVEF"),
+      str_detect(VariableName, "SFA\\d{4}") ~ paste0("20", str_sub(str_extract(VariableName, "SFA\\d{4}"), -2)),  # grab last 2 digits
+      TRUE ~ NA_character_
+    ),  # extract 4-digit year conditionally
+    clean_label = str_remove(VariableName, "\\s*\\([^\\)]+\\)")  # remove everything in parentheses
+  ) %>% #looks good! I'll remove original variable name
+  select(-VariableName)
+
+# The Pell and Non-resident variables are broken into two different variables due to different naming conventions. I'll combine those.
+
+studentbody_data_clean <- studentbody_data_clean %>% 
+  mutate(clean_label = recode(clean_label, "Percent of undergraduate enrollment that are Nonresident Alien" = 
+        "Percent of undergraduate enrollment that are U.S. Nonresident",
+        "Percent of undergraduate students awarded Pell grants" = 
+        "Percent of undergraduate students awarded Federal Pell grants"))
+
+# table(studentbody_data_clean$clean_label) #check
+
+minoritized_dat <- studentbody_data_clean %>% 
+  mutate(clean_label = case_when(clean_label == "Percent of undergraduate students awarded Federal Pell grants" ~ "pct_pell",
+                               clean_label == "Percent of undergraduate enrollment that are White" ~ "pct_white",
+                               clean_label == "Undergraduate enrollment" ~ "enrollment")) %>% 
+  filter(clean_label == "pct_pell" | clean_label == "pct_white" | clean_label == "enrollment") %>% 
+  janitor::clean_names() %>% 
+  pivot_wider(names_from = clean_label,
+              values_from = value) %>% 
+  mutate(pct_race_minority = 100 - pct_white) %>% 
+  select(-pct_white) %>% 
+  filter(enrollment > 1)
+```
+
+###  Percent racially minoritized students (numeric: %, 0 to 100) 
+
+```{r}
+describe(minoritized_dat)
+```
+
+## Complete dataset
+
+We will restrict the sample to the schools that have all the independent variables represented.
+
+```{r}
+minoritized_dat$year = as.integer(minoritized_dat$year)
+finance_data_clean$year = as.integer(finance_data_clean$year)
+admissions_rate_df$year = as.integer(admissions_rate_df$year)
+
+admissions_selected <- admissions_rate_df %>% select(-enrolled, -admissions)
+
+dat <- inner_join(minoritized_dat, finance_data_clean)
+dat <- inner_join(dat, admissions_selected)
+```
+
+```{r}
+length(unique(dat$unit_id))
+```
+
+We have 1,606 unique Institution IDs in our sample.
+
+```{r}
+describe(dat) %>% 
+  gt() 
+#  fmt_number(decimals = 2)
+```
+Examine by year.
+
+```{r}
+dat %>%
+  group_by(year) %>%
+  summarise(
+    across(
+      -c(unit_id, institution_name),
+      list(mean = mean, sd = sd),
+      na.rm = TRUE
+    ),
+    .groups = "drop"
+  ) %>% 
+  pivot_longer(
+    cols = -year,
+    names_to = c("variable", "stat"),
+    names_pattern = "^(.*)_(mean|sd)$"
+  ) %>%
+  pivot_wider(
+    names_from = year,
+    values_from = value
+  ) %>% 
+  mutate(across(where(is.numeric), ~round(.x, 2)))
+
+```
+
+
+## Control variables 
+
+  Percent of adults 25 and over with a Bachelor’s degree or higher by state in 2018 (numeric: %, 0 to 100) 
+
+  Degree of urbanization (categorical: city, suburb, town, rural) 
+
+  Bureau of Economic Analysis regions (categorical: 8 regions) 
+
+  Carnegie ranking (categorical: R1, R2, M, other) 
+
+
+
