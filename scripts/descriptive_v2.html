@@ -12,7 +12,7 @@
 
 <meta name="author" content="Anwesha Guha" />
 
-<meta name="date" content="2025-04-21" />
+<meta name="date" content="2025-04-22" />
 
 <title>Descriptives - Version 2</title>
 
@@ -141,7 +141,7 @@ pointer-events: auto;
 <section class="page-header">
 <h1 class="title toc-ignore project-name">Descriptives - Version 2</h1>
 <h4 class="author project-author">Anwesha Guha</h4>
-<h4 class="date project-date">2025-04-21</h4>
+<h4 class="date project-date">2025-04-22</h4>
 </section>
 
 
@@ -165,7 +165,18 @@ awarded Federal Pell grants (numeric: %, 0 to 100)</a></li>
 students (numeric: %, 0 to 100)</a></li>
 </ul></li>
 <li><a href="#complete-dataset" id="toc-complete-dataset"><span class="toc-section-number">4</span> Complete dataset</a></li>
-<li><a href="#control-variables" id="toc-control-variables"><span class="toc-section-number">5</span> Control variables</a></li>
+<li><a href="#control-variables" id="toc-control-variables"><span class="toc-section-number">5</span> Control variables</a>
+<ul>
+<li><a href="#percent-of-adults-25-and-over-with-a-bachelors-degree-or-higher-by-state-in-2018-numeric-0-to-100-acs" id="toc-percent-of-adults-25-and-over-with-a-bachelors-degree-or-higher-by-state-in-2018-numeric-0-to-100-acs"><span class="toc-section-number">5.1</span> Percent of adults 25 and over with
+a Bachelor’s degree or higher by state in 2018 (numeric: %, 0 to 100) –
+ACS</a></li>
+<li><a href="#high-school-graduates-by-state-numeric-integer-wiche" id="toc-high-school-graduates-by-state-numeric-integer-wiche"><span class="toc-section-number">5.2</span> High-school graduates by state
+(numeric: integer) – WICHE</a></li>
+<li><a href="#degree-of-urbanization-categorical-citysuburb-townrural" id="toc-degree-of-urbanization-categorical-citysuburb-townrural"><span class="toc-section-number">5.3</span> Degree of urbanization
+(categorical: city/suburb, town/rural)</a></li>
+<li><a href="#carnegie-ranking-categorical-r1-r2-m-other" id="toc-carnegie-ranking-categorical-r1-r2-m-other"><span class="toc-section-number">5.4</span> Carnegie ranking (categorical: R1,
+R2, M, other)</a></li>
+</ul></li>
 </ul>
 </div>
 </div>
@@ -398,20 +409,20 @@ independent variables represented.</p>
 <p>We have 1,606 unique Institution IDs in our sample.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">describe</span>(dat) <span class="sc">%&gt;%</span> </span>
 <span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>  <span class="fu">gt</span>() </span></code></pre></div>
-<div id="mmzyjafybf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#mmzyjafybf table {
+<div id="kslcvvpesv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#kslcvvpesv table {
 font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
 }
-#mmzyjafybf thead, #mmzyjafybf tbody, #mmzyjafybf tfoot, #mmzyjafybf tr, #mmzyjafybf td, #mmzyjafybf th {
+#kslcvvpesv thead, #kslcvvpesv tbody, #kslcvvpesv tfoot, #kslcvvpesv tr, #kslcvvpesv td, #kslcvvpesv th {
 border-style: none;
 }
-#mmzyjafybf p {
+#kslcvvpesv p {
 margin: 0;
 padding: 0;
 }
-#mmzyjafybf .gt_table {
+#kslcvvpesv .gt_table {
 display: table;
 border-collapse: collapse;
 line-height: normal;
@@ -436,11 +447,11 @@ border-left-style: none;
 border-left-width: 2px;
 border-left-color: #D3D3D3;
 }
-#mmzyjafybf .gt_caption {
+#kslcvvpesv .gt_caption {
 padding-top: 4px;
 padding-bottom: 4px;
 }
-#mmzyjafybf .gt_title {
+#kslcvvpesv .gt_title {
 color: #333333;
 font-size: 125%;
 font-weight: initial;
@@ -451,7 +462,7 @@ padding-right: 5px;
 border-bottom-color: #FFFFFF;
 border-bottom-width: 0;
 }
-#mmzyjafybf .gt_subtitle {
+#kslcvvpesv .gt_subtitle {
 color: #333333;
 font-size: 85%;
 font-weight: initial;
@@ -462,7 +473,7 @@ padding-right: 5px;
 border-top-color: #FFFFFF;
 border-top-width: 0;
 }
-#mmzyjafybf .gt_heading {
+#kslcvvpesv .gt_heading {
 background-color: #FFFFFF;
 text-align: center;
 border-bottom-color: #FFFFFF;
@@ -473,12 +484,12 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#mmzyjafybf .gt_bottom_border {
+#kslcvvpesv .gt_bottom_border {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#mmzyjafybf .gt_col_headings {
+#kslcvvpesv .gt_col_headings {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -492,7 +503,7 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#mmzyjafybf .gt_col_heading {
+#kslcvvpesv .gt_col_heading {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -511,7 +522,7 @@ padding-left: 5px;
 padding-right: 5px;
 overflow-x: hidden;
 }
-#mmzyjafybf .gt_column_spanner_outer {
+#kslcvvpesv .gt_column_spanner_outer {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -522,13 +533,13 @@ padding-bottom: 0;
 padding-left: 4px;
 padding-right: 4px;
 }
-#mmzyjafybf .gt_column_spanner_outer:first-child {
+#kslcvvpesv .gt_column_spanner_outer:first-child {
 padding-left: 0;
 }
-#mmzyjafybf .gt_column_spanner_outer:last-child {
+#kslcvvpesv .gt_column_spanner_outer:last-child {
 padding-right: 0;
 }
-#mmzyjafybf .gt_column_spanner {
+#kslcvvpesv .gt_column_spanner {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
@@ -539,10 +550,10 @@ overflow-x: hidden;
 display: inline-block;
 width: 100%;
 }
-#mmzyjafybf .gt_spanner_row {
+#kslcvvpesv .gt_spanner_row {
 border-bottom-style: hidden;
 }
-#mmzyjafybf .gt_group_heading {
+#kslcvvpesv .gt_group_heading {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -567,7 +578,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 text-align: left;
 }
-#mmzyjafybf .gt_empty_group_heading {
+#kslcvvpesv .gt_empty_group_heading {
 padding: 0.5px;
 color: #333333;
 background-color: #FFFFFF;
@@ -581,13 +592,13 @@ border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 vertical-align: middle;
 }
-#mmzyjafybf .gt_from_md > :first-child {
+#kslcvvpesv .gt_from_md > :first-child {
 margin-top: 0;
 }
-#mmzyjafybf .gt_from_md > :last-child {
+#kslcvvpesv .gt_from_md > :last-child {
 margin-bottom: 0;
 }
-#mmzyjafybf .gt_row {
+#kslcvvpesv .gt_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -605,7 +616,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 overflow-x: hidden;
 }
-#mmzyjafybf .gt_stub {
+#kslcvvpesv .gt_stub {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -617,7 +628,7 @@ border-right-color: #D3D3D3;
 padding-left: 5px;
 padding-right: 5px;
 }
-#mmzyjafybf .gt_stub_row_group {
+#kslcvvpesv .gt_stub_row_group {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -630,13 +641,13 @@ padding-left: 5px;
 padding-right: 5px;
 vertical-align: top;
 }
-#mmzyjafybf .gt_row_group_first td {
+#kslcvvpesv .gt_row_group_first td {
 border-top-width: 2px;
 }
-#mmzyjafybf .gt_row_group_first th {
+#kslcvvpesv .gt_row_group_first th {
 border-top-width: 2px;
 }
-#mmzyjafybf .gt_summary_row {
+#kslcvvpesv .gt_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -645,14 +656,14 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#mmzyjafybf .gt_first_summary_row {
+#kslcvvpesv .gt_first_summary_row {
 border-top-style: solid;
 border-top-color: #D3D3D3;
 }
-#mmzyjafybf .gt_first_summary_row.thick {
+#kslcvvpesv .gt_first_summary_row.thick {
 border-top-width: 2px;
 }
-#mmzyjafybf .gt_last_summary_row {
+#kslcvvpesv .gt_last_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -661,7 +672,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#mmzyjafybf .gt_grand_summary_row {
+#kslcvvpesv .gt_grand_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -670,7 +681,7 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#mmzyjafybf .gt_first_grand_summary_row {
+#kslcvvpesv .gt_first_grand_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -679,7 +690,7 @@ border-top-style: double;
 border-top-width: 6px;
 border-top-color: #D3D3D3;
 }
-#mmzyjafybf .gt_last_grand_summary_row_top {
+#kslcvvpesv .gt_last_grand_summary_row_top {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -688,10 +699,10 @@ border-bottom-style: double;
 border-bottom-width: 6px;
 border-bottom-color: #D3D3D3;
 }
-#mmzyjafybf .gt_striped {
+#kslcvvpesv .gt_striped {
 background-color: rgba(128, 128, 128, 0.05);
 }
-#mmzyjafybf .gt_table_body {
+#kslcvvpesv .gt_table_body {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -699,7 +710,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#mmzyjafybf .gt_footnotes {
+#kslcvvpesv .gt_footnotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -712,7 +723,7 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#mmzyjafybf .gt_footnote {
+#kslcvvpesv .gt_footnote {
 margin: 0px;
 font-size: 90%;
 padding-top: 4px;
@@ -720,7 +731,7 @@ padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#mmzyjafybf .gt_sourcenotes {
+#kslcvvpesv .gt_sourcenotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -733,64 +744,64 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#mmzyjafybf .gt_sourcenote {
+#kslcvvpesv .gt_sourcenote {
 font-size: 90%;
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#mmzyjafybf .gt_left {
+#kslcvvpesv .gt_left {
 text-align: left;
 }
-#mmzyjafybf .gt_center {
+#kslcvvpesv .gt_center {
 text-align: center;
 }
-#mmzyjafybf .gt_right {
+#kslcvvpesv .gt_right {
 text-align: right;
 font-variant-numeric: tabular-nums;
 }
-#mmzyjafybf .gt_font_normal {
+#kslcvvpesv .gt_font_normal {
 font-weight: normal;
 }
-#mmzyjafybf .gt_font_bold {
+#kslcvvpesv .gt_font_bold {
 font-weight: bold;
 }
-#mmzyjafybf .gt_font_italic {
+#kslcvvpesv .gt_font_italic {
 font-style: italic;
 }
-#mmzyjafybf .gt_super {
+#kslcvvpesv .gt_super {
 font-size: 65%;
 }
-#mmzyjafybf .gt_footnote_marks {
+#kslcvvpesv .gt_footnote_marks {
 font-size: 75%;
 vertical-align: 0.4em;
 position: initial;
 }
-#mmzyjafybf .gt_asterisk {
+#kslcvvpesv .gt_asterisk {
 font-size: 100%;
 vertical-align: 0;
 }
-#mmzyjafybf .gt_indent_1 {
+#kslcvvpesv .gt_indent_1 {
 text-indent: 5px;
 }
-#mmzyjafybf .gt_indent_2 {
+#kslcvvpesv .gt_indent_2 {
 text-indent: 10px;
 }
-#mmzyjafybf .gt_indent_3 {
+#kslcvvpesv .gt_indent_3 {
 text-indent: 15px;
 }
-#mmzyjafybf .gt_indent_4 {
+#kslcvvpesv .gt_indent_4 {
 text-indent: 20px;
 }
-#mmzyjafybf .gt_indent_5 {
+#kslcvvpesv .gt_indent_5 {
 text-indent: 25px;
 }
-#mmzyjafybf .katex-display {
+#kslcvvpesv .katex-display {
 display: inline-flex !important;
 margin-bottom: 0.75em !important;
 }
-#mmzyjafybf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#kslcvvpesv div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
 height: 0px !important;
 }
 </style>
@@ -987,11 +998,195 @@ height: 0px !important;
 </div>
 <div id="control-variables" class="section level2" number="5">
 <h2><span class="header-section-number">5</span> Control variables</h2>
-<p>Percent of adults 25 and over with a Bachelor’s degree or higher by
-state in 2018 (numeric: %, 0 to 100)</p>
-<p>Degree of urbanization (categorical: city, suburb, town, rural)</p>
-<p>Bureau of Economic Analysis regions (categorical: 8 regions)</p>
-<p>Carnegie ranking (categorical: R1, R2, M, other)</p>
+<div id="percent-of-adults-25-and-over-with-a-bachelors-degree-or-higher-by-state-in-2018-numeric-0-to-100-acs" class="section level3" number="5.1">
+<h3><span class="header-section-number">5.1</span> Percent of adults 25
+and over with a Bachelor’s degree or higher by state in 2018 (numeric:
+%, 0 to 100) – ACS</h3>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>acs_2018 <span class="ot">&lt;-</span> <span class="fu">import</span>(<span class="fu">here</span>(<span class="st">&quot;Data/Non-IPEDS Data/ACS Educational Attainment by State/ACSST1Y2018.S1501-2025-04-09T015452.csv&quot;</span>))</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>stabbr_csv <span class="ot">&lt;-</span> <span class="fu">import</span>(<span class="fu">here</span>(<span class="st">&quot;Data/Non-IPEDS Data/states.csv&quot;</span>))</span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>educ_attain_2018 <span class="ot">&lt;-</span> <span class="fu">select</span>(acs_2018, <span class="st">`</span><span class="at">Label (Grouping)</span><span class="st">`</span>, <span class="fu">ends_with</span>(<span class="st">&quot;Percent!!Estimate&quot;</span>))[<span class="dv">16</span>,] <span class="sc">%&gt;%</span></span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">53</span>, <span class="at">names_to =</span> <span class="st">&quot;ACS_variable&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a>    <span class="at">State =</span> <span class="fu">str_extract</span>(<span class="at">string =</span> ACS_variable, <span class="at">pattern =</span> <span class="st">&quot;^[^!]+(?=!)&quot;</span>)</span>
+<span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb25-10"><a href="#cb25-10" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb25-11"><a href="#cb25-11" tabindex="-1"></a>    <span class="at">y =</span> stabbr_csv,</span>
+<span id="cb25-12"><a href="#cb25-12" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">&quot;State&quot;</span></span>
+<span id="cb25-13"><a href="#cb25-13" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb25-14"><a href="#cb25-14" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">ACS_Pct_Bachelors =</span> value) <span class="sc">%&gt;%</span></span>
+<span id="cb25-15"><a href="#cb25-15" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ACS_Pct_Bachelors =</span> <span class="fu">as.numeric</span>(<span class="fu">str_extract</span>(ACS_Pct_Bachelors, <span class="at">pattern=</span><span class="st">&quot;</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">.</span><span class="sc">\\</span><span class="st">d+&quot;</span>)))</span>
+<span id="cb25-16"><a href="#cb25-16" tabindex="-1"></a></span>
+<span id="cb25-17"><a href="#cb25-17" tabindex="-1"></a>educ_attain_clean <span class="ot">&lt;-</span> educ_attain_2018 <span class="sc">%&gt;%</span> </span>
+<span id="cb25-18"><a href="#cb25-18" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb25-19"><a href="#cb25-19" tabindex="-1"></a>  <span class="fu">select</span>(acs_pct_bachelors, abbreviation) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-20"><a href="#cb25-20" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">stabbr =</span> abbreviation,</span>
+<span id="cb25-21"><a href="#cb25-21" tabindex="-1"></a>         <span class="at">pct_bachelors_2018 =</span> acs_pct_bachelors)</span></code></pre></div>
+</div>
+<div id="high-school-graduates-by-state-numeric-integer-wiche" class="section level3" number="5.2">
+<h3><span class="header-section-number">5.2</span> High-school graduates
+by state (numeric: integer) – WICHE</h3>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>wiche_data_allrows <span class="ot">&lt;-</span> <span class="fu">import</span>(<span class="fu">here</span>(<span class="st">&quot;Data/Non-IPEDS Data/WICHE HS Graduates by State.xlsx&quot;</span>), <span class="at">which =</span> <span class="st">&quot;Data&quot;</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a>hs_grads_by_year <span class="ot">&lt;-</span> wiche_data_allrows <span class="sc">%&gt;%</span></span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a>    Grade <span class="sc">==</span> <span class="st">&quot;High school graduates&quot;</span>, <span class="co"># Keep only rows ~ total high school graduates</span></span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a>    RaceEthnicity <span class="sc">==</span> <span class="st">&quot;Total/any&quot;</span>, <span class="co"># Keep only rows ~ total all race/ethnicity</span></span>
+<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a>    SchoolSector <span class="sc">==</span> <span class="st">&quot;Grand Total (public+private)&quot;</span>, <span class="co"># Keep only rows ~ total public and private high schools</span></span>
+<span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a>    <span class="sc">!</span>(<span class="fu">str_detect</span>(<span class="at">string =</span> Stabbr, <span class="at">pattern =</span> <span class="st">&quot;^_&quot;</span>)), <span class="co"># Keep only rows NOT starting with an underscore (i.e., drop region aggregates)</span></span>
+<span id="cb26-10"><a href="#cb26-10" tabindex="-1"></a>    <span class="sc">!</span>(<span class="fu">str_detect</span>(<span class="at">string =</span> Stabbr, <span class="at">pattern =</span> <span class="st">&quot;</span><span class="sc">\\</span><span class="st">d&quot;</span>)), <span class="co"># Keep only rows NOT containing digits (i.e., drop region aggregates)</span></span>
+<span id="cb26-11"><a href="#cb26-11" tabindex="-1"></a>    <span class="sc">!</span>(Stabbr <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;CM&quot;</span>,<span class="st">&quot;CW&quot;</span>)) <span class="co"># Keep only rows NOT CM and CW (i.e., drop region aggregates)</span></span>
+<span id="cb26-12"><a href="#cb26-12" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb26-13"><a href="#cb26-13" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb26-14"><a href="#cb26-14" tabindex="-1"></a>    <span class="at">HS_Grad_Year =</span> <span class="fu">as.numeric</span>(<span class="fu">str_extract</span>(<span class="at">string =</span> ClassOf, <span class="at">pattern =</span> <span class="st">&quot;</span><span class="sc">\\</span><span class="st">d+&quot;</span>)) <span class="co"># Extract the graduation year for numeric filtering</span></span>
+<span id="cb26-15"><a href="#cb26-15" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb26-16"><a href="#cb26-16" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb26-17"><a href="#cb26-17" tabindex="-1"></a>    HS_Grad_Year <span class="sc">&gt;=</span> <span class="dv">2017</span>,</span>
+<span id="cb26-18"><a href="#cb26-18" tabindex="-1"></a>    HS_Grad_Year <span class="sc">&lt;</span> <span class="dv">2026</span></span>
+<span id="cb26-19"><a href="#cb26-19" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb26-20"><a href="#cb26-20" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb26-21"><a href="#cb26-21" tabindex="-1"></a>    <span class="co"># Keep only these variables</span></span>
+<span id="cb26-22"><a href="#cb26-22" tabindex="-1"></a>    Stabbr,</span>
+<span id="cb26-23"><a href="#cb26-23" tabindex="-1"></a>    HS_Grad_Year,</span>
+<span id="cb26-24"><a href="#cb26-24" tabindex="-1"></a>    Students</span>
+<span id="cb26-25"><a href="#cb26-25" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb26-26"><a href="#cb26-26" tabindex="-1"></a>  <span class="co"># Convert to wide format...</span></span>
+<span id="cb26-27"><a href="#cb26-27" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> Stabbr, <span class="at">names_from =</span> HS_Grad_Year, <span class="at">values_from =</span> Students, <span class="at">names_prefix =</span> <span class="st">&quot;HS_Grad_&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-28"><a href="#cb26-28" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb26-29"><a href="#cb26-29" tabindex="-1"></a>  <span class="fu">select</span>(stabbr, hs_grad_2018<span class="sc">:</span>hs_grad_2022)</span>
+<span id="cb26-30"><a href="#cb26-30" tabindex="-1"></a></span>
+<span id="cb26-31"><a href="#cb26-31" tabindex="-1"></a><span class="co"># make join-friendly</span></span>
+<span id="cb26-32"><a href="#cb26-32" tabindex="-1"></a>hs_grads_clean <span class="ot">&lt;-</span> hs_grads_by_year <span class="sc">%&gt;%</span> </span>
+<span id="cb26-33"><a href="#cb26-33" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb26-34"><a href="#cb26-34" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">&quot;hs_grad_&quot;</span>),</span>
+<span id="cb26-35"><a href="#cb26-35" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">&quot;year&quot;</span>,</span>
+<span id="cb26-36"><a href="#cb26-36" tabindex="-1"></a>    <span class="at">names_prefix =</span> <span class="st">&quot;hs_grad_&quot;</span>,</span>
+<span id="cb26-37"><a href="#cb26-37" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">&quot;hs_grads&quot;</span></span>
+<span id="cb26-38"><a href="#cb26-38" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb26-39"><a href="#cb26-39" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.integer</span>(year) <span class="sc">+</span> <span class="dv">1</span>) <span class="co">#this is actually the HS grad for the prev year, but needed to add 1 to join with full data</span></span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>state_dat <span class="ot">&lt;-</span> <span class="fu">left_join</span>(hs_grads_clean, educ_attain_clean)</span></code></pre></div>
+<pre><code>## Joining with `by = join_by(stabbr)`</code></pre>
+</div>
+<div id="degree-of-urbanization-categorical-citysuburb-townrural" class="section level3" number="5.3">
+<h3><span class="header-section-number">5.3</span> Degree of
+urbanization (categorical: city/suburb, town/rural)</h3>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a>ipeds_geog_values <span class="ot">&lt;-</span> <span class="fu">import</span>(</span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a>  <span class="fu">here</span>(<span class="st">&quot;Data/Data Geographic Variables/Data Geographic Variables.csv&quot;</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a>)[, <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>]</span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a>ipeds_geog_labels <span class="ot">&lt;-</span> <span class="fu">import</span>(<span class="fu">here</span>(<span class="st">&quot;Data/Data Geographic Variables/Labels Geographic Variables.csv&quot;</span>))</span>
+<span id="cb29-6"><a href="#cb29-6" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" tabindex="-1"></a>ipeds_geog_values<span class="sc">$</span>Locale_Rural <span class="ot">&lt;-</span> <span class="fu">case_when</span>(</span>
+<span id="cb29-8"><a href="#cb29-8" tabindex="-1"></a>  ipeds_geog_values<span class="sc">$</span><span class="st">`</span><span class="at">Degree of urbanization (Urban-centric locale) (HD2023)</span><span class="st">`</span> <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">11</span>,<span class="dv">12</span>,<span class="dv">13</span>,<span class="dv">21</span>,<span class="dv">22</span>,<span class="dv">23</span>) <span class="sc">~</span> <span class="st">&quot;City/Suburb&quot;</span>,</span>
+<span id="cb29-9"><a href="#cb29-9" tabindex="-1"></a>  ipeds_geog_values<span class="sc">$</span><span class="st">`</span><span class="at">Degree of urbanization (Urban-centric locale) (HD2023)</span><span class="st">`</span> <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">31</span>,<span class="dv">32</span>,<span class="dv">33</span>,<span class="dv">41</span>,<span class="dv">42</span>,<span class="dv">43</span>) <span class="sc">~</span> <span class="st">&quot;Town/Rural&quot;</span>,</span>
+<span id="cb29-10"><a href="#cb29-10" tabindex="-1"></a>  <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA</span></span>
+<span id="cb29-11"><a href="#cb29-11" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a>geo <span class="ot">&lt;-</span> ipeds_geog_values <span class="sc">%&gt;%</span> </span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>  <span class="fu">select</span>(unit_id, institution_name, state_abbreviation_hd2023, locale_rural) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">stabbr =</span> state_abbreviation_hd2023) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a>  <span class="fu">left_join</span>(., state_dat) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">hs_grad_state =</span> hs_grads,</span>
+<span id="cb30-7"><a href="#cb30-7" tabindex="-1"></a>         <span class="at">pct_bachelors_2018_state =</span> pct_bachelors_2018)</span></code></pre></div>
+<pre><code>## Joining with `by = join_by(stabbr)`</code></pre>
+<pre><code>## Warning in left_join(., state_dat): Detected an unexpected many-to-many relationship between `x` and `y`.
+## ℹ Row 1 of `x` matches multiple rows in `y`.
+## ℹ Row 216 of `y` matches multiple rows in `x`.
+## ℹ If a many-to-many relationship is expected, set `relationship =
+##   &quot;many-to-many&quot;` to silence this warning.</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="fu">head</span>(geo)</span></code></pre></div>
+<pre><code>##   unit_id             institution_name stabbr locale_rural year hs_grad_state
+## 1  180203       Aaniiih Nakoda College     MT   Town/Rural 2019          9627
+## 2  180203       Aaniiih Nakoda College     MT   Town/Rural 2020          9686
+## 3  180203       Aaniiih Nakoda College     MT   Town/Rural 2021          9661
+## 4  180203       Aaniiih Nakoda College     MT   Town/Rural 2022          9694
+## 5  180203       Aaniiih Nakoda College     MT   Town/Rural 2023          9999
+## 6  222178 Abilene Christian University     TX  City/Suburb 2019        364979
+##   pct_bachelors_2018_state
+## 1                     31.7
+## 2                     31.7
+## 3                     31.7
+## 4                     31.7
+## 5                     31.7
+## 6                     30.3</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="fu">describe</span>(geo)</span></code></pre></div>
+<pre><code>##                          vars     n      mean        sd   median   trimmed
+## unit_id                     1 10035 208796.39  92605.37 192712.0 189070.12
+## institution_name*           2 10035    997.30    576.68    997.0    997.28
+## stabbr*                     3 10035     26.88     14.04     28.0     27.15
+## locale_rural*               4 10035      1.27      0.45      1.0      1.22
+## year                        5 10035   2021.00      1.41   2021.0   2021.00
+## hs_grad_state               6 10035 140829.49 124496.06 107239.0 118441.77
+## pct_bachelors_2018_state    7 10035     32.77      5.27     31.8     32.51
+##                               mad      min      max    range  skew kurtosis
+## unit_id                  49957.69 100654.0 499149.0 398495.0  1.96     3.27
+## institution_name*          741.30      1.0   1995.0   1994.0  0.00    -1.20
+## stabbr*                     16.31      1.0     51.0     50.0 -0.17    -1.22
+## locale_rural*                0.00      1.0      2.0      1.0  1.02    -0.96
+## year                         1.48   2019.0   2023.0      4.0  0.00    -1.30
+## hs_grad_state            79319.10   4662.0 492544.0 487882.0  1.52     1.51
+## pct_bachelors_2018_state     4.15     21.3     60.4     39.1  0.81     2.22
+##                               se
+## unit_id                   924.44
+## institution_name*           5.76
+## stabbr*                     0.14
+## locale_rural*               0.00
+## year                        0.01
+## hs_grad_state            1242.79
+## pct_bachelors_2018_state    0.05</code></pre>
+<p>Joined dataset</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a>full_dat <span class="ot">&lt;-</span> <span class="fu">left_join</span>(dat, geo)</span></code></pre></div>
+<pre><code>## Joining with `by = join_by(unit_id, institution_name, year)`</code></pre>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="fu">describe</span>(full_dat)</span></code></pre></div>
+<pre><code>##                          vars    n      mean        sd    median   trimmed
+## unit_id                     1 7762 199834.37  80798.98 189273.00 186048.05
+## institution_name*           2 7762    796.65    463.63    790.00    796.56
+## year                        3 7762   2021.01      1.42   2021.00   2021.01
+## pct_pell                    4 7762     34.32     14.85     33.00     33.17
+## enrollment                  5 7762   5240.13   8405.61   2070.00   3320.12
+## pct_race_minority           6 7762     43.04     22.91     39.00     41.28
+## avg_net_price_w_aid         7 7762  21075.93   8874.54  20047.50  20374.24
+## applicants                  8 7762   7840.87  13282.24   3247.00   4795.40
+## admissions_rate             9 7761      0.71      0.21      0.76      0.74
+## stabbr*                    10 7762     26.78     13.58     28.00     27.07
+## locale_rural*              11 7762      1.27      0.45      1.00      1.22
+## hs_grad_state              12 7762 135257.68 119404.16 104131.00 112388.31
+## pct_bachelors_2018_state   13 7762     32.97      5.43     31.90     32.74
+##                               mad       min      max     range  skew kurtosis
+## unit_id                  44965.78 100654.00 498571.0 397917.00  2.31     5.55
+## institution_name*          600.45      1.00   1596.0   1595.00  0.00    -1.22
+## year                         1.48   2019.00   2023.0      4.00 -0.01    -1.30
+## pct_pell                    14.83      0.00    100.0    100.00  0.80     0.86
+## enrollment                2146.80      8.00 159653.0 159645.00  4.44    40.23
+## pct_race_minority           20.76      0.00    100.0    100.00  0.63    -0.03
+## avg_net_price_w_aid       8123.17    204.00  62226.0  62022.00  0.82     1.02
+## applicants                3902.94      2.00 149801.0 149799.00  3.96    21.75
+## admissions_rate              0.19      0.02      1.0      0.98 -1.04     0.78
+## stabbr*                     16.31      1.00     51.0     50.00 -0.16    -1.15
+## locale_rural*                0.00      1.00      2.0      1.00  1.02    -0.95
+## hs_grad_state            71381.26   4662.00 492544.0 487882.00  1.64     2.06
+## pct_bachelors_2018_state     4.45     21.30     60.4     39.10  0.77     2.03
+##                               se
+## unit_id                   917.10
+## institution_name*           5.26
+## year                        0.02
+## pct_pell                    0.17
+## enrollment                 95.41
+## pct_race_minority           0.26
+## avg_net_price_w_aid       100.73
+## applicants                150.76
+## admissions_rate             0.00
+## stabbr*                     0.15
+## locale_rural*               0.01
+## hs_grad_state            1355.29
+## pct_bachelors_2018_state    0.06</code></pre>
+</div>
+<div id="carnegie-ranking-categorical-r1-r2-m-other" class="section level3" number="5.4">
+<h3><span class="header-section-number">5.4</span> Carnegie ranking
+(categorical: R1, R2, M, other)</h3>
+</div>
 </div>
 </section>
 

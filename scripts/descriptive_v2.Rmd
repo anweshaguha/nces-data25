@@ -260,13 +260,125 @@ dat %>%
 
 ## Control variables 
 
-  Percent of adults 25 and over with a Bachelor’s degree or higher by state in 2018 (numeric: %, 0 to 100) 
+###  Percent of adults 25 and over with a Bachelor’s degree or higher by state in 2018 (numeric: %, 0 to 100) -- ACS
 
-  Degree of urbanization (categorical: city, suburb, town, rural) 
+```{r}
+acs_2018 <- import(here("Data/Non-IPEDS Data/ACS Educational Attainment by State/ACSST1Y2018.S1501-2025-04-09T015452.csv"))
 
-  Bureau of Economic Analysis regions (categorical: 8 regions) 
+stabbr_csv <- import(here("Data/Non-IPEDS Data/states.csv"))
 
-  Carnegie ranking (categorical: R1, R2, M, other) 
+educ_attain_2018 <- select(acs_2018, `Label (Grouping)`, ends_with("Percent!!Estimate"))[16,] %>%
+  pivot_longer(cols = 2:53, names_to = "ACS_variable") %>%
+  mutate(
+    State = str_extract(string = ACS_variable, pattern = "^[^!]+(?=!)")
+  ) %>%
+  left_join(
+    y = stabbr_csv,
+    by = "State"
+  ) %>%
+  rename(ACS_Pct_Bachelors = value) %>%
+  mutate(ACS_Pct_Bachelors = as.numeric(str_extract(ACS_Pct_Bachelors, pattern="\\d+\\.\\d+")))
+
+educ_attain_clean <- educ_attain_2018 %>% 
+  janitor::clean_names() %>% 
+  select(acs_pct_bachelors, abbreviation) %>% 
+  rename(stabbr = abbreviation,
+         pct_bachelors_2018 = acs_pct_bachelors)
+```
+
+
+###  High-school graduates by state (numeric: integer) -- WICHE
+
+```{r}
+wiche_data_allrows <- import(here("Data/Non-IPEDS Data/WICHE HS Graduates by State.xlsx"), which = "Data")
+
+
+hs_grads_by_year <- wiche_data_allrows %>%
+  filter(
+    Grade == "High school graduates", # Keep only rows ~ total high school graduates
+    RaceEthnicity == "Total/any", # Keep only rows ~ total all race/ethnicity
+    SchoolSector == "Grand Total (public+private)", # Keep only rows ~ total public and private high schools
+    !(str_detect(string = Stabbr, pattern = "^_")), # Keep only rows NOT starting with an underscore (i.e., drop region aggregates)
+    !(str_detect(string = Stabbr, pattern = "\\d")), # Keep only rows NOT containing digits (i.e., drop region aggregates)
+    !(Stabbr %in% c("CM","CW")) # Keep only rows NOT CM and CW (i.e., drop region aggregates)
+  ) %>%
+  mutate(
+    HS_Grad_Year = as.numeric(str_extract(string = ClassOf, pattern = "\\d+")) # Extract the graduation year for numeric filtering
+  ) %>%
+  filter(
+    HS_Grad_Year >= 2017,
+    HS_Grad_Year < 2026
+  ) %>%
+  select(
+    # Keep only these variables
+    Stabbr,
+    HS_Grad_Year,
+    Students
+  ) %>%
+  # Convert to wide format...
+  pivot_wider(id_cols = Stabbr, names_from = HS_Grad_Year, values_from = Students, names_prefix = "HS_Grad_") %>% 
+  janitor::clean_names() %>% 
+  select(stabbr, hs_grad_2018:hs_grad_2022)
+
+# make join-friendly
+hs_grads_clean <- hs_grads_by_year %>% 
+  pivot_longer(
+    cols = starts_with("hs_grad_"),
+    names_to = "year",
+    names_prefix = "hs_grad_",
+    values_to = "hs_grads"
+  ) %>%
+  mutate(year = as.integer(year) + 1) #this is actually the HS grad for the prev year, but needed to add 1 to join with full data
+```
+
+```{r}
+state_dat <- left_join(hs_grads_clean, educ_attain_clean)
+```
+
+
+###  Degree of urbanization (categorical: city/suburb, town/rural) 
+
+```{r}
+ipeds_geog_values <- import(
+  here("Data/Data Geographic Variables/Data Geographic Variables.csv")
+)[, 1:9]
+
+ipeds_geog_labels <- import(here("Data/Data Geographic Variables/Labels Geographic Variables.csv"))
+
+ipeds_geog_values$Locale_Rural <- case_when(
+  ipeds_geog_values$`Degree of urbanization (Urban-centric locale) (HD2023)` %in% c(11,12,13,21,22,23) ~ "City/Suburb",
+  ipeds_geog_values$`Degree of urbanization (Urban-centric locale) (HD2023)` %in% c(31,32,33,41,42,43) ~ "Town/Rural",
+  TRUE ~ NA
+)
+```
+
+```{r}
+geo <- ipeds_geog_values %>% 
+  janitor::clean_names() %>% 
+  select(unit_id, institution_name, state_abbreviation_hd2023, locale_rural) %>% 
+  rename(stabbr = state_abbreviation_hd2023) %>% 
+  left_join(., state_dat) %>% 
+  rename(hs_grad_state = hs_grads,
+         pct_bachelors_2018_state = pct_bachelors_2018)
+
+head(geo)
+```
+
+```{r}
+describe(geo)
+```
+
+Joined dataset
+```{r}
+full_dat <- left_join(dat, geo)
+```
+
+```{r}
+describe(full_dat)
+```
+
+
+###  Carnegie ranking (categorical: R1, R2, M, other) 
 
 
 
