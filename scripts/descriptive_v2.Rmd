@@ -375,10 +375,156 @@ full_dat <- left_join(dat, geo)
 
 ```{r}
 describe(full_dat)
+length(unique(full_dat$unit_id)) #1606
 ```
 
 
 ###  Carnegie ranking (categorical: R1, R2, M, other) 
 
+```{r}
+carnegie_data <- import(here("Data/Data Carnegie Variables", "Data Carnegie Variables.csv"))
 
+carnegie_labels <- import(here("Data/Data Carnegie Variables", "Labels Carnegie Variables.csv"))
+
+carnegie_data <- carnegie_data %>% 
+  select(-V9) %>% # get rid of rogue empty variable
+  pivot_longer(
+    cols = -c(1:2),
+    names_to = "VariableName",
+    values_to = "Value"
+  ) 
+
+# add in labels
+carnegie_labelled <- carnegie_data %>% 
+  left_join(., carnegie_labels)
+
+carnegie_labelled <- carnegie_labelled %>% 
+  filter(VariableName == "Carnegie Classification 2021: Basic (HD2023)") %>% 
+  select(-VariableName) %>% 
+  janitor::clean_names()
+```
+
+#### Consolidate classifications
+
+1. *Not Carnegie (n = 52)* *should be removed
+
+- Not applicable, not in Carnegie universe (not accredited or nondegree-granting)
+
+2. *Two-Year (n = 71)* *should be removed
+
+- Associate's Colleges: High Career & Technical-High Nontraditional 
+- Associate's Colleges: High Career & Technical-High Traditional 
+- Associate's Colleges: High Career & Technical-Mixed Traditional/Nontraditional 
+- Associate's Colleges: High Transfer-High Nontraditional 
+- Associate's Colleges: High Transfer-High Traditional  
+- Associate's Colleges: High Transfer-Mixed Traditional/Nontraditional 
+- Associate's Colleges: Mixed Transfer/Career & Technical-High Nontraditional 
+- Associate's Colleges: Mixed Transfer/Career & Technical-High Traditional 
+- Associate's Colleges: Mixed Transfer/Career & Technical-Mixed Traditional/Nontraditional  
+
+- Special Focus Two-Year: Health Professions 
+- Special Focus Two-Year: Other Fields 
+
+3. *Baccalaureate (n = 603)*
+
+- Baccalaureate Colleges: Arts & Sciences Focus 
+- Baccalaureate Colleges: Diverse Fields 
+- Baccalaureate/Associate's Colleges: Associate's Dominant 
+- Baccalaureate/Associate's Colleges: Mixed Baccalaureate/Associate's 
+
+4. *R1 (n = 146)*
+
+- Doctoral Universities: Very High Research Activity
+
+5. *R2 (n = 127)*
+
+- Doctoral Universities: High Research Activity
+
+6. *R0 (n = 161)*
+
+-  Doctoral/Professional Universities
+
+7. *M (n = 582)*
+
+- Master's Colleges & Universities: Larger Programs
+- Master's Colleges & Universities: Medium Programs 
+- Master's Colleges & Universities: Small Programs 
+
+8. *Special or Tribal (n = 265)*
+
+- Special Focus Four-Year: Arts, Music & Design Schools 
+- Special Focus Four-Year: Business & Management Schools 
+- Special Focus Four-Year: Engineering and Other Technology-Related Schools 
+- Special Focus Four-Year: Faith-Related Institutions 
+- Special Focus Four-Year: Medical Schools & Centers 
+- Special Focus Four-Year: Other Health Professions Schools 
+- Special Focus Four-Year: Other Special Focus Institutions 
+- Special Focus Four-Year: Research Institutions 
+- Tribal Colleges 
+
+
+```{r}
+carnegie_consolidated <- carnegie_labelled %>% 
+  mutate(carnegie = case_when(value < 0 ~ "Not Carnegie",
+                              value >=1 & value <= 13 ~ "Two-Year",
+                              value == 14 | (value >= 21 & value <= 23) ~ "Baccalaureate",
+                              value == 15 ~ "R1",
+                              value == 16 ~ "R2",
+                              value == 17 ~ "R0",
+                              value >= 18 & value <= 20 ~ "M",
+                              value >= 24 & value <= 33 ~ "Special or Tribal",
+                              ),
+         ) %>% 
+  select(unit_id, carnegie)
+```
+
+```{r}
+full_dat2 <- left_join(full_dat, carnegie_consolidated)
+# readr::write_csv(full_dat2, here("Data/full_dat2.csv"))
+```
+
+
+### Sector (and Enrollment)
+
+```{r}
+sector_enroll <- import(here("Data/Data Sector-Enrollment Variables", "Sector-Enrollment-Data.csv"))
+sector_enroll_labels <- import(here("Data/Data Sector-Enrollment Variables", "Sector-Enrollment-Labels.csv"))
+```
+
+```{r}
+sector_enroll <- sector_enroll %>% 
+  pivot_longer(cols = c(4:8),
+               names_to = "variable",
+               values_to = "enrollment2") %>% 
+  mutate(year = str_extract(variable, "20\\d{2}"),
+    year = as.integer(year)) %>% 
+  janitor::clean_names() %>% 
+  mutate(sector = ifelse(sector_of_institution_hd2023 == 1, "public", "private")) %>% 
+  select(unit_id, year, sector, enrollment2)
+```
+
+```{r}
+length(unique(sector_enroll$unit_id))
+```
+
+```{r}
+describe(sector_enroll$enrollment2)
+```
+
+```{r}
+full_dat3 <- left_join(full_dat2, sector_enroll)
+full_dat3 <- full_dat3 %>% 
+  rename(overall_enrollment = enrollment,
+         first_time_enrollment = enrollment2)
+# readr::write_csv(full_dat3, here("Data/full_dat3.csv"))
+```
+
+To do:
+
+- check enrollment distribution for each category 
+- filter <1,000 enrollment
+- consider: confidence intervals on random intercepts?
+- double check missing enrollment data for institutions & decide which to exclude and which to impute
+
+                                                                   
 

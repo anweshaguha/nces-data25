@@ -12,7 +12,7 @@
 
 <meta name="author" content="Anwesha Guha" />
 
-<meta name="date" content="2025-04-22" />
+<meta name="date" content="2025-04-25" />
 
 <title>Descriptives - Version 2</title>
 
@@ -141,7 +141,7 @@ pointer-events: auto;
 <section class="page-header">
 <h1 class="title toc-ignore project-name">Descriptives - Version 2</h1>
 <h4 class="author project-author">Anwesha Guha</h4>
-<h4 class="date project-date">2025-04-22</h4>
+<h4 class="date project-date">2025-04-25</h4>
 </section>
 
 
@@ -176,6 +176,7 @@ ACS</a></li>
 (categorical: city/suburb, town/rural)</a></li>
 <li><a href="#carnegie-ranking-categorical-r1-r2-m-other" id="toc-carnegie-ranking-categorical-r1-r2-m-other"><span class="toc-section-number">5.4</span> Carnegie ranking (categorical: R1,
 R2, M, other)</a></li>
+<li><a href="#sector-and-enrollment" id="toc-sector-and-enrollment"><span class="toc-section-number">5.5</span> Sector (and Enrollment)</a></li>
 </ul></li>
 </ul>
 </div>
@@ -409,20 +410,20 @@ independent variables represented.</p>
 <p>We have 1,606 unique Institution IDs in our sample.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">describe</span>(dat) <span class="sc">%&gt;%</span> </span>
 <span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>  <span class="fu">gt</span>() </span></code></pre></div>
-<div id="kslcvvpesv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#kslcvvpesv table {
+<div id="xginagtfjc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#xginagtfjc table {
 font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
 }
-#kslcvvpesv thead, #kslcvvpesv tbody, #kslcvvpesv tfoot, #kslcvvpesv tr, #kslcvvpesv td, #kslcvvpesv th {
+#xginagtfjc thead, #xginagtfjc tbody, #xginagtfjc tfoot, #xginagtfjc tr, #xginagtfjc td, #xginagtfjc th {
 border-style: none;
 }
-#kslcvvpesv p {
+#xginagtfjc p {
 margin: 0;
 padding: 0;
 }
-#kslcvvpesv .gt_table {
+#xginagtfjc .gt_table {
 display: table;
 border-collapse: collapse;
 line-height: normal;
@@ -447,11 +448,11 @@ border-left-style: none;
 border-left-width: 2px;
 border-left-color: #D3D3D3;
 }
-#kslcvvpesv .gt_caption {
+#xginagtfjc .gt_caption {
 padding-top: 4px;
 padding-bottom: 4px;
 }
-#kslcvvpesv .gt_title {
+#xginagtfjc .gt_title {
 color: #333333;
 font-size: 125%;
 font-weight: initial;
@@ -462,7 +463,7 @@ padding-right: 5px;
 border-bottom-color: #FFFFFF;
 border-bottom-width: 0;
 }
-#kslcvvpesv .gt_subtitle {
+#xginagtfjc .gt_subtitle {
 color: #333333;
 font-size: 85%;
 font-weight: initial;
@@ -473,7 +474,7 @@ padding-right: 5px;
 border-top-color: #FFFFFF;
 border-top-width: 0;
 }
-#kslcvvpesv .gt_heading {
+#xginagtfjc .gt_heading {
 background-color: #FFFFFF;
 text-align: center;
 border-bottom-color: #FFFFFF;
@@ -484,12 +485,12 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#kslcvvpesv .gt_bottom_border {
+#xginagtfjc .gt_bottom_border {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#kslcvvpesv .gt_col_headings {
+#xginagtfjc .gt_col_headings {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -503,7 +504,7 @@ border-right-style: none;
 border-right-width: 1px;
 border-right-color: #D3D3D3;
 }
-#kslcvvpesv .gt_col_heading {
+#xginagtfjc .gt_col_heading {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -522,7 +523,7 @@ padding-left: 5px;
 padding-right: 5px;
 overflow-x: hidden;
 }
-#kslcvvpesv .gt_column_spanner_outer {
+#xginagtfjc .gt_column_spanner_outer {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -533,13 +534,13 @@ padding-bottom: 0;
 padding-left: 4px;
 padding-right: 4px;
 }
-#kslcvvpesv .gt_column_spanner_outer:first-child {
+#xginagtfjc .gt_column_spanner_outer:first-child {
 padding-left: 0;
 }
-#kslcvvpesv .gt_column_spanner_outer:last-child {
+#xginagtfjc .gt_column_spanner_outer:last-child {
 padding-right: 0;
 }
-#kslcvvpesv .gt_column_spanner {
+#xginagtfjc .gt_column_spanner {
 border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
@@ -550,10 +551,10 @@ overflow-x: hidden;
 display: inline-block;
 width: 100%;
 }
-#kslcvvpesv .gt_spanner_row {
+#xginagtfjc .gt_spanner_row {
 border-bottom-style: hidden;
 }
-#kslcvvpesv .gt_group_heading {
+#xginagtfjc .gt_group_heading {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -578,7 +579,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 text-align: left;
 }
-#kslcvvpesv .gt_empty_group_heading {
+#xginagtfjc .gt_empty_group_heading {
 padding: 0.5px;
 color: #333333;
 background-color: #FFFFFF;
@@ -592,13 +593,13 @@ border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 vertical-align: middle;
 }
-#kslcvvpesv .gt_from_md > :first-child {
+#xginagtfjc .gt_from_md > :first-child {
 margin-top: 0;
 }
-#kslcvvpesv .gt_from_md > :last-child {
+#xginagtfjc .gt_from_md > :last-child {
 margin-bottom: 0;
 }
-#kslcvvpesv .gt_row {
+#xginagtfjc .gt_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -616,7 +617,7 @@ border-right-color: #D3D3D3;
 vertical-align: middle;
 overflow-x: hidden;
 }
-#kslcvvpesv .gt_stub {
+#xginagtfjc .gt_stub {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -628,7 +629,7 @@ border-right-color: #D3D3D3;
 padding-left: 5px;
 padding-right: 5px;
 }
-#kslcvvpesv .gt_stub_row_group {
+#xginagtfjc .gt_stub_row_group {
 color: #333333;
 background-color: #FFFFFF;
 font-size: 100%;
@@ -641,13 +642,13 @@ padding-left: 5px;
 padding-right: 5px;
 vertical-align: top;
 }
-#kslcvvpesv .gt_row_group_first td {
+#xginagtfjc .gt_row_group_first td {
 border-top-width: 2px;
 }
-#kslcvvpesv .gt_row_group_first th {
+#xginagtfjc .gt_row_group_first th {
 border-top-width: 2px;
 }
-#kslcvvpesv .gt_summary_row {
+#xginagtfjc .gt_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -656,14 +657,14 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#kslcvvpesv .gt_first_summary_row {
+#xginagtfjc .gt_first_summary_row {
 border-top-style: solid;
 border-top-color: #D3D3D3;
 }
-#kslcvvpesv .gt_first_summary_row.thick {
+#xginagtfjc .gt_first_summary_row.thick {
 border-top-width: 2px;
 }
-#kslcvvpesv .gt_last_summary_row {
+#xginagtfjc .gt_last_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -672,7 +673,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#kslcvvpesv .gt_grand_summary_row {
+#xginagtfjc .gt_grand_summary_row {
 color: #333333;
 background-color: #FFFFFF;
 text-transform: inherit;
@@ -681,7 +682,7 @@ padding-bottom: 8px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#kslcvvpesv .gt_first_grand_summary_row {
+#xginagtfjc .gt_first_grand_summary_row {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -690,7 +691,7 @@ border-top-style: double;
 border-top-width: 6px;
 border-top-color: #D3D3D3;
 }
-#kslcvvpesv .gt_last_grand_summary_row_top {
+#xginagtfjc .gt_last_grand_summary_row_top {
 padding-top: 8px;
 padding-bottom: 8px;
 padding-left: 5px;
@@ -699,10 +700,10 @@ border-bottom-style: double;
 border-bottom-width: 6px;
 border-bottom-color: #D3D3D3;
 }
-#kslcvvpesv .gt_striped {
+#xginagtfjc .gt_striped {
 background-color: rgba(128, 128, 128, 0.05);
 }
-#kslcvvpesv .gt_table_body {
+#xginagtfjc .gt_table_body {
 border-top-style: solid;
 border-top-width: 2px;
 border-top-color: #D3D3D3;
@@ -710,7 +711,7 @@ border-bottom-style: solid;
 border-bottom-width: 2px;
 border-bottom-color: #D3D3D3;
 }
-#kslcvvpesv .gt_footnotes {
+#xginagtfjc .gt_footnotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -723,7 +724,7 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#kslcvvpesv .gt_footnote {
+#xginagtfjc .gt_footnote {
 margin: 0px;
 font-size: 90%;
 padding-top: 4px;
@@ -731,7 +732,7 @@ padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#kslcvvpesv .gt_sourcenotes {
+#xginagtfjc .gt_sourcenotes {
 color: #333333;
 background-color: #FFFFFF;
 border-bottom-style: none;
@@ -744,64 +745,64 @@ border-right-style: none;
 border-right-width: 2px;
 border-right-color: #D3D3D3;
 }
-#kslcvvpesv .gt_sourcenote {
+#xginagtfjc .gt_sourcenote {
 font-size: 90%;
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 5px;
 padding-right: 5px;
 }
-#kslcvvpesv .gt_left {
+#xginagtfjc .gt_left {
 text-align: left;
 }
-#kslcvvpesv .gt_center {
+#xginagtfjc .gt_center {
 text-align: center;
 }
-#kslcvvpesv .gt_right {
+#xginagtfjc .gt_right {
 text-align: right;
 font-variant-numeric: tabular-nums;
 }
-#kslcvvpesv .gt_font_normal {
+#xginagtfjc .gt_font_normal {
 font-weight: normal;
 }
-#kslcvvpesv .gt_font_bold {
+#xginagtfjc .gt_font_bold {
 font-weight: bold;
 }
-#kslcvvpesv .gt_font_italic {
+#xginagtfjc .gt_font_italic {
 font-style: italic;
 }
-#kslcvvpesv .gt_super {
+#xginagtfjc .gt_super {
 font-size: 65%;
 }
-#kslcvvpesv .gt_footnote_marks {
+#xginagtfjc .gt_footnote_marks {
 font-size: 75%;
 vertical-align: 0.4em;
 position: initial;
 }
-#kslcvvpesv .gt_asterisk {
+#xginagtfjc .gt_asterisk {
 font-size: 100%;
 vertical-align: 0;
 }
-#kslcvvpesv .gt_indent_1 {
+#xginagtfjc .gt_indent_1 {
 text-indent: 5px;
 }
-#kslcvvpesv .gt_indent_2 {
+#xginagtfjc .gt_indent_2 {
 text-indent: 10px;
 }
-#kslcvvpesv .gt_indent_3 {
+#xginagtfjc .gt_indent_3 {
 text-indent: 15px;
 }
-#kslcvvpesv .gt_indent_4 {
+#xginagtfjc .gt_indent_4 {
 text-indent: 20px;
 }
-#kslcvvpesv .gt_indent_5 {
+#xginagtfjc .gt_indent_5 {
 text-indent: 25px;
 }
-#kslcvvpesv .katex-display {
+#xginagtfjc .katex-display {
 display: inline-flex !important;
 margin-bottom: 0.75em !important;
 }
-#kslcvvpesv div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#xginagtfjc div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
 height: 0px !important;
 }
 </style>
@@ -1182,10 +1183,169 @@ urbanization (categorical: city/suburb, town/rural)</h3>
 ## locale_rural*               0.01
 ## hs_grad_state            1355.29
 ## pct_bachelors_2018_state    0.06</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(full_dat<span class="sc">$</span>unit_id)) <span class="co">#1606</span></span></code></pre></div>
+<pre><code>## [1] 1606</code></pre>
 </div>
 <div id="carnegie-ranking-categorical-r1-r2-m-other" class="section level3" number="5.4">
 <h3><span class="header-section-number">5.4</span> Carnegie ranking
 (categorical: R1, R2, M, other)</h3>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a>carnegie_data <span class="ot">&lt;-</span> <span class="fu">import</span>(<span class="fu">here</span>(<span class="st">&quot;Data/Data Carnegie Variables&quot;</span>, <span class="st">&quot;Data Carnegie Variables.csv&quot;</span>))</span>
+<span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" tabindex="-1"></a>carnegie_labels <span class="ot">&lt;-</span> <span class="fu">import</span>(<span class="fu">here</span>(<span class="st">&quot;Data/Data Carnegie Variables&quot;</span>, <span class="st">&quot;Labels Carnegie Variables.csv&quot;</span>))</span>
+<span id="cb43-4"><a href="#cb43-4" tabindex="-1"></a></span>
+<span id="cb43-5"><a href="#cb43-5" tabindex="-1"></a>carnegie_data <span class="ot">&lt;-</span> carnegie_data <span class="sc">%&gt;%</span> </span>
+<span id="cb43-6"><a href="#cb43-6" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>V9) <span class="sc">%&gt;%</span> <span class="co"># get rid of rogue empty variable</span></span>
+<span id="cb43-7"><a href="#cb43-7" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb43-8"><a href="#cb43-8" tabindex="-1"></a>    <span class="at">cols =</span> <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>),</span>
+<span id="cb43-9"><a href="#cb43-9" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">&quot;VariableName&quot;</span>,</span>
+<span id="cb43-10"><a href="#cb43-10" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">&quot;Value&quot;</span></span>
+<span id="cb43-11"><a href="#cb43-11" tabindex="-1"></a>  ) </span>
+<span id="cb43-12"><a href="#cb43-12" tabindex="-1"></a></span>
+<span id="cb43-13"><a href="#cb43-13" tabindex="-1"></a><span class="co"># add in labels</span></span>
+<span id="cb43-14"><a href="#cb43-14" tabindex="-1"></a>carnegie_labelled <span class="ot">&lt;-</span> carnegie_data <span class="sc">%&gt;%</span> </span>
+<span id="cb43-15"><a href="#cb43-15" tabindex="-1"></a>  <span class="fu">left_join</span>(., carnegie_labels)</span></code></pre></div>
+<pre><code>## Joining with `by = join_by(VariableName, Value)`</code></pre>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a>carnegie_labelled <span class="ot">&lt;-</span> carnegie_labelled <span class="sc">%&gt;%</span> </span>
+<span id="cb45-2"><a href="#cb45-2" tabindex="-1"></a>  <span class="fu">filter</span>(VariableName <span class="sc">==</span> <span class="st">&quot;Carnegie Classification 2021: Basic (HD2023)&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb45-3"><a href="#cb45-3" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>VariableName) <span class="sc">%&gt;%</span> </span>
+<span id="cb45-4"><a href="#cb45-4" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">clean_names</span>()</span></code></pre></div>
+<div id="consolidate-classifications" class="section level4" number="5.4.1">
+<h4><span class="header-section-number">5.4.1</span> Consolidate
+classifications</h4>
+<ol style="list-style-type: decimal">
+<li><em>Not Carnegie (n = 52)</em> *should be removed</li>
+</ol>
+<ul>
+<li>Not applicable, not in Carnegie universe (not accredited or
+nondegree-granting)</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li><em>Two-Year (n = 71)</em> *should be removed</li>
+</ol>
+<ul>
+<li><p>Associate’s Colleges: High Career &amp; Technical-High
+Nontraditional</p></li>
+<li><p>Associate’s Colleges: High Career &amp; Technical-High
+Traditional</p></li>
+<li><p>Associate’s Colleges: High Career &amp; Technical-Mixed
+Traditional/Nontraditional</p></li>
+<li><p>Associate’s Colleges: High Transfer-High Nontraditional</p></li>
+<li><p>Associate’s Colleges: High Transfer-High Traditional<br />
+</p></li>
+<li><p>Associate’s Colleges: High Transfer-Mixed
+Traditional/Nontraditional</p></li>
+<li><p>Associate’s Colleges: Mixed Transfer/Career &amp; Technical-High
+Nontraditional</p></li>
+<li><p>Associate’s Colleges: Mixed Transfer/Career &amp; Technical-High
+Traditional</p></li>
+<li><p>Associate’s Colleges: Mixed Transfer/Career &amp; Technical-Mixed
+Traditional/Nontraditional</p></li>
+<li><p>Special Focus Two-Year: Health Professions</p></li>
+<li><p>Special Focus Two-Year: Other Fields</p></li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li><em>Baccalaureate (n = 603)</em></li>
+</ol>
+<ul>
+<li>Baccalaureate Colleges: Arts &amp; Sciences Focus</li>
+<li>Baccalaureate Colleges: Diverse Fields</li>
+<li>Baccalaureate/Associate’s Colleges: Associate’s Dominant</li>
+<li>Baccalaureate/Associate’s Colleges: Mixed
+Baccalaureate/Associate’s</li>
+</ul>
+<ol start="4" style="list-style-type: decimal">
+<li><em>R1 (n = 146)</em></li>
+</ol>
+<ul>
+<li>Doctoral Universities: Very High Research Activity</li>
+</ul>
+<ol start="5" style="list-style-type: decimal">
+<li><em>R2 (n = 127)</em></li>
+</ol>
+<ul>
+<li>Doctoral Universities: High Research Activity</li>
+</ul>
+<ol start="6" style="list-style-type: decimal">
+<li><em>R0 (n = 161)</em></li>
+</ol>
+<ul>
+<li>Doctoral/Professional Universities</li>
+</ul>
+<ol start="7" style="list-style-type: decimal">
+<li><em>M (n = 582)</em></li>
+</ol>
+<ul>
+<li>Master’s Colleges &amp; Universities: Larger Programs</li>
+<li>Master’s Colleges &amp; Universities: Medium Programs</li>
+<li>Master’s Colleges &amp; Universities: Small Programs</li>
+</ul>
+<ol start="8" style="list-style-type: decimal">
+<li><em>Special or Tribal (n = 265)</em></li>
+</ol>
+<ul>
+<li>Special Focus Four-Year: Arts, Music &amp; Design Schools</li>
+<li>Special Focus Four-Year: Business &amp; Management Schools</li>
+<li>Special Focus Four-Year: Engineering and Other Technology-Related
+Schools</li>
+<li>Special Focus Four-Year: Faith-Related Institutions</li>
+<li>Special Focus Four-Year: Medical Schools &amp; Centers</li>
+<li>Special Focus Four-Year: Other Health Professions Schools</li>
+<li>Special Focus Four-Year: Other Special Focus Institutions</li>
+<li>Special Focus Four-Year: Research Institutions</li>
+<li>Tribal Colleges</li>
+</ul>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a>carnegie_consolidated <span class="ot">&lt;-</span> carnegie_labelled <span class="sc">%&gt;%</span> </span>
+<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">carnegie =</span> <span class="fu">case_when</span>(value <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> <span class="st">&quot;Not Carnegie&quot;</span>,</span>
+<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a>                              value <span class="sc">&gt;=</span><span class="dv">1</span> <span class="sc">&amp;</span> value <span class="sc">&lt;=</span> <span class="dv">13</span> <span class="sc">~</span> <span class="st">&quot;Two-Year&quot;</span>,</span>
+<span id="cb46-4"><a href="#cb46-4" tabindex="-1"></a>                              value <span class="sc">==</span> <span class="dv">14</span> <span class="sc">|</span> (value <span class="sc">&gt;=</span> <span class="dv">21</span> <span class="sc">&amp;</span> value <span class="sc">&lt;=</span> <span class="dv">23</span>) <span class="sc">~</span> <span class="st">&quot;Baccalaureate&quot;</span>,</span>
+<span id="cb46-5"><a href="#cb46-5" tabindex="-1"></a>                              value <span class="sc">==</span> <span class="dv">15</span> <span class="sc">~</span> <span class="st">&quot;R1&quot;</span>,</span>
+<span id="cb46-6"><a href="#cb46-6" tabindex="-1"></a>                              value <span class="sc">==</span> <span class="dv">16</span> <span class="sc">~</span> <span class="st">&quot;R2&quot;</span>,</span>
+<span id="cb46-7"><a href="#cb46-7" tabindex="-1"></a>                              value <span class="sc">==</span> <span class="dv">17</span> <span class="sc">~</span> <span class="st">&quot;R0&quot;</span>,</span>
+<span id="cb46-8"><a href="#cb46-8" tabindex="-1"></a>                              value <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">&amp;</span> value <span class="sc">&lt;=</span> <span class="dv">20</span> <span class="sc">~</span> <span class="st">&quot;M&quot;</span>,</span>
+<span id="cb46-9"><a href="#cb46-9" tabindex="-1"></a>                              value <span class="sc">&gt;=</span> <span class="dv">24</span> <span class="sc">&amp;</span> value <span class="sc">&lt;=</span> <span class="dv">33</span> <span class="sc">~</span> <span class="st">&quot;Special or Tribal&quot;</span>,</span>
+<span id="cb46-10"><a href="#cb46-10" tabindex="-1"></a>                              ),</span>
+<span id="cb46-11"><a href="#cb46-11" tabindex="-1"></a>         ) <span class="sc">%&gt;%</span> </span>
+<span id="cb46-12"><a href="#cb46-12" tabindex="-1"></a>  <span class="fu">select</span>(unit_id, carnegie)</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a>full_dat2 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(full_dat, carnegie_consolidated)</span></code></pre></div>
+<pre><code>## Joining with `by = join_by(unit_id)`</code></pre>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a><span class="co"># readr::write_csv(full_dat2, here(&quot;Data/full_dat2.csv&quot;))</span></span></code></pre></div>
+</div>
+</div>
+<div id="sector-and-enrollment" class="section level3" number="5.5">
+<h3><span class="header-section-number">5.5</span> Sector (and
+Enrollment)</h3>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a>sector_enroll <span class="ot">&lt;-</span> <span class="fu">import</span>(<span class="fu">here</span>(<span class="st">&quot;Data/Data Sector-Enrollment Variables&quot;</span>, <span class="st">&quot;Sector-Enrollment-Data.csv&quot;</span>))</span>
+<span id="cb50-2"><a href="#cb50-2" tabindex="-1"></a>sector_enroll_labels <span class="ot">&lt;-</span> <span class="fu">import</span>(<span class="fu">here</span>(<span class="st">&quot;Data/Data Sector-Enrollment Variables&quot;</span>, <span class="st">&quot;Sector-Enrollment-Labels.csv&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a>sector_enroll <span class="ot">&lt;-</span> sector_enroll <span class="sc">%&gt;%</span> </span>
+<span id="cb51-2"><a href="#cb51-2" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">8</span>),</span>
+<span id="cb51-3"><a href="#cb51-3" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;variable&quot;</span>,</span>
+<span id="cb51-4"><a href="#cb51-4" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;enrollment2&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb51-5"><a href="#cb51-5" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">str_extract</span>(variable, <span class="st">&quot;20</span><span class="sc">\\</span><span class="st">d{2}&quot;</span>),</span>
+<span id="cb51-6"><a href="#cb51-6" tabindex="-1"></a>    <span class="at">year =</span> <span class="fu">as.integer</span>(year)) <span class="sc">%&gt;%</span> </span>
+<span id="cb51-7"><a href="#cb51-7" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb51-8"><a href="#cb51-8" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sector =</span> <span class="fu">ifelse</span>(sector_of_institution_hd2023 <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&quot;public&quot;</span>, <span class="st">&quot;private&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb51-9"><a href="#cb51-9" tabindex="-1"></a>  <span class="fu">select</span>(unit_id, year, sector, enrollment2)</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(sector_enroll<span class="sc">$</span>unit_id))</span></code></pre></div>
+<pre><code>## [1] 2007</code></pre>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a><span class="fu">describe</span>(sector_enroll<span class="sc">$</span>enrollment2)</span></code></pre></div>
+<pre><code>##    vars    n   mean      sd median trimmed    mad min   max range skew kurtosis
+## X1    1 9836 952.42 1503.08    404  600.46 463.31   1 15989 15988 3.33    14.67
+##       se
+## X1 15.16</code></pre>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a>full_dat3 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(full_dat2, sector_enroll)</span></code></pre></div>
+<pre><code>## Joining with `by = join_by(unit_id, year)`</code></pre>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a>full_dat3 <span class="ot">&lt;-</span> full_dat3 <span class="sc">%&gt;%</span> </span>
+<span id="cb58-2"><a href="#cb58-2" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">overall_enrollment =</span> enrollment,</span>
+<span id="cb58-3"><a href="#cb58-3" tabindex="-1"></a>         <span class="at">first_time_enrollment =</span> enrollment2)</span>
+<span id="cb58-4"><a href="#cb58-4" tabindex="-1"></a><span class="co"># readr::write_csv(full_dat3, here(&quot;Data/full_dat3.csv&quot;))</span></span></code></pre></div>
+<p>To do:</p>
+<ul>
+<li>check enrollment distribution for each category</li>
+<li>filter &lt;1,000 enrollment</li>
+<li>consider: confidence intervals on random intercepts?</li>
+<li>double check missing enrollment data for institutions &amp; decide
+which to exclude and which to impute</li>
+</ul>
 </div>
 </div>
 </section>
