@@ -1,0 +1,238 @@
+---
+title: "Multi-Level Modeling of Enrollment"
+output: html_notebook
+---
+
+# Setup
+
+```{r}
+library(tidyverse)
+library(lme4)
+```
+```{r}
+full_dat3 <- read_csv("./Data/full_dat3.csv")
+str(full_dat3)
+```
+
+```{r}
+public_dat3 <- full_dat3 %>% filter(sector == "public")
+private_dat3 <- full_dat3 %>% filter(sector == "private")
+```
+
+```{r}
+public_dat3 %>%
+  group_by(unit_id) %>%
+  summarise(N_year = length(unique(year))) %>%
+  ungroup() %>%
+  count(N_year)
+  
+private_dat3 %>%
+  group_by(unit_id) %>%
+  summarise(N_year = length(unique(year))) %>%
+  ungroup() %>%
+  count(N_year)
+```
+36 out of 520 public institutions do not have 5 years of IPEDS data
+77 out of 1076 private institutions do not have 5 years of IPEDS data
+
+```{r}
+public_dat3 %>%
+  group_by(unit_id) %>%
+  summarise(Min_Enrl = min(overall_enrollment), Max_Enrl = max(overall_enrollment)) %>%
+  ungroup() %>%
+  count(Min_Enrl < 1000, Max_Enrl > 1000)
+  filter(Min_Enrl < 1000, Max_Enrl > 1000)
+private_dat3 %>%
+  group_by(unit_id) %>%
+  summarise(Min_Enrl = min(overall_enrollment), Max_Enrl = max(overall_enrollment)) %>%
+  ungroup() %>%
+  # count(Min_Enrl < 1000, Max_Enrl > 1000)
+  filter(Min_Enrl < 1000, Max_Enrl > 1000)
+```
+2 out of 530 public institutions cross the 1000 overall enrollment threshold in this period.
+90 out of 1076 private institutions cross the 1000 overall enrollment threshold in this period.
+
+```{r}
+public_dat3 %>%
+  group_by(unit_id) %>%
+  filter(year == min(year)) %>%
+  ungroup() %>%
+  filter(overall_enrollment >= 1000) %>%
+  distinct(unit_id) %>%
+  left_join(
+    y = public_dat3,
+    by = "unit_id"
+  )
+
+private_dat3 %>%
+  group_by (unit_id) %>%
+  filter(year == min(year)) %>%
+  ungroup() %>%
+  filter(overall_enrollment >= 1000) %>%
+  distinct(unit_id) %>%
+  left_join(
+    y = private_dat3,
+    by = "unit_id"
+  )
+
+private_dat3 %>%
+  group_by (unit_id) %>%
+  filter(year == min(year)) %>%
+  ungroup() %>%
+  filter(overall_enrollment < 1000) %>%
+  mutate(
+    Enrl_Level = case_when(
+      overall_enrollment >= 800 ~ "800+",
+      overall_enrollment >= 600 ~ "600-800",
+      overall_enrollment >= 400 ~ "400-600",
+      overall_enrollment >= 200 ~ "200-400",
+      overall_enrollment > 0 ~ "1-200"
+    )
+  ) %>%
+  count(Enrl_Level)
+
+```
+504 of 530 public institutions enrolled at least 1000 students in their first reporting year in this period.
+679 of 1076 private institutions enrolled at least 1000 students in their first reporting year in this period.
+
+```{r}
+public_dat3 %>%
+  distinct(unit_id, carnegie) %>%
+  count(carnegie)
+private_dat3 %>%
+  distinct(unit_id, carnegie) %>%
+  count(carnegie)
+```
+26 out of 530 public institutions were not in the Carnegie universe.
+15 out of 1076 private institutions were not in the Carnegie universe.
+
+```{r}
+public_dat3_x <- public_dat3 %>%
+  # In the Carnegie universe
+  filter(carnegie != "Not Carnegie") %>%
+  # At least 1000 overall enrollment in first reporting year
+  group_by(unit_id) %>%
+  filter(year == min(year)) %>%
+  ungroup() %>%
+  filter(overall_enrollment >= 1000) %>%
+  distinct(unit_id) %>%
+  left_join(
+    y = public_dat3,
+    by = "unit_id"
+  ) %>%
+  # Has all 5 years of data
+  group_by(unit_id) %>%
+  summarise(N_year = length(unique(year))) %>%
+  ungroup() %>%
+  left_join(
+    y = public_dat3,
+    by = "unit_id"
+  ) %>%
+  mutate(
+    year_0 = year - min(year),
+    # Log transforms: first-time enrollment; HS grads by state; applicants; average net price with aid
+    log_fyr = log(first_time_enrollment),
+    log_hs = log(hs_grad_state),
+    log_apps = log(applicants),
+    log_price = log(avg_net_price_w_aid),
+    sy_fyr = scale(log_fyr),
+    x_year = year_0,
+    sx_hs = scale(log_hs),
+    sx_bach = scale(pct_bachelors_2018_state),
+    x_rural = factor(locale_rural),
+    sx_pell = scale(pct_pell),
+    sx_race_minority = scale(pct_race_minority),
+    sx_price = scale(log_price),
+    sx_apps = scale(log_apps),
+    sx_admit_rate = scale(admissions_rate)
+  )
+
+public_dat3_x5 <- filter(public_dat3_x, N_year == 5)
+
+private_dat3_x <- private_dat3 %>%
+  # In the Carnegie universe
+  filter(carnegie != "Not Carnegie") %>%
+  # At least 1000 overall enrollment in first reporting year
+  group_by(unit_id) %>%
+  filter(year == min(year)) %>%
+  ungroup() %>%
+  filter(overall_enrollment >= 1000) %>%
+  distinct(unit_id) %>%
+  left_join(
+    y = private_dat3,
+    by = "unit_id"
+  ) %>%
+  # Has all 5 years of data
+  group_by(unit_id) %>%
+  summarise(N_year = length(unique(year))) %>%
+  ungroup() %>%
+  left_join(
+    y = private_dat3,
+    by = "unit_id"
+  ) %>%
+  mutate(
+    year_0 = year - min(year),
+    # Log transforms: first-time enrollment; HS grads by state; applicants; average net price with aid
+    log_fyr = log(first_time_enrollment),
+    log_hs = log(hs_grad_state),
+    log_apps = log(applicants),
+    log_price = log(avg_net_price_w_aid),
+    sy_fyr = scale(log_fyr),
+    x_year = year_0,
+    sx_hs = scale(log_hs),
+    sx_bach = scale(pct_bachelors_2018_state),
+    x_rural = factor(locale_rural),
+    sx_pell = scale(pct_pell),
+    sx_race_minority = scale(pct_race_minority),
+    sx_price = scale(log_price),
+    sx_apps = scale(log_apps),
+    sx_admit_rate = scale(admissions_rate)
+  )
+
+private_dat3_x5 <- filter(private_dat3_x, N_year == 5)
+```
+
+```{r}
+distinct(public_dat3_x5, unit_id) ; distinct(private_dat3_x5, unit_id)
+```
+479 out of 530 public institutions meet the criteria ...
+662 out of 1076 private institutions meet the criteria ...
+
+# Model 1: Basic Growth Model (Null Model)
+
+```{r}
+formula_1 <- formula(
+  first_time_enrollment ~
+    1
+    + x_year
+    + (1 + x_year | unit_id)
+)
+```
+
+## Public Institutions
+
+```{r}
+m_public_1 <- lme4::lmer(
+  formula = formula_1,
+  data = public_dat3_x5
+)
+summary(m_public_1)
+coef(m_public_1)
+# fitted(m_public_1)
+# resid(m_public_1)
+```
+
+## Private Institutions
+
+```{r}
+m_private_1 <- lme4::lmer(
+  formula = formula_1,
+  data = private_dat3_x5
+)
+summary(m_private_1)
+coef(m_private_1)
+# fitted(m_private_1)
+# resid(m_private_1)
+```
+
+
