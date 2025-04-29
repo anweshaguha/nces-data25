@@ -10,7 +10,7 @@ library(tidyverse)
 library(lme4)
 ```
 ```{r}
-full_dat3 <- read_csv("./Data/full_dat3.csv")
+full_dat3 <- read_csv("../Data/full_dat3.csv")
 str(full_dat3)
 ```
 
@@ -32,7 +32,7 @@ private_dat3 %>%
   ungroup() %>%
   count(N_year)
 ```
-36 out of 520 public institutions do not have 5 years of IPEDS data
+36 out of 530 public institutions do not have 5 years of IPEDS data
 77 out of 1076 private institutions do not have 5 years of IPEDS data
 
 ```{r}
@@ -41,13 +41,13 @@ public_dat3 %>%
   summarise(Min_Enrl = min(overall_enrollment), Max_Enrl = max(overall_enrollment)) %>%
   ungroup() %>%
   count(Min_Enrl < 1000, Max_Enrl > 1000)
-  filter(Min_Enrl < 1000, Max_Enrl > 1000)
+  # filter(Min_Enrl < 1000, Max_Enrl > 1000)
 private_dat3 %>%
   group_by(unit_id) %>%
   summarise(Min_Enrl = min(overall_enrollment), Max_Enrl = max(overall_enrollment)) %>%
   ungroup() %>%
-  # count(Min_Enrl < 1000, Max_Enrl > 1000)
-  filter(Min_Enrl < 1000, Max_Enrl > 1000)
+  count(Min_Enrl < 1000, Max_Enrl > 1000)
+  # filter(Min_Enrl < 1000, Max_Enrl > 1000)
 ```
 2 out of 530 public institutions cross the 1000 overall enrollment threshold in this period.
 90 out of 1076 private institutions cross the 1000 overall enrollment threshold in this period.
@@ -102,6 +102,9 @@ public_dat3 %>%
 private_dat3 %>%
   distinct(unit_id, carnegie) %>%
   count(carnegie)
+
+table(full_dat3$carnegie)
+table(private_dat3_x5$carnegie)
 ```
 26 out of 530 public institutions were not in the Carnegie universe.
 15 out of 1076 private institutions were not in the Carnegie universe.
@@ -137,13 +140,13 @@ public_dat3_x <- public_dat3 %>%
     log_price = log(avg_net_price_w_aid),
     sy_fyr = scale(log_fyr),
     x_year = year_0,
-    sx_hs = scale(log_hs),
+    sx_hs = scale(log_hs), # log this
     sx_bach = scale(pct_bachelors_2018_state),
     x_rural = factor(locale_rural),
     sx_pell = scale(pct_pell),
     sx_race_minority = scale(pct_race_minority),
-    sx_price = scale(log_price),
-    sx_apps = scale(log_apps),
+    sx_price = scale(log_price), # don't log this
+    sx_apps = scale(log_apps), # log this
     sx_admit_rate = scale(admissions_rate)
   )
 
@@ -194,6 +197,8 @@ private_dat3_x5 <- filter(private_dat3_x, N_year == 5)
 
 ```{r}
 distinct(public_dat3_x5, unit_id) ; distinct(private_dat3_x5, unit_id)
+distinct(public_dat3_x, unit_id) ; distinct(private_dat3_x, unit_id)
+
 ```
 479 out of 530 public institutions meet the criteria ...
 662 out of 1076 private institutions meet the criteria ...
