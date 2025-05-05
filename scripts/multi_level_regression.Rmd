@@ -210,11 +210,12 @@ formula_1 <- formula(
   first_time_enrollment ~
     1
     + x_year
+    # + (1 + x_year | carnegie)
     + (1 + x_year | unit_id)
 )
 ```
 
-## Public Institutions
+## Model Estimation: Public Institutions
 
 ```{r}
 m_public_1 <- lme4::lmer(
@@ -227,7 +228,7 @@ coef(m_public_1)
 # resid(m_public_1)
 ```
 
-## Private Institutions
+## Model Estimation: Private Institutions
 
 ```{r}
 m_private_1 <- lme4::lmer(
@@ -239,5 +240,147 @@ coef(m_private_1)
 # fitted(m_private_1)
 # resid(m_private_1)
 ```
+
+## Results Visualization: Overall FYR recruitment trends
+
+```{r}
+public_fyr_normalized <- public_dat3_x5 %>%
+  filter(x_year==0) %>%
+  select(unit_id, first_time_enrollment, overall_enrollment) %>%
+  rename(baseline_enrollment = first_time_enrollment, baseline_overall=overall_enrollment) %>%
+  left_join(
+    y = public_dat3_x5 %>% select(unit_id, institution_name, carnegie, year, x_year, first_time_enrollment),
+    by = "unit_id"
+  ) %>%
+  mutate(
+    normalized_enrollment = first_time_enrollment / baseline_enrollment,
+    size_category = case_when(
+      baseline_overall >= 1000 & baseline_overall < 5000 ~ "1k-5k",
+      baseline_overall >= 5000 & baseline_overall < 10000 ~ "5k-10k",
+      baseline_overall >= 10000 & baseline_overall < 20000 ~ "10k-20k",
+      baseline_overall >= 20000 ~ "20k+"
+    ) %>% factor(levels = c("1k-5k","5k-10k","10k-20k","20k+")),
+    carnegie_category = factor(
+      carnegie,
+      levels = c("R1", "R2", "R0", "M", "Baccalaureate", "Special or Tribal"),
+      labels = c("R1", "R2", "D/PU", "M", "B", "SF&TCU")
+    )
+  ) %>%
+  left_join(
+    y = tibble(
+      unit_id = rownames(coef(m_public_1)$unit_id) %>% as.numeric(),
+      time_slope = coef(m_public_1)$unit_id[,"x_year"],
+      enrl_intcpt = coef(m_public_1)$unit_id[,"(Intercept)"],
+      growth_pct = time_slope / enrl_intcpt,
+      growth_bucket = case_when(
+        growth_pct < -0.05 ~ "Linear Decline more than 5% per year",
+        growth_pct < -0.01 ~ "Linear Decline 1 to 5% per year",
+        growth_pct <= 0.01 ~ "Linear Change less than 1% per year",
+        growth_pct <= 0.05 ~ "Linear Growth 1 to 5% per year",
+        growth_pct > 0.05 ~ "Linear Growth more than 5% per year"
+      ) %>% factor(levels = c("Linear Decline more than 5% per year","Linear Decline 1 to 5% per year","Linear Change less than 1% per year","Linear Growth 1 to 5% per year","Linear Growth more than 5% per year"))
+    ) ,
+    by = "unit_id"
+  )
+
+public_fyr_slope_avg <- public_fyr_normalized %>%
+  group_by(size_category, carnegie_category) %>%
+  summarise(Avg_Slope = mean(growth_pct))
+```
+
+```{r}
+# public_fyr_normalized %>%
+#   ggplot(aes(x=x_year, y=normalized_enrollment, group=unit_id, color=growth_bucket)) +
+#   geom_line(alpha = 0.9) +
+#   scale_color_brewer(type="div", palette = "RdYlBu") +
+#   facet_wrap(~size_category) +
+#   theme_classic()
+# 
+# public_fyr_normalized %>%
+#   ggplot(aes(x=x_year, y=normalized_enrollment, group=unit_id, color=growth_bucket)) +
+#   geom_line(alpha = 0.9) +
+#   scale_color_brewer(type="div", palette = "RdYlBu") +
+#   facet_wrap(~carnegie_category) +
+#   theme_classic()
+
+public_fyr_normalized %>%
+  ggplot(aes(x=x_year, y=normalized_enrollment)) +
+  geom_line(mapping=aes(group=unit_id, color=growth_bucket), alpha = 0.9) +
+  scale_color_brewer(type="div", palette = "RdYlBu") +
+  geom_text(data=public_fyr_slope_avg, mapping=aes(x=0.5,y=3,label=round(Avg_Slope, 3))) +
+  scale_y_continuous(name = "Normalized FYR Recruitment") +
+  scale_x_continuous(name = "", labels = c(2019, 2020, 2021, 2022, 2023)) +
+  facet_grid(size_category~carnegie_category) +
+  # geom_abline(data=public_fyr_slope_avg, mapping=aes(slope=Avg_Slope, intercept=1), linewidth=1, linetype = 1) +
+  theme_classic()
+
+```
+
+```{r}
+private_fyr_normalized <- private_dat3_x5 %>%
+  filter(x_year==0) %>%
+  select(unit_id, first_time_enrollment, overall_enrollment) %>%
+  rename(baseline_enrollment = first_time_enrollment, baseline_overall=overall_enrollment) %>%
+  left_join(
+    y = private_dat3_x5 %>% select(unit_id, institution_name, carnegie, year, x_year, first_time_enrollment),
+    by = "unit_id"
+  ) %>%
+  mutate(
+    normalized_enrollment = first_time_enrollment / baseline_enrollment,
+    size_category = case_when(
+      baseline_overall >= 1000 & baseline_overall < 5000 ~ "1k-5k",
+      baseline_overall >= 5000 & baseline_overall < 10000 ~ "5k-10k",
+      baseline_overall >= 10000 & baseline_overall < 20000 ~ "10k-20k",
+      baseline_overall >= 20000 ~ "20k+"
+    ) %>% factor(levels = c("1k-5k","5k-10k","10k-20k","20k+")),
+    carnegie_category = factor(
+      carnegie,
+      levels = c("R1", "R2", "R0", "M", "Baccalaureate", "Special or Tribal"),
+      labels = c("R1", "R2", "D/PU", "M", "B", "SF&TCU")
+    )
+  ) %>%
+  left_join(
+    y = tibble(
+      unit_id = rownames(coef(m_private_1)$unit_id) %>% as.numeric(),
+      time_slope = coef(m_private_1)$unit_id[,"x_year"],
+      enrl_intcpt = coef(m_private_1)$unit_id[,"(Intercept)"],
+      growth_pct = time_slope / enrl_intcpt,
+      growth_bucket = case_when(
+        growth_pct < -0.05 ~ "Linear Decline more than 5% per year",
+        growth_pct < -0.01 ~ "Linear Decline 1 to 5% per year",
+        growth_pct <= 0.01 ~ "Linear Change less than 1% per year",
+        growth_pct <= 0.05 ~ "Linear Growth 1 to 5% per year",
+        growth_pct > 0.05 ~ "Linear Growth more than 5% per year"
+      ) %>% factor(levels = c("Linear Decline more than 5% per year","Linear Decline 1 to 5% per year","Linear Change less than 1% per year","Linear Growth 1 to 5% per year","Linear Growth more than 5% per year"))
+    ) ,
+    by = "unit_id"
+  )
+
+private_fyr_slope_avg <- private_fyr_normalized %>%
+  group_by(size_category, carnegie_category) %>%
+  summarise(Avg_Slope = mean(growth_pct))
+```
+
+```{r}
+private_fyr_normalized %>%
+  ggplot(aes(x=x_year, y=normalized_enrollment)) +
+  geom_line(mapping=aes(group=unit_id, color=growth_bucket), alpha = 0.9) +
+  scale_color_brewer(type="div", palette = "RdYlBu") +
+  geom_text(data=private_fyr_slope_avg, mapping=aes(x=0.5,y=3,label=round(Avg_Slope, 3))) +
+  scale_y_continuous(name = "Normalized FYR Recruitment") +
+  scale_x_continuous(name = "", labels = c(2019, 2020, 2021, 2022, 2023)) +
+  facet_grid(size_category~carnegie_category) +
+  # geom_abline(data=private_fyr_slope_avg, mapping=aes(slope=Avg_Slope, intercept=1), linewidth=1, linetype = 1) +
+  theme_classic()
+
+```
+
+```{r}
+public_fyr_normalized %>%
+  distinct(unit_id, growth_pct, growth_bucket) %>%
+  count(growth_bucket) %>%
+  mutate(pct = round(n/sum(n), 2))
+```
+
 
 
