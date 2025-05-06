@@ -103,8 +103,8 @@ private_dat3 %>%
   distinct(unit_id, carnegie) %>%
   count(carnegie)
 
-table(full_dat3$carnegie)
-table(private_dat3_x5$carnegie)
+# table(full_dat3$carnegie)
+# table(private_dat3_x5$carnegie)
 ```
 26 out of 530 public institutions were not in the Carnegie universe.
 15 out of 1076 private institutions were not in the Carnegie universe.
@@ -460,7 +460,44 @@ tibble(
   scale_color_brewer(type="div") +
   facet_grid(size_category ~ carnegie_category) +
   theme_classic()
-  
+ggsave("../Results/m2_slope_shift_public.png")
 ```
+
+## Model 2 Estimation: Private
+
+```{r}
+m_private_2 <- lmer(formula_2, private_dat3_x5)
+summary(m_private_2)
+```
+
+```{r}
+tibble(
+  unit_id = rownames(coef(m_private_1)$unit_id) %>% as.numeric(),
+  M1_Intcpt = coef(m_private_1)$unit_id[,"(Intercept)"],
+  M1_Slope = coef(m_private_1)$unit_id[,"x_year"],
+  M2_Slope = coef(m_private_2)$unit_id[,"x_year"],
+  Growth_Pct_M1 = M1_Slope / M1_Intcpt,
+  Growth_Pct_M2 = M2_Slope / M1_Intcpt,
+  GPM_Diff = Growth_Pct_M2 - Growth_Pct_M1,
+  GPM_Diff_Bucket = case_when(
+    GPM_Diff < -0.01 ~ 1,
+    GPM_Diff < 0.01 ~ 2,
+    GPM_Diff >= 0.01 ~ 3
+  ) %>% factor()
+) %>%
+  pivot_longer(cols=5:6) %>%
+  left_join(
+    y = private_fyr_normalized %>% distinct(unit_id, carnegie_category, size_category),
+    by = "unit_id"
+  ) %>%
+  ggplot(aes(x=name, y=value)) +
+  geom_hline(yintercept = 0) +
+  geom_line(aes(group=unit_id, color=GPM_Diff_Bucket), alpha = 0.5, linewidth=2) +
+  scale_color_brewer(type="div") +
+  facet_grid(size_category ~ carnegie_category) +
+  theme_classic()
+ggsave("../Results/m2_slope_shift_private.png")
+```
+
 
 
