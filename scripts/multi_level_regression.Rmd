@@ -312,7 +312,9 @@ public_fyr_normalized %>%
   scale_x_continuous(name = "", labels = c(2019, 2020, 2021, 2022, 2023)) +
   facet_grid(size_category~carnegie_category) +
   # geom_abline(data=public_fyr_slope_avg, mapping=aes(slope=Avg_Slope, intercept=1), linewidth=1, linetype = 1) +
-  theme_classic()
+  theme_classic() +
+  theme(legend.position = "bottom")
+ggsave("../Results/normalized_fyr_public.png")
 
 ```
 
@@ -371,7 +373,9 @@ private_fyr_normalized %>%
   scale_x_continuous(name = "", labels = c(2019, 2020, 2021, 2022, 2023)) +
   facet_grid(size_category~carnegie_category) +
   # geom_abline(data=private_fyr_slope_avg, mapping=aes(slope=Avg_Slope, intercept=1), linewidth=1, linetype = 1) +
-  theme_classic()
+  theme_classic() +
+  theme(legend.position = "bottom")
+ggsave("../Results/normalized_fyr_private.png")
 
 ```
 
@@ -380,7 +384,83 @@ public_fyr_normalized %>%
   distinct(unit_id, growth_pct, growth_bucket) %>%
   count(growth_bucket) %>%
   mutate(pct = round(n/sum(n), 2))
+
+private_fyr_normalized %>%
+  distinct(unit_id, growth_pct, growth_bucket) %>%
+  count(growth_bucket) %>%
+  mutate(pct = round(n/sum(n), 2))
+
+public_fyr_normalized %>%
+  distinct(unit_id, growth_pct, growth_bucket, carnegie, size_category) %>%
+  group_by(carnegie, size_category) %>%
+  summarise(
+    tot_decline = sum(growth_bucket %in% c("Linear Decline 1 to 5% per year","Linear Decline more than 5% per year")),
+    tot_inst = length(unique(unit_id)),
+    decline_frac = paste0(tot_decline,"/",tot_inst, " (", 100*round(tot_decline/tot_inst,2), "%)")
+  )
+
+private_fyr_normalized %>%
+  distinct(unit_id, growth_pct, growth_bucket, carnegie, size_category) %>%
+  group_by(carnegie, size_category) %>%
+  summarise(
+    tot_decline = sum(growth_bucket %in% c("Linear Decline 1 to 5% per year","Linear Decline more than 5% per year")),
+    tot_inst = length(unique(unit_id)),
+    decline_frac = paste0(tot_decline,"/",tot_inst, " (", 100*round(tot_decline/tot_inst,2), "%)")
+  )
+
 ```
 
+# Model 2: Geographic and Demographic Context
+
+```{r}
+formula_2 <- formula(
+  first_time_enrollment ~
+    1
+    + x_year
+    + x_rural
+    + sx_bach
+    + sx_hs
+    # + (1 + x_year | carnegie)
+    + (1 + x_year | unit_id)
+)
+```
+
+## Model Estimation: Public
+
+```{r}
+m_public_2 <- lmer(formula_2, public_dat3_x5)
+summary(m_public_2)
+```
+```{r}
+coef(m_public_1)$unit_id
+coef(m_public_2)$unit_id
+
+tibble(
+  unit_id = rownames(coef(m_public_1)$unit_id) %>% as.numeric(),
+  M1_Intcpt = coef(m_public_1)$unit_id[,"(Intercept)"],
+  M1_Slope = coef(m_public_1)$unit_id[,"x_year"],
+  M2_Slope = coef(m_public_2)$unit_id[,"x_year"],
+  Growth_Pct_M1 = M1_Slope / M1_Intcpt,
+  Growth_Pct_M2 = M2_Slope / M1_Intcpt,
+  GPM_Diff = Growth_Pct_M2 - Growth_Pct_M1,
+  GPM_Diff_Bucket = case_when(
+    GPM_Diff < -0.01 ~ 1,
+    GPM_Diff < 0.01 ~ 2,
+    GPM_Diff >= 0.01 ~ 3
+  ) %>% factor()
+) %>%
+  pivot_longer(cols=5:6) %>%
+  left_join(
+    y = public_fyr_normalized %>% distinct(unit_id, carnegie_category, size_category),
+    by = "unit_id"
+  ) %>%
+  ggplot(aes(x=name, y=value)) +
+  geom_hline(yintercept = 0) +
+  geom_line(aes(group=unit_id, color=GPM_Diff_Bucket), alpha = 0.5, linewidth=2) +
+  scale_color_brewer(type="div") +
+  facet_grid(size_category ~ carnegie_category) +
+  theme_classic()
+  
+```
 
 
