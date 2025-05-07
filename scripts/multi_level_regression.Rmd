@@ -418,8 +418,8 @@ formula_2 <- formula(
     1
     + x_year
     + x_rural
-    + sx_bach
-    + sx_hs
+    + sx_bach # Percent of adults with bachelors degree in the state where the institution is located, standardized
+    + sx_hs # The number of high school graduates that year, logged and standardized
     # + (1 + x_year | carnegie)
     + (1 + x_year | unit_id)
 )
@@ -498,6 +498,122 @@ tibble(
   theme_classic()
 ggsave("../Results/m2_slope_shift_private.png")
 ```
+
+# Model 3: Institutional Actions
+
+```{r}
+formula_3 <- formula(
+  first_time_enrollment ~
+    1
+    + x_year
+    + x_rural
+    + sx_bach # Percent of adults with bachelors degree in the state where the institution is located, standardized
+    + sx_hs # The number of high school graduates that year, logged and standardized
+    + sx_race_minority
+    + sx_pell
+    + sx_apps
+    + sx_admit_rate
+    + sx_price
+    # + (1 + x_year | carnegie)
+    + (1 + x_year | unit_id)
+)
+```
+
+
+# Model Estimation: Public
+
+```{r}
+m_public_3 <- lmer(formula = formula_3, data = public_dat3_x5)
+summary(m_public_3)
+coef(m_public_3)
+```
+
+```{r}
+m_private_3 <- lmer(formula = formula_3, data = private_dat3_x5)
+summary(m_private_3)
+coef(m_private_3)
+```
+
+The model did not converge. Let's explore what's going on
+
+```{r}
+cor(private_dat3_x5$sx_apps, private_dat3_x5$sx_admit_rate) # correlation is ~ -0.5 so not collinear
+
+cor(private_dat3_x5[,c(
+  "sx_apps"
+  ,"sx_admit_rate"
+  ,"sx_pell"
+  ,"sx_price"
+  ,"sx_race_minority"
+  )
+  ]
+)
+
+glmer(formula = formula_3, data = private_dat3_x5, family = "poisson") # this runs
+```
+
+From https://www.geeksforgeeks.org/how-to-resolve-r-glmer-warnings-model-fails-to-converge-and-model-is-nearly-unidentifiable/?ref=asr4
+
+> Model Fails to Converge: This warning suggests that the algorithm used to fit the GLMM did not successfully find a solution that meets convergence criteria. Convergence failure can occure due to various reasons, including:
+> * Poor starting values for the optimization algorithm
+> * Non-linear relationships between predictors and the response variable
+> * High collinearity among predictors
+> * Overdispersion or underdispersion in the data
+> * Sparse data or small sample sizes
+
+I think we can rule out collinearity despite the natural relationship between total number of applications and admission rate because even then the correlation between them is not close to 1.
+
+I think overdispersion is much more likely given that we were already thinking that might be a problem.
+
+```{r}
+glm_public_1 <- glmer(formula = formula_1, data = public_dat3_x5, family = "poisson")
+glm_public_2 <- glmer(formula = formula_2, data = public_dat3_x5, family = "poisson")
+glm_public_3 <- glmer(formula = formula_3, data = public_dat3_x5, family = "poisson")
+
+glm_private_1 <- glmer(formula = formula_1, data = private_dat3_x5, family = "poisson")
+glm_private_2 <- glmer(formula = formula_2, data = private_dat3_x5, family = "poisson")
+glm_private_3 <- glmer(formula = formula_3, data = private_dat3_x5, family = "poisson")
+
+```
+
+
+```{r}
+map(
+  .x = list(
+    glm_public_1,
+    glm_public_2,
+    glm_public_3,
+    glm_private_1,
+    glm_private_2,
+    glm_private_3
+  ),
+  .f = summary
+)
+```
+
+```{r}
+anova(glm_public_1, glm_public_2, glm_public_3)
+
+anova(glm_private_1, glm_private_2, glm_private_3)
+```
+
+Let's see if number of iterations does something for the non-convergence
+
+```{r}
+lmer(formula = formula_3, data = private_dat3_x5, control = lmerControl())
+?lmerControl
+```
+
+```{r}
+allFit(m_private_3)
+```
+
+
+
+
+
+
+
 
 
 
