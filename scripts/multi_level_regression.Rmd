@@ -609,10 +609,197 @@ allFit(m_private_3)
 ```
 
 
+```{r}
+public_dat3_x5 %>%
+  select(unit_id, year, pct_race_minority) %>%
+  left_join(
+    y = public_fyr_normalized,
+    by = c("unit_id","year")
+  ) %>%
+  ggplot(aes(x=year, y=pct_race_minority)) +
+  geom_line(aes(group=unit_id, color=growth_bucket)) +
+  scale_color_brewer(type = "div")
+
+predict(
+  m_public_3, 
+  tibble(
+    x_year = c(0,4),
+    x_rural = c("City/Suburb","City/Suburb"),
+    sx_bach = c(0,0),
+    sx_hs = c(0,0),
+    sx_race_minority = c(-1,1),
+    sx_pell = c(0,0),
+    sx_apps = c(0,0),
+    sx_admit_rate = c(0,0),
+    sx_price = c(0,0),
+    unit_id = c(200332, 200332)
+  )
+)
+
+str(m_public_3)
+m_public_3@call
+
+count(public_dat3_x5, locale_rural)
+
+public_fyr_normalized %>%
+  left_join(
+    y = public_dat3_x5 %>%
+      filter(year==2019) %>%
+      mutate(xvar_cut = cut(pct_race_minority, 3)) %>%
+      select(unit_id, xvar_cut),
+    by = "unit_id"
+  ) %>%
+  ggplot(aes(x=x_year, y=normalized_enrollment)) +
+  geom_line(mapping=aes(group=unit_id, color=growth_bucket), alpha = 0.9) +
+  scale_color_brewer(type="div", palette = "RdYlBu") +
+  facet_grid(size_category ~ xvar_cut)
+
+map(
+  .x = list(
+    "pct_race_minority",
+    "pct_pell",
+    # "applicants",
+    "sx_apps",
+    "admissions_rate",
+    "avg_net_price_w_aid"
+  ),
+  .f = function(x) {
+    baseline_tertiles <- filter(public_dat3_x5, year==2019)
+    baseline_tertiles$xvar_cut <- cut(baseline_tertiles[[x]], 5)
+    baseline_tertiles <- select(baseline_tertiles, unit_id, xvar_cut)
+    
+    public_fyr_normalized %>%
+      left_join(
+        y = baseline_tertiles,
+        by = "unit_id"
+      ) %>%
+      ggplot(aes(x=x_year, y=normalized_enrollment)) +
+      geom_line(mapping=aes(group=unit_id, color=growth_bucket), alpha = 0.9) +
+      scale_color_brewer(type="div", palette = "RdYlBu") +
+      facet_grid(1 ~ xvar_cut) +
+      theme_classic() +
+      ggplot2::ggtitle(x)
+  }
+)
+```
 
 
+# Prototypes?
 
+```{r}
+gower_distance <- kmed::distmix(
+  data = public_dat3_x5 %>% 
+    filter(year==2019) %>%
+    select(
+      x_rural, sx_bach, sx_hs, 
+      sx_race_minority, sx_pell, sx_apps, sx_admit_rate, sx_price
+    ),
+  method = "gower",
+  idnum = 2:8,
+  idcat = 1
+)
 
+set.seed(20250507)
+rkm_result <- kmed::rankkmed(gower_distance, ncluster = 5, m = 10, iterate = 50)
+
+prototypes_baseline <- filter(public_dat3_x5, year==2019)[rkm_result$medoid,]
+
+critics_baseline <- tibble(
+  unit_id = filter(public_dat3_x5, year==2019)[["unit_id"]],
+  Rank1 = rank(gower_distance[rkm_result$medoid,][1,]),
+  Rank2 = rank(gower_distance[rkm_result$medoid,][2,]),
+  Rank3 = rank(gower_distance[rkm_result$medoid,][3,]),
+  Rank4 = rank(gower_distance[rkm_result$medoid,][4,]),
+  Rank5 = rank(gower_distance[rkm_result$medoid,][5,])
+) %>%
+  mutate(Tot_Rank = Rank1 + Rank2 + Rank3 + Rank4 + Rank5) %>%
+  arrange(desc(Tot_Rank)) %>%
+  head(5) %>%
+  left_join(
+    y = public_dat3_x5 %>% filter(year == 2019),
+    by = "unit_id"
+  )
+
+```
+
+```{r}
+gower_b <- kmed::distmix(
+  data = public_dat3_x5 %>% 
+    filter(year==2019, carnegie=="Baccalaureate") %>%
+    select(
+      x_rural, sx_bach, sx_hs, 
+      sx_race_minority, sx_pell, sx_apps, sx_admit_rate, sx_price
+    ),
+  method = "gower",
+  idnum = 2:8,
+  idcat = 1
+)
+
+gower_m <- kmed::distmix(
+  data = public_dat3_x5 %>% 
+    filter(year==2019, carnegie=="M") %>%
+    select(
+      x_rural, sx_bach, sx_hs, 
+      sx_race_minority, sx_pell, sx_apps, sx_admit_rate, sx_price
+    ),
+  method = "gower",
+  idnum = 2:8,
+  idcat = 1
+)
+
+gower_d <- kmed::distmix(
+  data = public_dat3_x5 %>% 
+    filter(year==2019, carnegie %in% c("R1","R2")) %>%
+    select(
+      x_rural, sx_bach, sx_hs, 
+      sx_race_minority, sx_pell, sx_apps, sx_admit_rate, sx_price
+    ),
+  method = "gower",
+  idnum = 2:8,
+  idcat = 1
+)
+
+set.seed(20250507)
+kmed_b <- kmed::rankkmed(gower_b, ncluster = 3, m = 10, iterate = 50)
+kmed_m <- kmed::rankkmed(gower_m, ncluster = 3, m = 10, iterate = 50)
+kmed_d <- kmed::rankkmed(gower_d, ncluster = 3, m = 10, iterate = 50)
+
+prototypes_baseline <- rbind(
+  filter(public_dat3_x5, year==2019, carnegie=="Baccalaureate")[kmed_b$medoid,],
+  filter(public_dat3_x5, year==2019, carnegie=="M")[kmed_m$medoid,],
+  filter(public_dat3_x5, year==2019, carnegie %in% c("R1","R2"))[kmed_d$medoid,]
+)
+
+```
+
+```{r}
+prototypes_baseline %>%
+  select(unit_id) %>%
+  left_join(public_dat3_x5, by = "unit_id") %>%
+  cross_join(
+    y = tibble(
+      pred_race_minority = c(-0.5, 0.25, 0, 0.25, 0.5)
+    )
+  ) %>%
+  select(-sx_race_minority) %>%
+  rename(sx_race_minority = pred_race_minority) %>%
+  mutate(
+    pred_fyr = predict(object = m_public_3, newdata=.),
+    pred_grp = paste0(unit_id,":",sx_race_minority)
+  ) %>%
+  group_by(pred_grp) %>%
+  mutate(
+    pred_fyr_norm = pred_fyr / pred_fyr[which(year==2019)]
+  ) %>%
+  ggplot(
+    aes(x = x_year, y = pred_fyr_norm)
+  ) +
+  geom_line(aes(group=pred_grp, color = factor(sx_race_minority))) +
+  scale_color_brewer(type="div") +
+  facet_wrap(~unit_id)
+
+predict(m_public_3, prototypes_baseline)
+```
 
 
 
