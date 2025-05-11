@@ -345,6 +345,10 @@ private_outliers <- private_intslopes %>%
     y = private_dat3,
     by = "unit_id"
   )
+
+write_csv(public_outliers %>% map_df(.f = function(x) if(is.matrix(x)) {x[,1]} else {x}), "../Results/Public_Outliers.csv")
+write_csv(private_outliers %>% map_df(.f = function(x) if(is.matrix(x)) {x[,1]} else {x}), "../Results/Private_Outliers.csv")
+
 ```
 
 # Visualization
