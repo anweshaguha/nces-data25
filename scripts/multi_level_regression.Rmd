@@ -310,7 +310,7 @@ public_fyr_normalized %>%
   geom_text(data=public_fyr_slope_avg, mapping=aes(x=0.5,y=3,label=round(Avg_Slope, 3))) +
   scale_y_continuous(name = "Normalized FYR Recruitment") +
   scale_x_continuous(name = "", labels = c(2019, 2020, 2021, 2022, 2023)) +
-  facet_grid(size_category~carnegie_category) +
+  # facet_grid(size_category~carnegie_category) +
   # geom_abline(data=public_fyr_slope_avg, mapping=aes(slope=Avg_Slope, intercept=1), linewidth=1, linetype = 1) +
   theme_classic() +
   theme(legend.position = "bottom")
@@ -574,6 +574,10 @@ glm_private_1 <- glmer(formula = formula_1, data = private_dat3_x5, family = "po
 glm_private_2 <- glmer(formula = formula_2, data = private_dat3_x5, family = "poisson")
 glm_private_3 <- glmer(formula = formula_3, data = private_dat3_x5, family = "poisson")
 
+```
+
+```{r}
+glmer.nb(formula_3, data=public_dat3_x5)
 ```
 
 
