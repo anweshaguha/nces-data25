@@ -1,4 +1,4 @@
----
+mo---
 title: "Final Analysis & Interpretation"
 output: html_notebook
 ---
@@ -229,6 +229,81 @@ map(
   ),
   .f = summary
 )
+```
+
+Creating tables -- public
+```{r}
+public_mods <- list(glm_public_1, glm_public_2, glm_public_3)
+
+## table creation
+modelsummary::modelsummary(public_mods, 
+                           title = "Model Summary for Public Institutions",
+                           notes = "***p<.01, **p<.05, *p<.10",
+                           estimate = "{estimate}{stars}({std.error})",
+                           statistic = NULL,
+                           coef_rename = c(
+  "x_year" = "Year", 
+  "x_ruralTown/Rural" = "Town/Rural",
+  "sx_bach" = "Pct. Bachelor-degree Holders",
+  "sxl_hs" = "HS Graduates",
+  "sx_race_minority" = "Pct. Non-White",
+  "sx_pell" = "Pct. Pell",
+  "sxl_apps" = "Applicants",
+  "sx_admit_rate" = "Admission Rate",
+  "sx_price" = "Tuition Cost"),
+  coef_omit = "SD|Cor|Intercept.*unit_id|x_year.*unit_id",
+  gof_map = c("nobs", "aic", "bic", "rmse", "logLik"))
+```
+
+Private mods
+```{r}
+private_mods <- list(glm_private_1, glm_private_2, glm_private_3)
+
+## table creation
+modelsummary::modelsummary(private_mods, 
+                           output = "gt",
+                           title = "***p<.01, **p<.05, *p<.10",
+                           estimate = "{estimate}{stars}({std.error})",
+                           statistic = NULL,
+                           coef_rename = c(
+  "x_year" = "Year", 
+  "x_ruralTown/Rural" = "Town/Rural",
+  "sx_bach" = "Pct. Bachelor-degree Holders",
+  "sxl_hs" = "HS Graduates",
+  "sx_race_minority" = "Pct. Non-White",
+  "sx_pell" = "Pct. Pell",
+  "sxl_apps" = "Applicants",
+  "sx_admit_rate" = "Admission Rate",
+  "sx_price" = "Tuition Cost"),
+  coef_omit = "SD|Cor|Intercept.*unit_id|x_year.*unit_id",
+  gof_map = c("nobs", "aic", "bic", "rmse", "logLik")) %>% 
+  gt::tab_spanner(label = "Private", columns = everything())
+```
+
+All in one table
+```{r}
+all_mods <- list(glm_public_1, glm_public_2, glm_public_3, glm_private_1, glm_private_2, glm_private_3)
+
+summary_table <- modelsummary::modelsummary(all_mods, 
+                           output = "gt",
+                           title = "Model Summaries on Enrollment Rate by Institution Type",
+                           notes = "***p<.01, **p<.05, *p<.10",
+                           estimate = "{estimate}{stars}({std.error})",
+                           statistic = NULL,
+                           coef_rename = c(
+  "x_year" = "Year", 
+  "x_ruralTown/Rural" = "Town/Rural (compared to City/Suburb)",
+  "sx_bach" = "Pct. Bachelor-degree Holders",
+  "sxl_hs" = "HS Graduates",
+  "sx_race_minority" = "Pct. Non-White",
+  "sx_pell" = "Pct. Pell",
+  "sxl_apps" = "Applicants",
+  "sx_admit_rate" = "Admission Rate",
+  "sx_price" = "Avg. Net Price with Aid"),
+  coef_omit = "SD|Cor|Intercept.*unit_id|x_year.*unit_id",
+  gof_map = c("nobs", "aic", "bic", "rmse", "logLik")) %>% 
+  gt::tab_spanner(label = "Public", columns = 2:4) %>% 
+  gt::tab_spanner(label = "Private", columns = 5:7)
 ```
 
 
