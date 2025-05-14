@@ -337,18 +337,18 @@ public_intslopes <- tibble(
 
 # public_dat3$m1_int <- coef(glm_public_1)$unit_id[,"(Intercept)"]
 # public_dat3$m1_slope_time <- coef(glm_public_1)$unit_id[,"x_year"]
-public_dat3$m1_fitted_link <- fitted(glm_public_1, type="link")
-public_dat3$m1_fitted_resp <- fitted(glm_public_1, type="resp")
+public_dat3$m1_fitted_link <- predict(glm_public_1, type="link")
+public_dat3$m1_fitted_resp <- predict(glm_public_1, type="resp")
 public_dat3$m1_residual <- resid(glm_public_1)
 # public_dat3$m2_int <- coef(glm_public_2)$unit_id[,"(Intercept)"]
 # public_dat3$m2_slope_time <- coef(glm_public_2)$unit_id[,"x_year"]
-public_dat3$m2_fitted_link <- fitted(glm_public_2, type="link")
-public_dat3$m2_fitted_resp <- fitted(glm_public_2, type="resp")
+public_dat3$m2_fitted_link <- predict(glm_public_2, type="link")
+public_dat3$m2_fitted_resp <- predict(glm_public_2, type="resp")
 public_dat3$m2_residual <- resid(glm_public_2)
 # public_dat3$m3_int <- coef(glm_public_3)$unit_id[,"(Intercept)"]
 # public_dat3$m3_slope_time <- coef(glm_public_3)$unit_id[,"x_year"]
-public_dat3$m3_fitted_link <- fitted(glm_public_3, type="link")
-public_dat3$m3_fitted_resp <- fitted(glm_public_3, type="resp")
+public_dat3$m3_fitted_link <- predict(glm_public_3, type="link")
+public_dat3$m3_fitted_resp <- predict(glm_public_3, type="resp")
 public_dat3$m3_residual <- resid(glm_public_3)
 
 #
@@ -377,18 +377,18 @@ private_intslopes <- tibble(
 
 # private_dat3$m1_int <- coef(glm_private_1)$unit_id[,"(Intercept)"]
 # private_dat3$m1_slope_time <- coef(glm_private_1)$unit_id[,"x_year"]
-private_dat3$m1_fitted_link <- fitted(glm_private_1, type="link")
-private_dat3$m1_fitted_resp <- fitted(glm_private_1, type="resp")
+private_dat3$m1_fitted_link <- predict(glm_private_1, type="link")
+private_dat3$m1_fitted_resp <- predict(glm_private_1, type="resp")
 private_dat3$m1_residual <- resid(glm_private_1)
 # private_dat3$m2_int <- coef(glm_private_2)$unit_id[,"(Intercept)"]
 # private_dat3$m2_slope_time <- coef(glm_private_2)$unit_id[,"x_year"]
-private_dat3$m2_fitted_link <- fitted(glm_private_2, type="link")
-private_dat3$m2_fitted_resp <- fitted(glm_private_2, type="resp")
+private_dat3$m2_fitted_link <- predict(glm_private_2, type="link")
+private_dat3$m2_fitted_resp <- predict(glm_private_2, type="resp")
 private_dat3$m2_residual <- resid(glm_private_2)
 # private_dat3$m3_int <- coef(glm_private_3)$unit_id[,"(Intercept)"]
 # private_dat3$m3_slope_time <- coef(glm_private_3)$unit_id[,"x_year"]
-private_dat3$m3_fitted_link <- fitted(glm_private_3, type="link")
-private_dat3$m3_fitted_resp <- fitted(glm_private_3, type="resp")
+private_dat3$m3_fitted_link <- predict(glm_private_3, type="link")
+private_dat3$m3_fitted_resp <- predict(glm_private_3, type="resp")
 private_dat3$m3_residual <- resid(glm_private_3)
 
 ```
@@ -436,4 +436,86 @@ ggplot(
   geom_line(mapping = aes(group=unit_id))
 ```
 
+## Slope change from model 1 to model 2
+
+```{r}
+public_m1m2_slopechange <- public_intslopes %>%
+  mutate(slopechange_21 = m2_slope_time - m1_slope_time) %>%
+  arrange(desc(slopechange_21)) %>%
+  mutate(unit_id_f = factor(unit_id, levels = unique(unit_id))) %>%
+  left_join(
+    y = distinct(public_dat3, unit_id, carnegie_category, size_category),
+    by = "unit_id"
+  )
+
+
+ggplot(data=public_m1m2_slopechange, mapping = aes(x=unit_id_f, y=slopechange_21)) +
+  geom_bar(
+    stat="identity"
+#    ,color = "black"
+    ,mapping = aes(fill=size_category)
+  ) +
+  scale_fill_brewer(type = "div", direction = -1) +
+#  facet_wrap(~size_category) +
+  theme_classic() +
+  theme(
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  )
+
+public_m1m2_slopechange %>%
+  mutate(
+    slpchg_median = median(slopechange_21),
+    slpchg_top3rd = quantile(slopechange_21, 0.66),
+    slpchg_bot3rd = quantile(slopechange_21, 0.33)
+  ) %>%
+  group_by(size_category, carnegie_category) %>%
+  summarise(
+    Top3rd = sum(slopechange_21 > slpchg_top3rd),
+    Bot3rd = -1*sum(slopechange_21 < slpchg_bot3rd)
+  ) %>%
+  pivot_longer(cols=3:4) %>%
+  ggplot(aes(x = size_category, y = value)) +
+  geom_bar(stat="identity", mapping=aes(fill=name)) +
+  facet_wrap(~carnegie_category)
+
+ggplot(
+  public_m1m2_slopechange,
+  aes(x = m1_slope_time, y = m2_slope_time)
+) +
+  geom_point()
+
+set.seed(3)
+slp21_example <- sample_n(public_m1m2_slopechange, 25)
+
+public_dat3 %>%
+  filter(unit_id %in% slp21_example$unit_id) %>%
+  ggplot(
+    mapping = aes(x = year_0)
+  ) +
+  geom_line(
+    mapping = aes(y = m2_fitted_resp, group = unit_id)
+    ,color="red",linewidth=2,alpha=0.2
+  ) +
+  geom_line(
+    mapping = aes(y = m1_fitted_resp, group = unit_id)
+    ,color="blue",linewidth=2,alpha=0.2
+  ) +
+  facet_wrap(~unit_id, nrow=5)
+
+public_dat3 %>%
+  filter(unit_id %in% slp21_example$unit_id) %>%
+  ggplot(
+    mapping = aes(x = year_0)
+  ) +
+  geom_line(
+    mapping = aes(y = m2_fitted_link, group = unit_id)
+    ,color="red",linewidth=2,alpha=0.2
+  ) +
+  geom_line(
+    mapping = aes(y = m1_fitted_link, group = unit_id)
+    ,color="blue",linewidth=2,alpha=0.2
+  ) +
+  facet_wrap(~unit_id, nrow=5)
+```
 
