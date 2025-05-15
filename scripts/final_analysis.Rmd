@@ -519,3 +519,185 @@ public_dat3 %>%
   facet_wrap(~unit_id, nrow=5)
 ```
 
+
+
+
+# Within-Institution Correlation...
+
+```{r}
+tibble(
+  unit_id = unique(public_dat3$unit_id)
+  ,enrl_cor_hs = map_dbl(
+    .x = as.list(unique(public_dat3$unit_id)),
+    .f = function(x) {
+      unit_id_subset <- filter(public_dat3, unit_id==x) %>%
+        arrange(year)
+    
+      cor(unit_id_subset$first_time_enrollment, unit_id_subset$hs_grad_state)
+    }
+  )
+  ,enrl_cor_pell = map_dbl(
+    .x = as.list(unique(public_dat3$unit_id)),
+    .f = function(x) {
+      unit_id_subset <- filter(public_dat3, unit_id==x) %>%
+        arrange(year)
+    
+      cor(unit_id_subset$first_time_enrollment, unit_id_subset$pct_pell)
+    }
+  )
+) %>%
+  pivot_longer(cols = 2:ncol(.)) %>%
+  ggplot(aes(x=name, y=value)) +
+  geom_boxplot()
+
+```
+
+```{r}
+m1_dist <- dist(public_intslopes %>% select(m1_int, m1_slope_time))
+```
+
+```{r}
+set.seed(20250514)
+m1_trj_medoids <- kmed::rankkmed(m1_dist, ncluster = 7)
+public_intslopes[m1_trj_medoids$medoid,] %>%
+  left_join(y=public_dat3,
+            by="unit_id") %>%
+  ggplot(aes(x=year_0, y=log_fyr)) +
+  geom_line(mapping=aes(group=unit_id,color=factor(unit_id)), linewidth=2, linetype=1, alpha=0.3) +
+  geom_abline(aes(slope=m1_slope_time, intercept = m1_int, color=factor(unit_id)), linewidth=2) +
+  theme_classic()
+
+
+m1_trj_medoids$cluster
+# public_intslopes %>%
+#   mutate(
+#     trj_cluster=m1_trj_medoids$cluster,
+#     rowind = row_number(),
+#     is_medoid = if_else(rowind %in% m1_trj_medoids$medoid, TRUE, FALSE)
+#   ) %>%
+#   left_join(y=public_dat3, by="unit_id") %>%
+#   ggplot(
+#     data = .,
+#     aes(x=year_0,y=log_fyr)
+#   ) +
+#   geom_line(mapping=aes(group=unit_id), linewidth=2, linetype=1, alpha=0.3) +
+#   geom_abline(mapping = aes(slope=m1_slope_time, intercept = m1_int, color=factor(trj_cluster), group=unit_id))
+```
+
+
+```{r}
+public_fyr_change_5yr <- public_dat3 %>%
+  select(
+    unit_id, sector, year_0, first_time_enrollment, log_fyr, m1_fitted_link, m1_fitted_resp
+  ) %>%
+  group_by(unit_id, sector) %>%
+  filter(year_0 == max(year_0) | year_0 == min(year_0)) %>%
+  mutate(year_ref = case_when(year_0==max(year_0)~"LastYr", year_0==min(year_0)~"FirstYr")) %>%
+  pivot_wider(id_cols = c(unit_id, sector), names_from = year_ref, values_from=c(m1_fitted_resp,first_time_enrollment)) %>%
+  mutate(
+    MaxMinYr_Change_Fit = (m1_fitted_resp_LastYr/m1_fitted_resp_FirstYr)-1
+    ,MaxMinYr_Change_Obs = (first_time_enrollment_LastYr/first_time_enrollment_FirstYr)-1
+  ) %>%
+  mutate(
+    Growth_Category = case_when(
+      MaxMinYr_Change_Fit < -0.05 ~ "Decline more than 5%",
+      MaxMinYr_Change_Fit >= -0.05 & MaxMinYr_Change_Fit <= 0.05 ~ "Change less than 5%",
+      MaxMinYr_Change_Fit > 0.05 ~ "Growth more than 5%"
+    )
+  ) %>%
+  ungroup()
+
+private_fyr_change_5yr <- private_dat3 %>%
+ select(
+    unit_id, sector, year_0, first_time_enrollment, log_fyr, m1_fitted_link, m1_fitted_resp
+  ) %>%
+  group_by(unit_id, sector) %>%
+  filter(year_0 == max(year_0) | year_0 == min(year_0)) %>%
+  mutate(year_ref = case_when(year_0==max(year_0)~"LastYr", year_0==min(year_0)~"FirstYr")) %>%
+  pivot_wider(id_cols = c(unit_id, sector), names_from = year_ref, values_from=c(m1_fitted_resp,first_time_enrollment)) %>%
+  mutate(
+    MaxMinYr_Change_Fit = (m1_fitted_resp_LastYr/m1_fitted_resp_FirstYr)-1
+    ,MaxMinYr_Change_Obs = (first_time_enrollment_LastYr/first_time_enrollment_FirstYr)-1
+  ) %>%
+  mutate(
+    Growth_Category = case_when(
+      MaxMinYr_Change_Fit < -0.05 ~ "Decline more than 5%",
+      MaxMinYr_Change_Fit >= -0.05 & MaxMinYr_Change_Fit <= 0.05 ~ "Change less than 5%",
+      MaxMinYr_Change_Fit > 0.05 ~ "Growth more than 5%"
+    )
+  ) %>%
+  ungroup()
+```
+
+```{r}
+rbind(
+  public_fyr_change_5yr,
+  private_fyr_change_5yr
+) %>%
+  count(sector, Growth_Category) %>%
+  group_by(sector) %>%
+  mutate(pct = round(100*n/sum(n))) %>%
+  arrange(sector, desc(n))
+```
+```{r}
+public_intslopes[m1_trj_medoids$medoid,] %>%
+  left_join(y=public_dat3,
+            by="unit_id") %>%
+  ggplot(aes(x=year_0, y=log_fyr)) +
+  geom_line(mapping=aes(group=unit_id,color=factor(unit_id)), linewidth=2, linetype=1, alpha=0.3) +
+  # geom_abline(aes(slope=m1_slope_time, intercept = m1_int, color=factor(unit_id)), linewidth=2) +
+  geom_abline(aes(slope=m2_slope_time, intercept = m2_int, color=factor(unit_id)), linewidth=2, linetype=2) +
+  scale_y_continuous(limits = c(5.5, 8)) +
+  theme_classic()
+```
+```{r}
+public_dat3 %>%
+  distinct(stabbr, year, hs_grad_state, pct_bachelors_2018_state, sxl_hs, sx_bach) %>%
+  arrange(sx_bach, stabbr, year)
+
+summary(glm_public_2)
+```
+
+
+MS, TX, NE, CA, VT
+```{r}
+public_dat3 %>%
+  distinct(stabbr, year, hs_grad_state, pct_bachelors_2018_state, sxl_hs, sx_bach) %>%
+  arrange(sx_bach, stabbr, year) %>%
+  filter(stabbr %in% c("MS","TX","NE","CA","VT")) %>%
+  mutate(
+    State_Link = glm_public_2@beta[1] + glm_public_2@beta[2]*(year-2019) + glm_public_2@beta[4]*sx_bach + glm_public_2@beta[5]*sxl_hs,
+    State_Resp = exp(State_Link)
+  )
+summary(glm_public_2)
+```
+
+```{r}
+public_dat3 %>%
+  distinct(stabbr, year, hs_grad_state, pct_bachelors_2018_state, sxl_hs, sx_bach) %>%
+  arrange(sx_bach, stabbr, year) %>%
+  ggplot(aes(x=pct_bachelors_2018_state, y=hs_grad_state, color=stabbr)) +
+  geom_point()
+
+state_summary <- public_dat3 %>%
+  distinct(stabbr, year, hs_grad_state, pct_bachelors_2018_state) %>%
+  group_by(stabbr) %>%
+  summarise(
+    Avg_HS_Grads = mean(hs_grad_state),
+    Pct_Bach = mean(pct_bachelors_2018_state)
+  ) %>%
+  ungroup() %>%
+  mutate(
+    SL_HS_Grads = scale(log(Avg_HS_Grads)),
+    HS_Grads_Rank = rank(Avg_HS_Grads),
+    Pct_Bach_Rank = rank(Pct_Bach)
+  ) %>%
+  arrange(desc(Pct_Bach)) %>%
+  mutate(State_Ordered = factor(stabbr, levels=unique(stabbr)))
+
+ggplot(data=state_summary, mapping=aes(x=State_Ordered, y=Pct_Bach)) +
+  geom_bar(stat="identity", mapping=aes(fill=SL_HS_Grads)) +
+  scale_fill_distiller(type="div") +
+  theme_classic()
+```
+
