@@ -1,0 +1,751 @@
+mo---
+title: "Final Analysis & Interpretation"
+output: html_notebook
+---
+
+# Setup
+
+```{r}
+library(tidyverse)
+library(lme4)
+```
+
+```{r}
+full_dat3 <- read_csv("../Data/full_dat3.csv")
+# imputed_enrl <- read_csv("../Data/Data Sector-Enrollment Variables/Imputation_Flags.csv")
+# enrl_data <- read_csv("../Data/final_enrollment_data.csv")
+```
+
+```{r}
+# enrl_long <- enrl_data %>%
+#   select(-`...18`) %>%
+#   pivot_longer(cols = 3:17, names_to = "Var_Name", values_to = "IPEDS_Value") %>%
+#   mutate(
+#     Year = str_extract(Var_Name, "20\\d\\d"),
+#     Enrl_Var = case_when(
+#       str_detect(Var_Name, "^Undergraduate") ~ "UGRD_ENRL",
+#       str_detect(Var_Name, "^First") ~ "FYR_ENRL",
+#       str_detect(Var_Name, "Total") ~ "TOT_ENRL"
+#     )
+#   )
+# 
+# enrl_long %>%
+#   group_by(UnitID, Enrl_Var) %>%
+#   summarise(N = sum(!is.na(IPEDS_Value))) %>%
+#   ungroup() %>%
+#   pivot_wider(names_from = "Enrl_Var", values_from = "N") %>%
+#   filter(FYR_ENRL < 5 | TOT_ENRL < 5 | UGRD_ENRL < 5) %>%
+#   left_join(
+#     y = imputed_enrl,
+#     by = "UnitID"
+#   )
+
+```
+
+
+```{r}
+combined_data <- full_dat3 %>%
+  # Inclusion criteria:
+  # In the Carnegie universe
+  filter(carnegie != "Not Carnegie") %>%
+  # At least 1000 overall enrollment in first reporting year
+  group_by(unit_id) %>%
+  filter(year == min(year, na.rm = TRUE)) %>%
+  ungroup() %>%
+  filter(overall_enrollment >= 1000) %>%
+  distinct(unit_id) %>%
+  left_join(
+    y = full_dat3,
+    by = "unit_id"
+  ) %>%
+  # How many years of data?
+  group_by(unit_id) %>%
+  summarise(N_year = length(unique(year))) %>%
+  ungroup() %>%
+  left_join(
+    y = full_dat3,
+    by = "unit_id"
+  )
+
+public_dat3 <- combined_data %>%
+  filter(sector=="public") %>%
+  mutate(
+    year_0 = year - 2019,
+    # Log transforms: first-time enrollment; HS grads by state; applicants; average net price with aid
+    log_fyr = log(first_time_enrollment),
+    log_hs = log(hs_grad_state),
+    log_apps = log(applicants),
+    log_price = log(avg_net_price_w_aid),
+    sy_fyr = scale(log_fyr),
+    x_year = year_0,
+    sxl_hs = scale(log_hs), # log this
+    sx_bach = scale(pct_bachelors_2018_state),
+    x_rural = factor(locale_rural),
+    sx_pell = scale(pct_pell),
+    sx_race_minority = scale(pct_race_minority),
+    sx_price = scale(avg_net_price_w_aid), # don't log this
+    sxl_apps = scale(log_apps), # log this
+    sx_admit_rate = scale(admissions_rate)
+  ) %>%
+  mutate(
+    carnegie_category = factor(
+      carnegie,
+      levels = c("R1", "R2", "R0", "M", "Baccalaureate", "Special or Tribal"),
+      labels = c("R1", "R2", "D/PU", "M", "B", "SF&TCU")
+    )
+  ) %>%
+  left_join(
+    y = combined_data %>%
+      group_by(unit_id) %>%
+      filter(year == min(year)) %>%
+      ungroup() %>%
+      mutate(
+        size_category = case_when(
+          overall_enrollment >= 1000 & overall_enrollment < 5000 ~ "1k-5k",
+          overall_enrollment >= 5000 & overall_enrollment < 10000 ~ "5k-10k",
+          overall_enrollment >= 10000 & overall_enrollment < 20000 ~ "10k-20k",
+          overall_enrollment >= 20000 ~ "20k+"
+        ) %>% factor(levels = c("1k-5k","5k-10k","10k-20k","20k+"))
+      ) %>%
+      select(unit_id, size_category),
+    by = "unit_id"
+  )
+
+private_dat3 <- combined_data %>%
+  filter(sector=="private") %>%
+  mutate(
+    year_0 = year - 2019,
+    # Log transforms: first-time enrollment; HS grads by state; applicants; average net price with aid
+    log_fyr = log(first_time_enrollment),
+    log_hs = log(hs_grad_state),
+    log_apps = log(applicants),
+    log_price = log(avg_net_price_w_aid),
+    sy_fyr = scale(log_fyr),
+    x_year = year_0,
+    sxl_hs = scale(log_hs), # log this
+    sx_bach = scale(pct_bachelors_2018_state),
+    x_rural = factor(locale_rural),
+    sx_pell = scale(pct_pell),
+    sx_race_minority = scale(pct_race_minority),
+    sx_price = scale(avg_net_price_w_aid), # don't log this
+    sxl_apps = scale(log_apps), # log this
+    sx_admit_rate = scale(admissions_rate)
+  ) %>%
+  mutate(
+    carnegie_category = factor(
+      carnegie,
+      levels = c("R1", "R2", "R0", "M", "Baccalaureate", "Special or Tribal"),
+      labels = c("R1", "R2", "D/PU", "M", "B", "SF&TCU")
+    )
+  ) %>%
+  left_join(
+    y = combined_data %>%
+      group_by(unit_id) %>%
+      filter(year == min(year)) %>%
+      ungroup() %>%
+      mutate(
+        size_category = case_when(
+          overall_enrollment >= 1000 & overall_enrollment < 5000 ~ "1k-5k",
+          overall_enrollment >= 5000 & overall_enrollment < 10000 ~ "5k-10k",
+          overall_enrollment >= 10000 & overall_enrollment < 20000 ~ "10k-20k",
+          overall_enrollment >= 20000 ~ "20k+"
+        ) %>% factor(levels = c("1k-5k","5k-10k","10k-20k","20k+"))
+      ) %>%
+      select(unit_id, size_category),
+    by = "unit_id"
+  )
+
+
+# full_dat3 %>%
+#   select(unit_id, year, overall_enrollment, first_time_enrollment) %>%
+#   pivot_wider(names_from = "year", id_cols = "unit_id", values_from = c("overall_enrollment","first_time_enrollment"))
+# 
+# instid <- unique(full_dat3$unit_id)
+# writeClipboard(paste0(instid[1:500], collapse=","))
+# writeClipboard(paste0(instid[501:1000], collapse=","))
+# writeClipboard(paste0(instid[1001:1500], collapse = ","))
+# writeClipboard(paste0(instid[1501:length(instid)], collapse=","))
+```
+
+
+```{r}
+formula_1 <- formula(
+  first_time_enrollment ~
+    1
+    + x_year
+    # + (1 + x_year | carnegie)
+    + (1 + x_year | unit_id)
+)
+
+formula_2 <- formula(
+  first_time_enrollment ~
+    1
+    + x_year
+    + x_rural
+    + sx_bach # Percent of adults with bachelors degree in the state where the institution is located, standardized
+    + sxl_hs # The number of high school graduates that year, logged and standardized
+    # + (1 + x_year | carnegie)
+    + (1 + x_year | unit_id)
+)
+
+formula_3 <- formula(
+  first_time_enrollment ~
+    1
+    + x_year
+    + x_rural
+    + sx_bach # Percent of adults with bachelors degree in the state where the institution is located, standardized
+    + sxl_hs # The number of high school graduates that year, logged and standardized
+    + sx_race_minority
+    + sx_pell
+    + sxl_apps
+    + sx_admit_rate
+    + sx_price
+    # + (1 + x_year | carnegie)
+    + (1 + x_year | unit_id)
+)
+```
+
+
+```{r}
+glm_public_1 <- glmer(formula = formula_1, data = public_dat3, family = "poisson")
+glm_public_2 <- glmer(formula = formula_2, data = public_dat3, family = "poisson")
+glm_public_3 <- glmer(formula = formula_3, data = public_dat3, family = "poisson")
+
+glm_private_1 <- glmer(formula = formula_1, data = private_dat3, family = "poisson")
+glm_private_2 <- glmer(formula = formula_2, data = private_dat3, family = "poisson")
+glm_private_3 <- glmer(formula = formula_3, data = private_dat3, family = "poisson")
+
+```
+
+```{r}
+map(
+  .x = list(
+    glm_public_1,
+    glm_public_2,
+    glm_public_3,
+    glm_private_1,
+    glm_private_2,
+    glm_private_3
+  ),
+  .f = summary
+)
+```
+
+# Tables
+Descriptive tables
+```{r}
+library(gtsummary)
+
+public_descriptive <- public_dat3 %>% 
+  group_by(unit_id) %>% 
+  summarise(`Total Enrollment` = mean(overall_enrollment),
+            `First Time Enrollment` = mean(first_time_enrollment),
+            `Pct. Pell (%)` = mean(pct_pell),
+            `Pct. Non-White (%)` = mean(pct_race_minority),
+            `Avg. Net Price with Aid ($)` = mean(avg_net_price_w_aid),
+            `Applicants` = mean(applicants),
+            `Admission Rate (%)` = mean(admissions_rate),
+            `HS Graduates in State` = mean(hs_grad_state),
+            `Pct. Bachelor-degree Holders in State (%)` = mean(pct_bachelors_2018_state),
+            `Carnegie` = first(carnegie),
+            `Locale` = first(locale_rural)
+            ) %>% 
+  tbl_summary(include = -unit_id) %>% 
+  bold_labels()
+
+private_descriptive <- private_dat3 %>% 
+  group_by(unit_id) %>% 
+  summarise(`Total Enrollment` = mean(overall_enrollment),
+            `First Time Enrollment` = mean(first_time_enrollment),
+            `Pct. Pell (%)` = mean(pct_pell),
+            `Pct. Non-White (%)` = mean(pct_race_minority),
+            `Avg. Net Price with Aid ($)` = mean(avg_net_price_w_aid),
+            `Applicants` = mean(applicants),
+            `Admission Rate (%)` = mean(admissions_rate),
+            `HS Graduates in State` = mean(hs_grad_state),
+            `Pct. Bachelor-degree Holders in State (%)` = mean(pct_bachelors_2018_state),
+            `Carnegie` = first(carnegie),
+            `Locale` = first(locale_rural)
+            ) %>% 
+  tbl_summary(include = -unit_id) %>% 
+  bold_labels()
+
+combined_descriptive <- tbl_merge(
+  tbls = list(public_descriptive, private_descriptive),
+  tab_spanner = c("**Public Institutions**", "**Private Institutions**")
+)
+
+combined_descriptive
+```
+
+
+Creating tables -- public
+```{r}
+public_mods <- list(glm_public_1, glm_public_2, glm_public_3)
+
+## table creation
+modelsummary::modelsummary(public_mods, 
+                           title = "Model Summary for Public Institutions",
+                           notes = "***p<.01, **p<.05, *p<.10",
+                           estimate = "{estimate}{stars}({std.error})",
+                           statistic = NULL,
+                           coef_rename = c(
+  "x_year" = "Year", 
+  "x_ruralTown/Rural" = "Town/Rural",
+  "sx_bach" = "Pct. Bachelor-degree Holders",
+  "sxl_hs" = "HS Graduates",
+  "sx_race_minority" = "Pct. Non-White",
+  "sx_pell" = "Pct. Pell",
+  "sxl_apps" = "Applicants",
+  "sx_admit_rate" = "Admission Rate",
+  "sx_price" = "Tuition Cost"),
+  coef_omit = "SD|Cor|Intercept.*unit_id|x_year.*unit_id",
+  gof_map = c("nobs", "aic", "bic", "rmse", "logLik"))
+```
+
+Private mods
+```{r}
+private_mods <- list(glm_private_1, glm_private_2, glm_private_3)
+
+## table creation
+modelsummary::modelsummary(private_mods, 
+                           output = "gt",
+                           title = "***p<.01, **p<.05, *p<.10",
+                           estimate = "{estimate}{stars}({std.error})",
+                           statistic = NULL,
+                           coef_rename = c(
+  "x_year" = "Year", 
+  "x_ruralTown/Rural" = "Town/Rural",
+  "sx_bach" = "Pct. Bachelor-degree Holders",
+  "sxl_hs" = "HS Graduates",
+  "sx_race_minority" = "Pct. Non-White",
+  "sx_pell" = "Pct. Pell",
+  "sxl_apps" = "Applicants",
+  "sx_admit_rate" = "Admission Rate",
+  "sx_price" = "Tuition Cost"),
+  coef_omit = "SD|Cor|Intercept.*unit_id|x_year.*unit_id",
+  gof_map = c("nobs", "aic", "bic", "rmse", "logLik")) %>% 
+  gt::tab_spanner(label = "Private", columns = everything())
+```
+
+All in one table
+```{r}
+all_mods <- list(glm_public_1, glm_public_2, glm_public_3, glm_private_1, glm_private_2, glm_private_3)
+
+summary_table <- modelsummary::modelsummary(all_mods, 
+                           output = "gt",
+                           title = "Model Summaries on Enrollment Rate by Institution Type",
+                           notes = "***p<.01, **p<.05, *p<.10",
+                           estimate = "{estimate}{stars}({std.error})",
+                           statistic = NULL,
+                           coef_rename = c(
+  "x_year" = "Year", 
+  "x_ruralTown/Rural" = "Town/Rural (compared to City/Suburb)",
+  "sx_bach" = "Pct. Bachelor-degree Holders",
+  "sxl_hs" = "HS Graduates",
+  "sx_race_minority" = "Pct. Non-White",
+  "sx_pell" = "Pct. Pell",
+  "sxl_apps" = "Applicants",
+  "sx_admit_rate" = "Admission Rate",
+  "sx_price" = "Avg. Net Price with Aid"),
+  coef_omit = "SD|Cor|Intercept.*unit_id|x_year.*unit_id",
+  gof_map = c("nobs", "aic", "bic", "rmse", "logLik")) %>% 
+  gt::tab_spanner(label = "Public", columns = 2:4) %>% 
+  gt::tab_spanner(label = "Private", columns = 5:7)
+```
+
+
+```{r}
+anova(glm_public_1, glm_public_2, glm_public_3)
+anova(glm_private_1, glm_private_2, glm_private_3)
+```
+
+```{r}
+public_intslopes <- tibble(
+  unit_id = rownames(coef(glm_public_1)$unit_id) %>% as.numeric(),
+  m1_int = coef(glm_public_1)$unit_id[,"(Intercept)"],
+  m1_slope_time = coef(glm_public_1)$unit_id[,"x_year"]
+) %>%
+  left_join(
+    y = tibble(
+      unit_id = rownames(coef(glm_public_2)$unit_id) %>% as.numeric(),
+      m2_int = coef(glm_public_2)$unit_id[,"(Intercept)"],
+      m2_slope_time = coef(glm_public_2)$unit_id[,"x_year"]
+    ),
+    by = "unit_id"
+  ) %>%
+  left_join(
+    y = tibble(
+      unit_id = rownames(coef(glm_public_3)$unit_id) %>% as.numeric(),
+      m3_int = coef(glm_public_3)$unit_id[,"(Intercept)"],
+      m3_slope_time = coef(glm_public_3)$unit_id[,"x_year"]
+    ),
+    by = "unit_id"
+  )
+
+# public_dat3$m1_int <- coef(glm_public_1)$unit_id[,"(Intercept)"]
+# public_dat3$m1_slope_time <- coef(glm_public_1)$unit_id[,"x_year"]
+public_dat3$m1_fitted_link <- predict(glm_public_1, type="link")
+public_dat3$m1_fitted_resp <- predict(glm_public_1, type="resp")
+public_dat3$m1_residual <- resid(glm_public_1)
+# public_dat3$m2_int <- coef(glm_public_2)$unit_id[,"(Intercept)"]
+# public_dat3$m2_slope_time <- coef(glm_public_2)$unit_id[,"x_year"]
+public_dat3$m2_fitted_link <- predict(glm_public_2, type="link")
+public_dat3$m2_fitted_resp <- predict(glm_public_2, type="resp")
+public_dat3$m2_residual <- resid(glm_public_2)
+# public_dat3$m3_int <- coef(glm_public_3)$unit_id[,"(Intercept)"]
+# public_dat3$m3_slope_time <- coef(glm_public_3)$unit_id[,"x_year"]
+public_dat3$m3_fitted_link <- predict(glm_public_3, type="link")
+public_dat3$m3_fitted_resp <- predict(glm_public_3, type="resp")
+public_dat3$m3_residual <- resid(glm_public_3)
+
+#
+
+private_intslopes <- tibble(
+  unit_id = rownames(coef(glm_private_1)$unit_id) %>% as.numeric(),
+  m1_int = coef(glm_private_1)$unit_id[,"(Intercept)"],
+  m1_slope_time = coef(glm_private_1)$unit_id[,"x_year"]
+) %>%
+  left_join(
+    y = tibble(
+      unit_id = rownames(coef(glm_private_2)$unit_id) %>% as.numeric(),
+      m2_int = coef(glm_private_2)$unit_id[,"(Intercept)"],
+      m2_slope_time = coef(glm_private_2)$unit_id[,"x_year"]
+    ),
+    by = "unit_id"
+  ) %>%
+  left_join(
+    y = tibble(
+      unit_id = rownames(coef(glm_private_3)$unit_id) %>% as.numeric(),
+      m3_int = coef(glm_private_3)$unit_id[,"(Intercept)"],
+      m3_slope_time = coef(glm_private_3)$unit_id[,"x_year"]
+    ),
+    by = "unit_id"
+  )
+
+# private_dat3$m1_int <- coef(glm_private_1)$unit_id[,"(Intercept)"]
+# private_dat3$m1_slope_time <- coef(glm_private_1)$unit_id[,"x_year"]
+private_dat3$m1_fitted_link <- predict(glm_private_1, type="link")
+private_dat3$m1_fitted_resp <- predict(glm_private_1, type="resp")
+private_dat3$m1_residual <- resid(glm_private_1)
+# private_dat3$m2_int <- coef(glm_private_2)$unit_id[,"(Intercept)"]
+# private_dat3$m2_slope_time <- coef(glm_private_2)$unit_id[,"x_year"]
+private_dat3$m2_fitted_link <- predict(glm_private_2, type="link")
+private_dat3$m2_fitted_resp <- predict(glm_private_2, type="resp")
+private_dat3$m2_residual <- resid(glm_private_2)
+# private_dat3$m3_int <- coef(glm_private_3)$unit_id[,"(Intercept)"]
+# private_dat3$m3_slope_time <- coef(glm_private_3)$unit_id[,"x_year"]
+private_dat3$m3_fitted_link <- predict(glm_private_3, type="link")
+private_dat3$m3_fitted_resp <- predict(glm_private_3, type="resp")
+private_dat3$m3_residual <- resid(glm_private_3)
+
+```
+
+```{r}
+# Outliers
+public_outliers <- public_intslopes %>%
+  mutate(
+    m1_outlier_slope = case_when(
+      m1_slope_time < -3 * sd(m1_slope_time) + mean(m1_slope_time) ~ "Outlier Decline",
+      m1_slope_time > 3 * sd(m1_slope_time) + mean(m1_slope_time) ~ "Outlier Growth"
+    )
+  ) %>%
+  filter(!is.na(m1_outlier_slope)) %>%
+  left_join(
+    y = public_dat3,
+    by = "unit_id"
+  )
+
+private_outliers <- private_intslopes %>%
+  mutate(
+    m1_outlier_slope = case_when(
+      m1_slope_time < -3 * sd(m1_slope_time) + mean(m1_slope_time) ~ "Outlier Decline",
+      m1_slope_time > 3 * sd(m1_slope_time) + mean(m1_slope_time) ~ "Outlier Growth"
+    )
+  ) %>%
+  filter(!is.na(m1_outlier_slope)) %>%
+  left_join(
+    y = private_dat3,
+    by = "unit_id"
+  )
+
+write_csv(public_outliers %>% map_df(.f = function(x) if(is.matrix(x)) {x[,1]} else {x}), "../Results/Public_Outliers.csv")
+write_csv(private_outliers %>% map_df(.f = function(x) if(is.matrix(x)) {x[,1]} else {x}), "../Results/Private_Outliers.csv")
+
+```
+
+# Visualization
+
+```{r}
+ggplot(
+  data = public_dat3,
+  mapping = aes(x = x_year, y = m1_fitted_resp)
+) +
+  geom_line(mapping = aes(group=unit_id))
+```
+
+## Slope change from model 1 to model 2
+
+```{r}
+public_m1m2_slopechange <- public_intslopes %>%
+  mutate(slopechange_21 = m2_slope_time - m1_slope_time) %>%
+  arrange(desc(slopechange_21)) %>%
+  mutate(unit_id_f = factor(unit_id, levels = unique(unit_id))) %>%
+  left_join(
+    y = distinct(public_dat3, unit_id, carnegie_category, size_category),
+    by = "unit_id"
+  )
+
+
+ggplot(data=public_m1m2_slopechange, mapping = aes(x=unit_id_f, y=slopechange_21)) +
+  geom_bar(
+    stat="identity"
+#    ,color = "black"
+    ,mapping = aes(fill=size_category)
+  ) +
+  scale_fill_brewer(type = "div", direction = -1) +
+#  facet_wrap(~size_category) +
+  theme_classic() +
+  theme(
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  )
+
+public_m1m2_slopechange %>%
+  mutate(
+    slpchg_median = median(slopechange_21),
+    slpchg_top3rd = quantile(slopechange_21, 0.66),
+    slpchg_bot3rd = quantile(slopechange_21, 0.33)
+  ) %>%
+  group_by(size_category, carnegie_category) %>%
+  summarise(
+    Top3rd = sum(slopechange_21 > slpchg_top3rd),
+    Bot3rd = -1*sum(slopechange_21 < slpchg_bot3rd)
+  ) %>%
+  pivot_longer(cols=3:4) %>%
+  ggplot(aes(x = size_category, y = value)) +
+  geom_bar(stat="identity", mapping=aes(fill=name)) +
+  facet_wrap(~carnegie_category)
+
+ggplot(
+  public_m1m2_slopechange,
+  aes(x = m1_slope_time, y = m2_slope_time)
+) +
+  geom_point()
+
+set.seed(3)
+slp21_example <- sample_n(public_m1m2_slopechange, 25)
+
+public_dat3 %>%
+  filter(unit_id %in% slp21_example$unit_id) %>%
+  ggplot(
+    mapping = aes(x = year_0)
+  ) +
+  geom_line(
+    mapping = aes(y = m2_fitted_resp, group = unit_id)
+    ,color="red",linewidth=2,alpha=0.2
+  ) +
+  geom_line(
+    mapping = aes(y = m1_fitted_resp, group = unit_id)
+    ,color="blue",linewidth=2,alpha=0.2
+  ) +
+  facet_wrap(~unit_id, nrow=5)
+
+public_dat3 %>%
+  filter(unit_id %in% slp21_example$unit_id) %>%
+  ggplot(
+    mapping = aes(x = year_0)
+  ) +
+  geom_line(
+    mapping = aes(y = m2_fitted_link, group = unit_id)
+    ,color="red",linewidth=2,alpha=0.2
+  ) +
+  geom_line(
+    mapping = aes(y = m1_fitted_link, group = unit_id)
+    ,color="blue",linewidth=2,alpha=0.2
+  ) +
+  facet_wrap(~unit_id, nrow=5)
+```
+
+
+
+
+# Within-Institution Correlation...
+
+```{r}
+tibble(
+  unit_id = unique(public_dat3$unit_id)
+  ,enrl_cor_hs = map_dbl(
+    .x = as.list(unique(public_dat3$unit_id)),
+    .f = function(x) {
+      unit_id_subset <- filter(public_dat3, unit_id==x) %>%
+        arrange(year)
+    
+      cor(unit_id_subset$first_time_enrollment, unit_id_subset$hs_grad_state)
+    }
+  )
+  ,enrl_cor_pell = map_dbl(
+    .x = as.list(unique(public_dat3$unit_id)),
+    .f = function(x) {
+      unit_id_subset <- filter(public_dat3, unit_id==x) %>%
+        arrange(year)
+    
+      cor(unit_id_subset$first_time_enrollment, unit_id_subset$pct_pell)
+    }
+  )
+) %>%
+  pivot_longer(cols = 2:ncol(.)) %>%
+  ggplot(aes(x=name, y=value)) +
+  geom_boxplot()
+
+```
+
+```{r}
+m1_dist <- dist(public_intslopes %>% select(m1_int, m1_slope_time))
+```
+
+```{r}
+set.seed(20250514)
+m1_trj_medoids <- kmed::rankkmed(m1_dist, ncluster = 7)
+public_intslopes[m1_trj_medoids$medoid,] %>%
+  left_join(y=public_dat3,
+            by="unit_id") %>%
+  ggplot(aes(x=year_0, y=log_fyr)) +
+  geom_line(mapping=aes(group=unit_id,color=factor(unit_id)), linewidth=2, linetype=1, alpha=0.3) +
+  geom_abline(aes(slope=m1_slope_time, intercept = m1_int, color=factor(unit_id)), linewidth=2) +
+  theme_classic()
+
+
+m1_trj_medoids$cluster
+# public_intslopes %>%
+#   mutate(
+#     trj_cluster=m1_trj_medoids$cluster,
+#     rowind = row_number(),
+#     is_medoid = if_else(rowind %in% m1_trj_medoids$medoid, TRUE, FALSE)
+#   ) %>%
+#   left_join(y=public_dat3, by="unit_id") %>%
+#   ggplot(
+#     data = .,
+#     aes(x=year_0,y=log_fyr)
+#   ) +
+#   geom_line(mapping=aes(group=unit_id), linewidth=2, linetype=1, alpha=0.3) +
+#   geom_abline(mapping = aes(slope=m1_slope_time, intercept = m1_int, color=factor(trj_cluster), group=unit_id))
+```
+
+
+```{r}
+public_fyr_change_5yr <- public_dat3 %>%
+  select(
+    unit_id, sector, year_0, first_time_enrollment, log_fyr, m1_fitted_link, m1_fitted_resp
+  ) %>%
+  group_by(unit_id, sector) %>%
+  filter(year_0 == max(year_0) | year_0 == min(year_0)) %>%
+  mutate(year_ref = case_when(year_0==max(year_0)~"LastYr", year_0==min(year_0)~"FirstYr")) %>%
+  pivot_wider(id_cols = c(unit_id, sector), names_from = year_ref, values_from=c(m1_fitted_resp,first_time_enrollment)) %>%
+  mutate(
+    MaxMinYr_Change_Fit = (m1_fitted_resp_LastYr/m1_fitted_resp_FirstYr)-1
+    ,MaxMinYr_Change_Obs = (first_time_enrollment_LastYr/first_time_enrollment_FirstYr)-1
+  ) %>%
+  mutate(
+    Growth_Category = case_when(
+      MaxMinYr_Change_Fit < -0.05 ~ "Decline more than 5%",
+      MaxMinYr_Change_Fit >= -0.05 & MaxMinYr_Change_Fit <= 0.05 ~ "Change less than 5%",
+      MaxMinYr_Change_Fit > 0.05 ~ "Growth more than 5%"
+    )
+  ) %>%
+  ungroup()
+
+private_fyr_change_5yr <- private_dat3 %>%
+ select(
+    unit_id, sector, year_0, first_time_enrollment, log_fyr, m1_fitted_link, m1_fitted_resp
+  ) %>%
+  group_by(unit_id, sector) %>%
+  filter(year_0 == max(year_0) | year_0 == min(year_0)) %>%
+  mutate(year_ref = case_when(year_0==max(year_0)~"LastYr", year_0==min(year_0)~"FirstYr")) %>%
+  pivot_wider(id_cols = c(unit_id, sector), names_from = year_ref, values_from=c(m1_fitted_resp,first_time_enrollment)) %>%
+  mutate(
+    MaxMinYr_Change_Fit = (m1_fitted_resp_LastYr/m1_fitted_resp_FirstYr)-1
+    ,MaxMinYr_Change_Obs = (first_time_enrollment_LastYr/first_time_enrollment_FirstYr)-1
+  ) %>%
+  mutate(
+    Growth_Category = case_when(
+      MaxMinYr_Change_Fit < -0.05 ~ "Decline more than 5%",
+      MaxMinYr_Change_Fit >= -0.05 & MaxMinYr_Change_Fit <= 0.05 ~ "Change less than 5%",
+      MaxMinYr_Change_Fit > 0.05 ~ "Growth more than 5%"
+    )
+  ) %>%
+  ungroup()
+```
+
+```{r}
+rbind(
+  public_fyr_change_5yr,
+  private_fyr_change_5yr
+) %>%
+  count(sector, Growth_Category) %>%
+  group_by(sector) %>%
+  mutate(pct = round(100*n/sum(n))) %>%
+  arrange(sector, desc(n))
+```
+```{r}
+public_intslopes[m1_trj_medoids$medoid,] %>%
+  left_join(y=public_dat3,
+            by="unit_id") %>%
+  ggplot(aes(x=year_0, y=log_fyr)) +
+  geom_line(mapping=aes(group=unit_id,color=factor(unit_id)), linewidth=2, linetype=1, alpha=0.3) +
+  # geom_abline(aes(slope=m1_slope_time, intercept = m1_int, color=factor(unit_id)), linewidth=2) +
+  geom_abline(aes(slope=m2_slope_time, intercept = m2_int, color=factor(unit_id)), linewidth=2, linetype=2) +
+  scale_y_continuous(limits = c(5.5, 8)) +
+  theme_classic()
+```
+```{r}
+public_dat3 %>%
+  distinct(stabbr, year, hs_grad_state, pct_bachelors_2018_state, sxl_hs, sx_bach) %>%
+  arrange(sx_bach, stabbr, year)
+
+summary(glm_public_2)
+```
+
+
+MS, TX, NE, CA, VT
+```{r}
+public_dat3 %>%
+  distinct(stabbr, year, hs_grad_state, pct_bachelors_2018_state, sxl_hs, sx_bach) %>%
+  arrange(sx_bach, stabbr, year) %>%
+  filter(stabbr %in% c("MS","TX","NE","CA","VT")) %>%
+  mutate(
+    State_Link = glm_public_2@beta[1] + glm_public_2@beta[2]*(year-2019) + glm_public_2@beta[4]*sx_bach + glm_public_2@beta[5]*sxl_hs,
+    State_Resp = exp(State_Link)
+  )
+summary(glm_public_2)
+```
+
+```{r}
+public_dat3 %>%
+  distinct(stabbr, year, hs_grad_state, pct_bachelors_2018_state, sxl_hs, sx_bach) %>%
+  arrange(sx_bach, stabbr, year) %>%
+  ggplot(aes(x=pct_bachelors_2018_state, y=hs_grad_state, color=stabbr)) +
+  geom_point()
+
+state_summary <- public_dat3 %>%
+  distinct(stabbr, year, hs_grad_state, pct_bachelors_2018_state) %>%
+  group_by(stabbr) %>%
+  summarise(
+    Avg_HS_Grads = mean(hs_grad_state),
+    Pct_Bach = mean(pct_bachelors_2018_state)
+  ) %>%
+  ungroup() %>%
+  mutate(
+    SL_HS_Grads = scale(log(Avg_HS_Grads)),
+    HS_Grads_Rank = rank(Avg_HS_Grads),
+    Pct_Bach_Rank = rank(Pct_Bach)
+  ) %>%
+  arrange(desc(Pct_Bach)) %>%
+  mutate(State_Ordered = factor(stabbr, levels=unique(stabbr)))
+
+ggplot(data=state_summary, mapping=aes(x=State_Ordered, y=Pct_Bach)) +
+  geom_bar(stat="identity", mapping=aes(fill=SL_HS_Grads)) +
+  scale_fill_distiller(type="div") +
+  theme_classic()
+```
+
