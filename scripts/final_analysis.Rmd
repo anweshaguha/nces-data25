@@ -448,6 +448,15 @@ public_m1m2_slopechange <- public_intslopes %>%
     by = "unit_id"
   )
 
+private_m1m2_slopechange <- private_intslopes %>%
+  mutate(slopechange_21 = m2_slope_time - m1_slope_time) %>%
+  arrange(desc(slopechange_21)) %>%
+  mutate(unit_id_f = factor(unit_id, levels = unique(unit_id))) %>%
+  left_join(
+    y = distinct(private_dat3, unit_id, carnegie_category, size_category),
+    by = "unit_id"
+  )
+
 
 ggplot(data=public_m1m2_slopechange, mapping = aes(x=unit_id_f, y=slopechange_21)) +
   geom_bar(
