@@ -393,6 +393,67 @@ private_dat3$m3_residual <- resid(glm_private_3)
 
 ```
 
+Growth and decline summary table
+```{r}
+public_intslopes <- public_intslopes %>%
+  mutate(
+    Change_Sign = case_when(
+      m1_slope_time < 0 ~ "Negative"
+      ,m1_slope_time >= 0 ~ "Positive"
+    )
+    ,Change_Category = case_when(
+      m1_slope_time <= -0.025 ~ "Decline (>2.5%)"
+      ,m1_slope_time > -0.025 & m1_slope_time < 0 ~ "Stable (Negative, <2.5%)"
+      ,m1_slope_time >= 0 & m1_slope_time < 0.025 ~ "Stable (Positive, <2.5%)"
+      ,m1_slope_time >= 0.025 ~ "Growth (>2.5%)"
+    )
+  ) %>%
+  left_join(
+    y = public_dat3 %>% distinct(unit_id, size_category, carnegie_category),
+    by = "unit_id"
+  )
+
+private_intslopes <- private_intslopes %>%
+  mutate(
+    Change_Sign = case_when(
+      m1_slope_time < 0 ~ "Negative"
+      ,m1_slope_time >= 0 ~ "Positive"
+    )
+    ,Change_Category = case_when(
+      m1_slope_time <= -0.025 ~ "Decline (>2.5%)"
+      ,m1_slope_time > -0.025 & m1_slope_time < 0 ~ "Stable (Negative, <2.5%)"
+      ,m1_slope_time >= 0 & m1_slope_time < 0.025 ~ "Stable (Positive, <2.5%)"
+      ,m1_slope_time >= 0.025 ~ "Growth (>2.5%)"
+    )
+  ) %>%
+  left_join(
+    y = private_dat3 %>% distinct(unit_id, size_category, carnegie_category),
+    by = "unit_id"
+  )
+```
+
+```{r}
+combined_change <- rbind(
+  public_intslopes %>% mutate(sector = "public"),
+  private_intslopes %>% mutate(sector = "private")
+)
+
+xtabs_change <- table(
+  combined_change$Change_Category,
+  combined_change$sector
+)[c("Decline (>2.5%)","Stable (Negative, <2.5%)","Stable (Positive, <2.5%)","Growth (>2.5%)"),c("public","private")]
+
+xtabs_change
+marginSums(xtabs_change, 1)
+marginSums(xtabs_change, 2)
+xtabs_change[,1]/marginSums(xtabs_change, 2)[1]
+xtabs_change[,2]/marginSums(xtabs_change, 2)[2]
+marginSums(xtabs_change, 1)/sum(xtabs_change)
+
+table(combined_change)
+```
+
+
 ```{r}
 # Outliers
 public_outliers <- public_intslopes %>%
