@@ -770,4 +770,51 @@ ggplot(data=state_summary, mapping=aes(x=State_Ordered, y=Pct_Bach)) +
   scale_fill_distiller(type="div") +
   theme_classic()
 ```
+Putting things back to real-world numbers
+
+```{r}
+# Towns and Rural Areas (Model 2), Public and Private
+# Public: B = -0.711 per unit increase in x_rural (0 = Urban, 1 = Rural)
+# Private: B = -0.258 per unit increase in x_rural (0 = Urban, 1 = Rural)
+exp(-0.711) ; exp(-0.258)
+
+# High-school graduates (Model 2), Public and Private
+# Public: B = 0.212 per unit increase in sxl_hs (0 = 11.35922, 1 = 12.35907, s = 0.9998539)
+public_dat3$sxl_hs %>% attr("scaled:center") ; public_dat3$sxl_hs %>% attr("scaled:scale")
+# Double the high-school graduates
+exp(0.212 * (log(2*exp(public_dat3$sxl_hs %>% attr("scaled:center"))) - (public_dat3$sxl_hs %>% attr("scaled:center")))/(public_dat3$sxl_hs %>% attr("scaled:scale")))
+# Private: B = 0.081 per unit increase in sxl_hs (0 = 11.49692, 1 = 12.38718, s = )
+private_dat3$sxl_hs %>% attr("scaled:center") ; private_dat3$sxl_hs %>% attr("scaled:scale")
+# Double the high-school graduates
+exp(0.081 * (log(2*exp(private_dat3$sxl_hs %>% attr("scaled:center"))) - (private_dat3$sxl_hs %>% attr("scaled:center")))/(private_dat3$sxl_hs %>% attr("scaled:scale")))
+
+# Educational attainment (Model 2), Public and Private
+# Public: B = -0.112 per unit increase in sx_bach (0 = 32.18005, 1 = 37.52799, s = 5.347944)
+attr(public_dat3$sx_bach, "scaled:center"); attr(public_dat3$sx_bach, "scaled:scale")
+# Increase high-school graduates by one standard deviation
+1/exp(-0.112)
+# Private: B = 0.138 per unit increase in sx_bach (0 = 33.50603, 1 = 39.17788, s = 5.671852)
+attr(private_dat3$sx_bach, "scaled:center"); attr(private_dat3$sx_bach, "scaled:scale")
+exp(0.138)
+
+# Application volume (Model 3), Public and Private
+# Public: B = 0.514 per unit increase in sxl_apps (0 = 8.954673, 1 = 10.13351, s = 1.17884)
+attr(public_dat3$sxl_apps, "scaled:center"); attr(public_dat3$sxl_apps, "scaled:scale")
+# Increase apps by 10 percent
+exp(0.514*(log(1.1*exp(attr(public_dat3$sxl_apps, "scaled:center"))) - attr(public_dat3$sxl_apps, "scaled:center"))/(attr(public_dat3$sxl_apps, "scaled:scale")))
+# Private: B = 0.469 per unit increase in sxl_apps (0 = 8.306277, 1 = 9.345809, s = 1.039532)
+attr(private_dat3$sxl_apps, "scaled:center") ; attr(private_dat3$sxl_apps, "scaled:scale")
+# Increase apps by 10 percent
+exp(0.469*(log(1.1*exp(attr(private_dat3$sxl_apps, "scaled:center"))) - attr(private_dat3$sxl_apps, "scaled:center"))/(attr(private_dat3$sxl_apps, "scaled:scale")))
+
+# Admit rate (Model 3), Public and Private
+# Public: B = 0.114 per unit increase in sx_admit_rate (0 = 0.765045, 1 = 0.9392904, s = 0.1742454)
+attr(public_dat3$sx_admit_rate, "scaled:center"); attr(public_dat3$sx_admit_rate, "scaled:scale")
+# Increase from 80% (median) to 85% admission rate
+exp(0.114 * ((0.85 - attr(public_dat3$sx_admit_rate, "scaled:center"))/(attr(public_dat3$sx_admit_rate, "scaled:scale")) - (0.80 - attr(public_dat3$sx_admit_rate, "scaled:center"))/(attr(public_dat3$sx_admit_rate, "scaled:scale"))))
+# Private: B = 0.162 per unit increase in sx_admit_rate (0 = 0.6748105, 1 = 0.9032039, s=0.2283934)
+attr(private_dat3$sx_admit_rate, "scaled:center"); attr(private_dat3$sx_admit_rate, "scaled:scale")
+# Increase from 80% (median) to 85% admission rate
+exp(0.162 * ((0.85 - attr(private_dat3$sx_admit_rate, "scaled:center"))/(attr(private_dat3$sx_admit_rate, "scaled:scale")) - (0.80 - attr(private_dat3$sx_admit_rate, "scaled:center"))/(attr(private_dat3$sx_admit_rate, "scaled:scale"))))
+```
 
