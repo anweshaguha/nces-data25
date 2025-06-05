@@ -450,7 +450,7 @@ xtabs_change[,1]/marginSums(xtabs_change, 2)[1]
 xtabs_change[,2]/marginSums(xtabs_change, 2)[2]
 marginSums(xtabs_change, 1)/sum(xtabs_change)
 
-table(combined_change)
+#table(combined_change)
 ```
 
 
@@ -816,5 +816,106 @@ exp(0.114 * ((0.85 - attr(public_dat3$sx_admit_rate, "scaled:center"))/(attr(pub
 attr(private_dat3$sx_admit_rate, "scaled:center"); attr(private_dat3$sx_admit_rate, "scaled:scale")
 # Increase from 80% (median) to 85% admission rate
 exp(0.162 * ((0.85 - attr(private_dat3$sx_admit_rate, "scaled:center"))/(attr(private_dat3$sx_admit_rate, "scaled:scale")) - (0.80 - attr(private_dat3$sx_admit_rate, "scaled:center"))/(attr(private_dat3$sx_admit_rate, "scaled:scale"))))
+```
+
+# Additional Visuals for Presentation
+
+Illustrating the multi-level model
+```{r}
+public_intslopes$Change_Category
+
+set.seed(20250605)
+highlight_set <- slice_sample(public_intslopes, n=2, by = Change_Category)
+
+highlight_data <- highlight_set %>%
+  left_join(
+    y = public_dat3
+    , by = "unit_id"
+  ) 
+
+highlight_data %>%
+  ggplot(
+    aes(x = x_year)
+  ) +
+  scale_x_continuous(labels = c(2019, 2020, 2021, 2022, 2023)) +
+  # geom_point(
+  #   mapping = aes(y = first_time_enrollment, color=Change_Category)
+  # ) +
+  geom_point(
+    mapping = aes(y = log_fyr), size = 3, alpha = 0.33
+  ) +
+  # geom_line(
+  #   mapping = aes(y = log_fyr, group = unit_id, color = Change_Category)
+  # ) +
+  geom_smooth(
+    mapping = aes(y=log_fyr), method="lm", alpha = 0, color = "black"
+  ) +
+  scale_color_discrete(guide="none") +
+  theme_classic()
+ggsave("../Results/glmer_example_0.png", width = 3, height = 4)
+```
+
+```{r}
+illus_ri <- glmer(first_time_enrollment ~ 1 + x_year + (1 | unit_id), data=highlight_data, family="poisson") # random intercept example
+summary(illus_ri)
+coef(illus_ri)
+
+ggplot(
+  data = highlight_data,
+  mapping = aes(x = x_year, y = log_fyr)
+) +
+  geom_point(size=3, alpha=0.33, mapping=aes(color=factor(unit_id))) +
+  geom_abline(
+    data = tibble(
+      unit_id = rownames(coef(illus_ri)$unit_id) %>% as.factor()
+      , `(Intercept)` = coef(illus_ri)$unit_id$`(Intercept)`
+      , x_year = coef(illus_ri)$unit_id$x_year
+    ), 
+    mapping=aes(intercept=`(Intercept)`, slope=x_year, color=factor(unit_id))
+  ) +
+  scale_x_continuous(labels = c(2019, 2020, 2021, 2022, 2023)) +
+  scale_color_discrete(guide="none") +
+  geom_abline(
+    data = tibble(
+      Global_Intercept = illus_ri@beta[1]
+      , Global_Slope = illus_ri@beta[2]
+    )
+    , mapping = aes(intercept = Global_Intercept, slope=Global_Slope)
+    , color="black", linewidth=3
+  ) +
+  theme_classic()
+ggsave("../Results/glmer_example1.png", width=3, height=4)
+```
+```{r}
+illus_rs <- glmer(first_time_enrollment ~ 1 + x_year + (1 + x_year | unit_id), data=highlight_data, family="poisson") # random slopes example
+summary(illus_rs)
+coef(illus_rs)
+
+ggplot(
+  data = highlight_data,
+  mapping = aes(x = x_year, y = log_fyr)
+) +
+  geom_point(size=3, alpha=0.33, mapping=aes(color=factor(unit_id))) +
+  geom_abline(
+    data = tibble(
+      unit_id = rownames(coef(illus_rs)$unit_id) %>% as.factor()
+      , `(Intercept)` = coef(illus_rs)$unit_id$`(Intercept)`
+      , x_year = coef(illus_rs)$unit_id$x_year
+    ), 
+    mapping=aes(intercept=`(Intercept)`, slope=x_year, color=factor(unit_id))
+  ) +
+  scale_x_continuous(labels = c(2019, 2020, 2021, 2022, 2023)) +
+  scale_color_discrete(guide="none") +
+  # geom_abline(
+  #   data = tibble(
+  #     Global_Intercept = illus_rs@beta[1]
+  #     , Global_Slope = illus_rs@beta[2]
+  #   )
+  #   , mapping = aes(intercept = Global_Intercept, slope=Global_Slope)
+  #   , color="black", linewidth=3
+  # ) +
+  geom_smooth(method="lm", alpha=0, color="black", linewidth=3) +
+  theme_classic()
+ggsave("../Results/glmer_example2.png", width=3, height=4)
 ```
 
