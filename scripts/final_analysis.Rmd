@@ -838,6 +838,7 @@ highlight_data %>%
     aes(x = x_year)
   ) +
   scale_x_continuous(labels = c(2019, 2020, 2021, 2022, 2023)) +
+  scale_y_continuous(name = "FTIC Enrollment (log)") +
   # geom_point(
   #   mapping = aes(y = first_time_enrollment, color=Change_Category)
   # ) +
@@ -848,11 +849,15 @@ highlight_data %>%
   #   mapping = aes(y = log_fyr, group = unit_id, color = Change_Category)
   # ) +
   geom_smooth(
-    mapping = aes(y=log_fyr), method="lm", alpha = 0, color = "black"
+    mapping = aes(y=log_fyr), method="lm", alpha = 0, color = "black", linewidth = 2
   ) +
   scale_color_discrete(guide="none") +
-  theme_classic()
-ggsave("../Results/glmer_example_0.png", width = 3, height = 4)
+  ggtitle("OLS") +
+  theme_classic() +
+  theme(
+    axis.title.x = element_blank()
+  )
+ggsave("../Results/glmer_example_0.png", width = 3, height = 3)
 ```
 
 ```{r}
@@ -874,18 +879,17 @@ ggplot(
     mapping=aes(intercept=`(Intercept)`, slope=x_year, color=factor(unit_id))
   ) +
   scale_x_continuous(labels = c(2019, 2020, 2021, 2022, 2023)) +
+  scale_y_continuous(name = "FTIC Enrollment (log)") +
   scale_color_discrete(guide="none") +
-  geom_abline(
-    data = tibble(
-      Global_Intercept = illus_ri@beta[1]
-      , Global_Slope = illus_ri@beta[2]
-    )
-    , mapping = aes(intercept = Global_Intercept, slope=Global_Slope)
-    , color="black", linewidth=3
+  geom_smooth(
+    mapping = aes(y=log_fyr), method="lm", alpha = 0, color = "black", linewidth = 2
   ) +
-  theme_classic()
-ggsave("../Results/glmer_example1.png", width=3, height=4)
+  theme_classic() +
+  theme(axis.title.x = element_blank()) +
+  ggtitle("Random Intercepts")
+ggsave("../Results/glmer_example1.png", width=3, height=3)
 ```
+
 ```{r}
 illus_rs <- glmer(first_time_enrollment ~ 1 + x_year + (1 + x_year | unit_id), data=highlight_data, family="poisson") # random slopes example
 summary(illus_rs)
@@ -905,6 +909,7 @@ ggplot(
     mapping=aes(intercept=`(Intercept)`, slope=x_year, color=factor(unit_id))
   ) +
   scale_x_continuous(labels = c(2019, 2020, 2021, 2022, 2023)) +
+  scale_y_continuous(name = "FTIC Enrollment (log)") +
   scale_color_discrete(guide="none") +
   # geom_abline(
   #   data = tibble(
@@ -914,8 +919,160 @@ ggplot(
   #   , mapping = aes(intercept = Global_Intercept, slope=Global_Slope)
   #   , color="black", linewidth=3
   # ) +
-  geom_smooth(method="lm", alpha=0, color="black", linewidth=3) +
+  geom_smooth(method="lm", alpha=0, color="black", linewidth=2) +
+  theme_classic() +
+  theme(axis.title.x = element_blank()) +
+  ggtitle("+ Random Slopes")
+ggsave("../Results/glmer_example2.png", width=3, height=3)
+```
+
+```{r}
+ggplot() +
+  scale_x_continuous(limits = c(0,4), breaks = c(0,1,2,3,4), labels = c(2019, 2020, 2021, 2022, 2023)) +
+  scale_y_continuous(name = "Est. FTIC Enrollment (Log)", limits = c(2,10)) +
+  geom_abline(
+    data = combined_change %>% mutate(Change_Div = factor(Change_Category, levels = c("Growth (>2.5%)", "Stable (Positive, <2.5%)", "Stable (Negative, <2.5%)", "Decline (>2.5%)"))),
+    mapping = aes(intercept = m1_int, slope = m1_slope_time, color=Change_Div), alpha=0.35, linewidth = 2
+  ) +
+  scale_color_brewer(palette = "RdBu", direction = -1, guide="none") +
   theme_classic()
-ggsave("../Results/glmer_example2.png", width=3, height=4)
+ggsave("../Results/m1_trend.png", width = 3, height = 3)
+```
+```{r}
+combined_change %>%
+  count(sector, Change_Category) %>%
+  ungroup() %>%
+  group_by(sector) %>%
+  mutate(pct = n/sum(n)) %>%
+  ungroup() %>%
+  mutate(Change_Div = factor(Change_Category, levels = c("Growth (>2.5%)", "Stable (Positive, <2.5%)", "Stable (Negative, <2.5%)", "Decline (>2.5%)"))) %>%
+  ggplot(
+    aes(x=factor(sector, levels = c("public","private")), y=pct)
+  ) +
+  geom_bar(stat="identity", mapping=aes(fill=Change_Div)) +
+  scale_fill_brewer(palette = "RdBu", direction = -1) +
+  scale_x_discrete(labels = c("Public", "Private")) +
+  theme_classic() +
+  theme(axis.title.x = element_blank())
+ggsave("../Results/m1_trend_categories.png", width=3, height=3)
+```
+```{r}
+summary(glm_public_2) ; summary(glm_private_2)
+tibble(
+  sector = rep(c("Public", "Private"), each = 3),
+  parameter = rep(c("Rural vs. Urban", "HS Grads", "Ed. Attain."), times = 2),
+  beta = c(
+    glm_public_2@beta[3]
+    ,glm_public_2@beta[5]
+    ,glm_public_2@beta[4]
+    ,glm_private_2@beta[3]
+    ,glm_private_2@beta[5]
+    ,glm_private_2@beta[4]
+  ),
+  bexp = exp(beta),
+  sectorxprm = paste0(sector,"-",parameter) %>% factor(levels = c("Public-Rural vs. Urban","Public-HS Grads","Public-Ed. Attain.","Private-Rural vs. Urban","Private-HS Grads","Private-Ed. Attain."))
+) %>%
+  ggplot(aes(x=parameter %>% factor(levels = c("Rural vs. Urban", "HS Grads", "Ed. Attain.")), y=bexp)) +
+  geom_hline(yintercept = 1, color="#f85c44", linetype=2, linewidth=2) +
+  geom_bar(stat="identity", mapping = aes(fill = sectorxprm), position = "dodge") +
+  # geom_text(aes(label=round(bexp,2)*100)) +
+  scale_fill_manual(
+    values = c(
+      "#012147"
+      ,"#012147"
+      ,"#012147"
+      ,"#59dce3"
+      ,"#59dce3"
+      ,"#59dce3"
+    ),
+    guide = "none"
+  ) +
+  scale_y_continuous(name = "Rate Ratio (Exp. Beta Coefficient)") +
+  scale_x_discrete(labels = c("Rural (vs. Urban)", "HS Grads", "Ed. Attain.")) +
+  theme_classic() +
+  theme(axis.title.x = element_blank())
+ggsave("../Results/m2_exp_beta.png", width = 3, height = 3)
+```
+```{r}
+combined_change %>%
+  mutate(sector_f = factor(sector, levels = c("public", "private"), labels = c("Public", "Private"))) %>%
+  ggplot(aes(x=m1_slope_time, y=m2_slope_time)) +
+  geom_abline(slope = 1, intercept = 0, linewidth = 1.25, color="#bfbfbf") +
+  geom_hline(yintercept = 0, color = "#bfbfbf", linewidth = 1.25) +
+  geom_point(aes(color=sector_f), size = 3, alpha = 0.65) +
+  scale_color_manual(values = c("#012147","#59dce3"), guide = "none") +
+  scale_x_continuous(name = "Slope (M1)") +
+  scale_y_continuous(name = "Slope (M2)") +
+  facet_wrap(~sector_f) +
+  theme_classic()
+ggsave("../Results/m2_slope_change.png", width = 3, height = 3)
+```
+```{r}
+summary(glm_public_3) ; summary(glm_private_3)
+tibble(
+  sector = rep(c("Public", "Private"), each = 5),
+  parameter = rep(
+    c(
+      "Applicants"
+      , "Admit Rate"
+      , "Non-White %"
+      , "Pell %"
+      , "Net Price"
+    )
+    , times = 2
+  ) %>% factor(levels = c("Applicants", "Admit Rate", "Non-White %", "Pell %", "Net Price")),
+  beta = c(
+    glm_public_3@beta[8]
+    ,glm_public_3@beta[9]
+    ,glm_public_3@beta[6]
+    ,glm_public_3@beta[7]
+    ,glm_public_3@beta[10]
+    ,glm_private_3@beta[8]
+    ,glm_private_3@beta[9]
+    ,glm_private_3@beta[6]
+    ,glm_private_3@beta[7]
+    ,glm_private_3@beta[10]
+    
+  ),
+  bexp = exp(beta),
+  sectorxprm = paste0(sector,"-",parameter) %>% 
+    factor(levels = c(
+      "Public-Applicants"
+      , "Public-Admit Rate"
+      , "Public-Non-White %"
+      , "Public-Pell %"
+      , "Public-Net Price"
+      ,"Private-Applicants"
+      , "Private-Admit Rate"
+      , "Private-Non-White %"
+      , "Private-Pell %"
+      , "Private-Net Price"
+      )
+    )
+) %>%
+  ggplot(aes(x=parameter, y=bexp)) +
+  geom_hline(yintercept = 1, color="#f85c44", linetype=2, linewidth=2) +
+  geom_bar(stat="identity", mapping = aes(fill = sectorxprm), position = "dodge") +
+  # geom_text(aes(label=round(bexp,2)*100)) +
+  scale_fill_manual(
+    values = c(
+      "#012147"
+      ,"#012147"
+      ,"#012147"
+      ,"#012147"
+      ,"#012147"
+      ,"#59dce3"
+      ,"#59dce3"
+      ,"#59dce3"
+      ,"#59dce3"
+      ,"#59dce3"
+    ),
+    guide = "none"
+  ) +
+  scale_y_continuous(name = "Rate Ratio (Exp. Beta Coefficient)") +
+  # scale_x_discrete(labels = c("Rural (vs. Urban)", "HS Grads", "Ed. Attain.")) +
+  theme_classic() +
+  theme(axis.title.x = element_blank())
+ggsave("../Results/m3_exp_beta.png", width = 6, height = 3)
 ```
 
