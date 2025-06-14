@@ -992,6 +992,32 @@ tibble(
   theme_classic() +
   theme(axis.title.x = element_blank())
 ggsave("../Results/m2_exp_beta.png", width = 3, height = 3)
+
+tibble(
+  sector = rep(c("Public", "Private"), each = 3) %>% factor(levels = c("Public","Private")),
+  parameter = rep(c("Rural vs. Urban", "HS Grads", "Ed. Attain."), times = 2) %>% factor(levels = c("Rural vs. Urban","HS Grads","Ed. Attain.")),
+  beta = c(
+    glm_public_2@beta[3]
+    ,glm_public_2@beta[5]
+    ,glm_public_2@beta[4]
+    ,glm_private_2@beta[3]
+    ,glm_private_2@beta[5]
+    ,glm_private_2@beta[4]
+  ),
+  bexp = exp(beta),
+  sectorxprm = paste0(sector,"-",parameter) %>% factor(levels = c("Public-Rural vs. Urban","Public-HS Grads","Public-Ed. Attain.","Private-Rural vs. Urban","Private-HS Grads","Private-Ed. Attain."))
+) %>%
+  ggplot(mapping = aes(x = sector, y = bexp)) +
+  geom_hline(yintercept = 1, linewidth = 1, alpha = 0.33) +
+  #geom_point() +
+  geom_segment(mapping = aes(y = 1, yend = bexp, color=sector), arrow = arrow(length = unit(0.05, "npc"), type="closed"), linewidth = 1.5) +
+  scale_color_manual(values = c("#012147","#59dce3"), guide = "none") +
+  scale_y_continuous(name = "Rate Ratio (Exp. Beta Coefficient)", limits = c(0.3,1.3)) +
+  facet_wrap(~parameter) +
+  theme_classic() +
+  theme(axis.title.x = element_blank())
+ggsave("../Results/m2_exp_beta_arrows.svg", width = 5, height = 3)
+
 ```
 ```{r}
 combined_change %>%
@@ -1005,7 +1031,7 @@ combined_change %>%
   scale_y_continuous(name = "Slope (M2)") +
   facet_wrap(~sector_f) +
   theme_classic()
-ggsave("../Results/m2_slope_change.png", width = 3, height = 3)
+ggsave("../Results/m2_slope_change.svg", width = 4, height = 3)
 ```
 ```{r}
 summary(glm_public_3) ; summary(glm_private_3)
@@ -1074,5 +1100,57 @@ tibble(
   theme_classic() +
   theme(axis.title.x = element_blank())
 ggsave("../Results/m3_exp_beta.png", width = 6, height = 3)
+
+tibble(
+  sector = rep(c("Public", "Private"), each = 5) %>% factor(levels = c("Public","Private")),
+  parameter = rep(
+    c(
+      "Applicants"
+      , "Admit Rate"
+      , "Non-White %"
+      , "Pell %"
+      , "Net Price"
+    )
+    , times = 2
+  ) %>% factor(levels = c("Applicants", "Admit Rate", "Non-White %", "Pell %", "Net Price")),
+  beta = c(
+    glm_public_3@beta[8]
+    ,glm_public_3@beta[9]
+    ,glm_public_3@beta[6]
+    ,glm_public_3@beta[7]
+    ,glm_public_3@beta[10]
+    ,glm_private_3@beta[8]
+    ,glm_private_3@beta[9]
+    ,glm_private_3@beta[6]
+    ,glm_private_3@beta[7]
+    ,glm_private_3@beta[10]
+    
+  ),
+  bexp = exp(beta),
+  sectorxprm = paste0(sector,"-",parameter) %>% 
+    factor(levels = c(
+      "Public-Applicants"
+      , "Public-Admit Rate"
+      , "Public-Non-White %"
+      , "Public-Pell %"
+      , "Public-Net Price"
+      ,"Private-Applicants"
+      , "Private-Admit Rate"
+      , "Private-Non-White %"
+      , "Private-Pell %"
+      , "Private-Net Price"
+      )
+    )
+) %>%
+  ggplot(mapping = aes(x = sector, y = bexp)) +
+  geom_hline(yintercept = 1, linewidth = 1, alpha = 0.33) +
+  #geom_point() +
+  geom_segment(mapping = aes(y = 1, yend = bexp, color=sector), arrow = arrow(length = unit(0.05, "npc"), type="closed"), linewidth = 1.5) +
+  scale_color_manual(values = c("#012147","#59dce3"), guide = "none") +
+  scale_y_continuous(name = "Rate Ratio (Exp. Beta Coefficient)", limits = c(0.8,1.8)) +
+  facet_wrap(~parameter, nrow=1) +
+  theme_classic() +
+  theme(axis.title.x = element_blank())
+ggsave("../Results/m3_exp_beta_arrow.svg", width = 9, height = 3)
 ```
 
