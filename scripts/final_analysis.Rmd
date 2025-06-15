@@ -949,12 +949,13 @@ combined_change %>%
   ggplot(
     aes(x=factor(sector, levels = c("public","private")), y=pct)
   ) +
-  geom_bar(stat="identity", mapping=aes(fill=Change_Div)) +
-  scale_fill_brewer(palette = "RdBu", direction = -1) +
+  geom_bar(stat="identity", mapping=aes(fill=Change_Div), width = 0.33) +
+  scale_fill_brewer(palette = "RdBu", direction = -1, name = "Enrollment Trend (Random Slope)") +
   scale_x_discrete(labels = c("Public", "Private")) +
+  scale_y_continuous(name = "Percent of Institutions", labels = paste0(c(0,25,50,75,100),"%")) +
   theme_classic() +
   theme(axis.title.x = element_blank())
-ggsave("../Results/m1_trend_categories.png", width=3, height=3)
+ggsave("../Results/m1_trend_categories.png", width=5, height=3)
 ```
 ```{r}
 summary(glm_public_2) ; summary(glm_private_2)
