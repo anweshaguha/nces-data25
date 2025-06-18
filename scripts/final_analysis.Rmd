@@ -1155,3 +1155,217 @@ tibble(
 ggsave("../Results/m3_exp_beta_arrow.svg", width = 9, height = 3)
 ```
 
+# Example Visuals
+
+```{r}
+set.seed(20250617)
+x_ <- tibble(
+  Year = 0:4
+  , Y = -0.5 * Year + 5 + rnorm(5, mean = 0, sd = 0.5)
+)
+
+ggplot(
+    x_, aes(x = Year, y = Y)
+  ) +
+  geom_point(size = 1.5) +
+  coord_equal(ylim = c(2,7)) +
+  theme_classic() +
+  theme(
+    axis.title = element_blank()
+    , axis.ticks = element_blank()
+    , axis.text = element_blank()
+  )
+ggsave("../Results/regression_ex_0.svg", width=1, height=1)
+
+ggplot(
+    x_, aes(x = Year, y = Y)
+  ) +
+  geom_point(alpha=0.25, size = 1.5) +
+  geom_smooth(method="lm", alpha = 0, color="black") +
+  coord_equal(ylim = c(2,7)) +
+  theme_classic() +
+  theme(
+    axis.title = element_blank()
+    , axis.ticks = element_blank()
+    , axis.text = element_blank()
+  )
+ggsave("../Results/regression_ex_2.svg", width=1, height=1)
+
+
+```
+
+```{r}
+set.seed(20250617)
+z_ <- tibble(
+  Year = rep(c(0,1,2,3,4),times=3)
+  , UnitID = rep(c("A","B","C"),each=5)
+  , Slope = case_match(UnitID, "A" ~ 0.5, "B" ~0.25, "C"~-0.6)
+  , Intercept = case_match(UnitID, "A" ~ 5, "B" ~ 3.5, "C" ~ 4)
+  , Rand = rnorm(15, mean = 0, sd = 0.5)
+  , YVAL = Intercept + Slope * Year + Rand
+)
+
+zm_ols <- lm(YVAL ~ Year, data = z_)
+zm_rin <- lmer(YVAL ~ Year + (1 | UnitID), data = z_)
+zm_rsl <- lmer(YVAL ~ Year + (1 + Year | UnitID), data = z_)
+
+ggplot(
+  z_, aes(x=Year, y=YVAL)
+) +
+  geom_point(size = 1.5) +
+  geom_abline(intercept = zm_ols$coefficients[1], slope = zm_ols$coefficients[2]) +
+  theme_classic() +
+  theme(
+    axis.title = element_blank()
+    , axis.ticks = element_blank()
+    , axis.text = element_blank()
+  )
+ggsave("../Results/multilevel_ex_0.svg", width=1, height=1)
+
+ggplot(
+  z_, aes(x=Year, y=YVAL, color=UnitID)
+) +
+  geom_point(size=1.5) +
+  geom_abline(
+    data = tibble(
+      UnitID = c("A","B","C")
+      , MINT = coef(zm_rin)$UnitID[,1]
+      , MSLP = coef(zm_rin)$UnitID[,2]
+    )
+    , mapping = aes(intercept = MINT, slope = MSLP, color=UnitID)
+  ) +
+  theme_classic() +
+  theme(
+    axis.title = element_blank()
+    , axis.ticks = element_blank()
+    , axis.text = element_blank()
+    , legend.position = "none"
+  )
+ggsave("../Results/multilevel_ex_1.svg", width=1, height=1)
+
+
+ggplot(
+  z_, aes(x=Year, y=YVAL, color=UnitID)
+) +
+  geom_point(size=1.5) +
+  geom_abline(
+    data = tibble(
+      UnitID = c("A","B","C")
+      , MINT = coef(zm_rsl)$UnitID[,1]
+      , MSLP = coef(zm_rsl)$UnitID[,2]
+    )
+    , mapping = aes(intercept = MINT, slope = MSLP, color=UnitID)
+  ) +
+  theme_classic() +
+  theme(
+    axis.title = element_blank()
+    , axis.ticks = element_blank()
+    , axis.text = element_blank()
+    , legend.position = "none"
+  )
+ggsave("../Results/multilevel_ex_2.svg", width=1, height=1)
+
+
+```
+
+
+```{r}
+set.seed(20250605)
+highlight_set <- slice_sample(public_intslopes, n=2, by = Change_Category)
+
+highlight_data <- highlight_set %>%
+  left_join(
+    y = public_dat3
+    , by = "unit_id"
+  ) 
+
+illus_ols <- lm(log_fyr ~ x_year, data = highlight_set)
+highlight_data %>%
+  ggplot(
+    aes(x = x_year)
+  ) +
+  scale_x_continuous(labels = c(2019, 2020, 2021, 2022, 2023)) +
+  scale_y_continuous(name = "FTIC Enrollment (log)") +
+  # geom_point(
+  #   mapping = aes(y = first_time_enrollment, color=Change_Category)
+  # ) +
+  geom_point(
+    mapping = aes(y = log_fyr), size = 3, alpha = 0.33
+  ) +
+  # geom_line(
+  #   mapping = aes(y = log_fyr, group = unit_id, color = Change_Category)
+  # ) +
+  geom_smooth(
+    mapping = aes(y=log_fyr), method="lm", alpha = 0, color = "black", linewidth = 2
+  ) +
+  scale_color_discrete(guide="none") +
+  ggtitle("OLS") +
+  theme_classic() +
+  theme(
+    axis.title.x = element_blank()
+  )
+ggsave("../Results/glmer_example_0.png", width = 3, height = 3)
+
+illus_ri <- glmer(first_time_enrollment ~ 1 + x_year + (1 | unit_id), data=highlight_data, family="poisson") # random intercept example
+summary(illus_ri)
+coef(illus_ri)
+
+ggplot(
+  data = highlight_data,
+  mapping = aes(x = x_year, y = log_fyr)
+) +
+  geom_point(size=3, alpha=0.33, mapping=aes(color=factor(unit_id))) +
+  geom_abline(
+    data = tibble(
+      unit_id = rownames(coef(illus_ri)$unit_id) %>% as.factor()
+      , `(Intercept)` = coef(illus_ri)$unit_id$`(Intercept)`
+      , x_year = coef(illus_ri)$unit_id$x_year
+    ), 
+    mapping=aes(intercept=`(Intercept)`, slope=x_year, color=factor(unit_id))
+  ) +
+  scale_x_continuous(labels = c(2019, 2020, 2021, 2022, 2023)) +
+  scale_y_continuous(name = "FTIC Enrollment (log)") +
+  scale_color_discrete(guide="none") +
+  geom_smooth(
+    mapping = aes(y=log_fyr), method="lm", alpha = 0, color = "black", linewidth = 2
+  ) +
+  theme_classic() +
+  theme(axis.title.x = element_blank()) +
+  ggtitle("Random Intercepts")
+ggsave("../Results/glmer_example1.png", width=3, height=3)
+
+illus_rs <- glmer(first_time_enrollment ~ 1 + x_year + (1 + x_year | unit_id), data=highlight_data, family="poisson") # random slopes example
+summary(illus_rs)
+coef(illus_rs)
+
+ggplot(
+  data = highlight_data,
+  mapping = aes(x = x_year, y = log_fyr)
+) +
+  geom_point(size=3, alpha=0.33, mapping=aes(color=factor(unit_id))) +
+  geom_abline(
+    data = tibble(
+      unit_id = rownames(coef(illus_rs)$unit_id) %>% as.factor()
+      , `(Intercept)` = coef(illus_rs)$unit_id$`(Intercept)`
+      , x_year = coef(illus_rs)$unit_id$x_year
+    ), 
+    mapping=aes(intercept=`(Intercept)`, slope=x_year, color=factor(unit_id))
+  ) +
+  scale_x_continuous(labels = c(2019, 2020, 2021, 2022, 2023)) +
+  scale_y_continuous(name = "FTIC Enrollment (log)") +
+  scale_color_discrete(guide="none") +
+  # geom_abline(
+  #   data = tibble(
+  #     Global_Intercept = illus_rs@beta[1]
+  #     , Global_Slope = illus_rs@beta[2]
+  #   )
+  #   , mapping = aes(intercept = Global_Intercept, slope=Global_Slope)
+  #   , color="black", linewidth=3
+  # ) +
+  geom_smooth(method="lm", alpha=0, color="black", linewidth=2) +
+  theme_classic() +
+  theme(axis.title.x = element_blank()) +
+  ggtitle("+ Random Slopes")
+ggsave("../Results/glmer_example2.png", width=3, height=3)
+```
+
